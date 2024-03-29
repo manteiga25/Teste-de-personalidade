@@ -17,8 +17,8 @@ import time
 from time import gmtime, strftime
 
 #Variavel Global do programa todo
-audio_async = winsound.SND_FILENAME | winsound.SND_ASYNC
 rede_quest = True
+fich_async = winsound.SND_FILENAME | winsound.SND_ASYNC
 
 class tipos_personalidade:
     
@@ -93,6 +93,75 @@ class tipos_personalidade:
     caminho_img_fundo_str[7] = "D:\\prog\\img\\Sonhador.png"
     caminho_img_fundo_str[8] = "D:\\prog\\img\\Confrontador.png"
     caminho_img_fundo_str[9] = "D:\\prog\\img\\Pacifista.png"
+
+
+    def mudar_idioma(self, botao_selecionado):
+        if botao_selecionado == 1:
+            self.tipo_rosa_str[0] = ""
+            self.tipo_rosa_str[1] = "Os outros veem-me como perfeccionista, Disciplina e rigor são importantes para mim"
+            self.tipo_rosa_str[2] = "Os outros veem-me como disponível, Conexão com os outros e ajudar é importante para mim"
+            self.tipo_rosa_str[3] = "Os outros veem-me como alguém bem sucedido, O resultado e o reconhecimento são importantes para mim"
+            self.tipo_rosa_str[4] = "Os outros veem-me como alguém diferente, Sentir-me especial é importante para mim"
+            self.tipo_rosa_str[5] = "Os outros veem-me como alguém frio e distante, Conhecimento e isolamento são importantes para mim"
+            self.tipo_rosa_str[6] = "Os outros veem-me como alguém desconfiado, Antecipação de cenários é importantepara mim"
+            self.tipo_rosa_str[7] = "Os outros veem-me como alguém entusiasta, Ter planos e várias opções é importante para mim"
+            self.tipo_rosa_str[8] = "Os outros veem-me como alguém demasiado frontal, Controlo é importante para mim"
+            self.tipo_rosa_str[9] = "Os outros veem-me como alguém flexível, Harmonia éimportante para mim"
+
+            self.tipo_azul_str[0] = ""
+            self.tipo_azul_str[1] = "Foco no acerto e errado, Alto nível de exigência, Foco no detalhe e no rigor"
+            self.tipo_azul_str[2] = "Foco em ajudar os outros,  Fácil comunicar e relacionar, Proatividade na ajuda aos outros"
+            self.tipo_azul_str[3] = "Foco nas metas e concretização, Vaidade pelas suas conquistas, Foco na imagem e performance"
+            self.tipo_azul_str[4] = "Preocupação em ser diferente, Intensidade emocional, Muito exigenteconsigo mesmo"
+            self.tipo_azul_str[5] = "Foco na sua privacidade, Prazer pelo isolamento, Frieza, lógica e racionalidade"
+            self.tipo_azul_str[6] = "Foco em antecipar, Dificuldade em confiar, Hábil em fazer questões"
+            self.tipo_azul_str[7] = "Foco em manter varias opções, Entusiasmo e criatividade, Otimismo e foco no prazer"
+            self.tipo_azul_str[8] = "Foco em manter o controlo, Frontalidade e assertividade, Justiça e defesa dos mais fracos"
+            self.tipo_azul_str[9] = "Foco na harmonia e consenso, Dificuldade em dizer não, Flexibilidade em aceitar os outros"
+
+            self.resultado_str[0] = ""
+            self.resultado_str[1] = "Perfecionista"
+            self.resultado_str[2] = "Prestativo"
+            self.resultado_str[3] = "Bem-sucedido"
+            self.resultado_str[4] = "Romantico"
+            self.resultado_str[5] = "Frio"
+            self.resultado_str[6] = "Questionador"
+            self.resultado_str[7] = "Sonhador"
+            self.resultado_str[8] = "Confrontador"
+            self.resultado_str[9] = "Controlador"
+        else:
+            self.tipo_rosa_str[0] = ""
+            self.tipo_rosa_str[1] = "Others see me as a perfectionist, Discipline and rigor are important to me"
+            self.tipo_rosa_str[2] = "Others see me as available, Connection with others and helping is important to me"
+            self.tipo_rosa_str[3] = "Others see me as someone successful, Results and recognition are important to me"
+            self.tipo_rosa_str[4] = "Others see me as someone different, Feeling special is important to me"
+            self.tipo_rosa_str[5] = "Others see me as cold and distant, Knowledge and isolation are important to me"
+            self.tipo_rosa_str[6] = "Others see me as suspicious, Anticipating scenarios is important to me"
+            self.tipo_rosa_str[7] = "Others see me as enthusiastic, Having plans and several options is important to me"
+            self.tipo_rosa_str[8] = "Others see me as someone who is too frontal, Control is important to me"
+            self.tipo_rosa_str[9] = "Others see me as flexible, Harmony is important to me"
+
+            self.tipo_azul_str[0] = ""
+            self.tipo_azul_str[1] = "Focus on right and wrong, High level of demand, Focus on detail and rigor"
+            self.tipo_azul_str[2] = "Focus on helping others, Easy to communicate and relate, Proactivity in helping others"
+            self.tipo_azul_str[3] = "Focus on goals and achievement, Vanity for your achievements, Focus on image and performance"
+            self.tipo_azul_str[4] = "Concern about being different, Emotional intensity, Very demanding of oneself"
+            self.tipo_azul_str[5] = "Focus on your privacy, Pleasure for isolation, Coldness, logic and rationality"
+            self.tipo_azul_str[6] = "Focus on anticipating, Difficulty trusting, Skilled in asking questions"
+            self.tipo_azul_str[7] = "Focus on maintaining multiple options, Enthusiasm and creativity, Optimism and focus on pleasure"
+            self.tipo_azul_str[8] = "Focus on maintaining control, Frontality and assertiveness, Justice and defense of the weakest"
+            self.tipo_azul_str[9] = "Focus on harmony and consensus, Difficulty saying no, Flexibility in accepting others"
+
+            self.resultado_str[0] = ""
+            self.resultado_str[1] = "Perfectionist"
+            self.resultado_str[2] = "Helpful"
+            self.resultado_str[3] = "Successful"
+            self.resultado_str[4] = "Romantic"
+            self.resultado_str[5] = "analytical"
+            self.resultado_str[6] = "Questioner"
+            self.resultado_str[7] = "Dreamer"
+            self.resultado_str[8] = "Confrontational"
+            self.resultado_str[9] = "Controller"
 
 class App:
 
@@ -197,9 +266,8 @@ class App:
         janela.geometry(f"+{x}+{y}")
 
     def ver_registro(self, logo):
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
 
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", audio_async) # executa o audio de forma assincrona por causa do elevado tempo de resposta
-        
         if not os.path.exists("resultado.xml"):
             tk.messagebox.showinfo("Sem dados", "Não foi detectado nenhum dado no registro, realize um teste")
             return 1
@@ -274,7 +342,7 @@ class App:
 
     def __init__ (self, janela_init, tipos, back):
         if back:
-            winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+            winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
             self.botao_menu.destroy()
             self.botao_info.destroy()
             self.img_final.close()
@@ -285,8 +353,9 @@ class App:
         self.janela_init.title("Teste de personalidade")
         self.janela_init.geometry("1920x1080")
 
-        self.imagem = Image.open("D:\\prog\\img\\fundo_f3.png")
-        self.imagem.thumbnail((1920, 860))
+        self.imagem = Image.open("D:\\prog\\img\\fundo_f_3.png")
+        #self.imagem.thumbnail((1920, 860))
+        self.imagem.thumbnail((1920, 1080))
         self.imagem_tk = ImageTk.PhotoImage(self.imagem)
         
         self.label1 = Label(self.janela_init, image=self.imagem_tk)
@@ -341,15 +410,15 @@ class App:
         self.botao_init = tk.Button(janela_init, image=imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome, Mensagem_nome, email_entry, Mensagem_email, self.label1))
         self.botao_init.image = imagem_botao_f
         self.botao_registo.image = imagem_reg_f
-        Mensagem_nome.place(x=520, y=230)
+        #Mensagem_nome.place(x=520, y=230)
         nome.place(x=520, y=260)
-        Mensagem_email.place(x=520, y=290)
+        #Mensagem_email.place(x=520, y=290)
         email_entry.place(x=520, y=320)
         self.botao_init.place(x=520, y=360)
         self.botao_registo.place(x=560, y=430)
     
     def verifica(self, id, mensagem, email, mensagem_email, img_fundo):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         global interrupted_rede
         interrupted_rede = False
         self.email_check = email.get()
@@ -431,84 +500,84 @@ class App:
         self.mensagem_principal.place(x=450,y=150)
 
     def cinzento2(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[0] = resp_num
         self.Botao1.config(command=partial(self.cinzento3, 6), text="Questionador, Precavido, Organizado, Antecipa os vários cenários")
         self.Botao2.config(command=partial(self.cinzento3, 7), text="Otimista, Entusiasta, Criativo, Foco em multi-opções")
         self.Botao3.config(command=partial(self.cinzento3, 1), text="Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado")
 
     def cinzento3(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[1] = resp_num
         self.Botao1.config(command=partial(self.cinzento4, 3), text="Competitivo, Confiante, Foco no sucesso, Objetivo")
         self.Botao2.config(command=partial(self.cinzento4, 4), text="Sonhador, Intenso, Emotivo, Romântico")
         self.Botao3.config(command=partial(self.cinzento4, 9), text="Pacificador, Flexível, Calmo e cordial, Dificuldade em dizer não")
 
     def cinzento4(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[2] = resp_num
         self.Botao1.config(command=partial(self.cinzento5, 7), text="Otimista, Entusiasta, Criativo, Foco em multi-opções")
         self.Botao2.config(command=partial(self.cinzento5, 3), text="Competitivo, Confiante, Foco no sucesso, Objetivo")
         self.Botao3.config(command=partial(self.cinzento5, 9), text="Pacificador, Flexível, Calmo e cordial, Dificuldade em dizer não")
 
     def cinzento5(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[3] = resp_num
         self.Botao1.config(command=partial(self.cinzento6, 4), text="Sonhador, Intenso, Emotivo, Romântico")
         self.Botao2.config(command=partial(self.cinzento6, 1), text="Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado")
         self.Botao3.config(command=partial(self.cinzento6, 8), text="Direto, Frontal, Impaciente com ritmo de outros, Assertivo")
 
     def cinzento6(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[4] = resp_num
         self.Botao1.config(command=partial(self.cinzento7, 5), text="Analítico, Observador, Frio Emocionalmente, Independente")
         self.Botao2.config(command=partial(self.cinzento7, 2), text="Empenhado, Habilidade nas relações, Organizado, Voluntarioso")
         self.Botao3.config(command=partial(self.cinzento7, 6), text="Questionador, Precavido, Organizado, Antecipa os vários cenários")
 
     def cinzento7(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[5] = resp_num
         self.Botao1.config(command=partial(self.cinzento8, 7), text="Otimista, Entusiasta, Criativo, Foco em multi-opções")
         self.Botao2.config(command=partial(self.cinzento8, 9), text="Pacificador, Flexível, Calmo e cordial, Dificuldade em dizer não")
         self.Botao3.config(command=partial(self.cinzento8, 2), text="Empenhado, Habilidade nas relações, Organizado, Voluntarioso")
     
     def cinzento8(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[6] = resp_num
         self.Botao1.config(command=partial(self.cinzento9, 6), text="Questionador, Precavido, Organizado, Antecipa os vários cenários")
         self.Botao2.config(command=partial(self.cinzento9, 8), text="Direto, Frontal, Impaciente com ritmo de outros, Assertivo")
         self.Botao3.config(command=partial(self.cinzento9, 4), text="Sonhador, Intenso, Emotivo, Romântico")
     
     def cinzento9(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[7] = resp_num
         self.Botao1.config(command=partial(self.cinzento10, 5), text="Analítico, Observador, Frio Emocionalmente, Independente")
         self.Botao2.config(command=partial(self.cinzento10, 1), text="Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado")
         self.Botao3.config(command=partial(self.cinzento10, 3), text="Competitivo, Confiante, Foco no sucesso, Objetivo")
     
     def cinzento10(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[8] = resp_num
         self.Botao1.config(command=partial(self.cinzento11, 9), text="Pacificador, Flexível, Calmo e cordial, Dificuldade em dizer não")
         self.Botao2.config(command=partial(self.cinzento11, 8), text="Direto, Frontal, Impaciente com ritmo de outros, Assertivo")
         self.Botao3.config(command=partial(self.cinzento11, 3), text="Competitivo, Confiante, Foco no sucesso, Objetivo")
     
     def cinzento11(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[9] = resp_num
         self.Botao1.config(command=partial(self.cinzento12, 4), text="Sonhador, Intenso, Emotivo, Romântico")
         self.Botao2.config(command=partial(self.cinzento12, 7), text="Otimista, Entusiasta, Criativo, Foco em multi-opções")
         self.Botao3.config(command=partial(self.cinzento12, 1), text="Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado")
     
     def cinzento12(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[10] = resp_num
         self.Botao1.config(command=partial(self.init_fase_rosa, 2), text="Empenhado, Habilidade nas relações, Organizado, Voluntarioso")
         self.Botao2.config(command=partial(self.init_fase_rosa, 6), text="Questionador, Precavido, Organizado, Antecipa os vários cenários")
         self.Botao3.config(command=partial(self.init_fase_rosa, 5), text="Analítico, Observador, Frio Emocionalmente, Independente")
     
     def init_fase_rosa(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.imagem_cinzento.close()
         self.label_cinzento.destroy()
         self.mensagem_principal["bg"] = "pink"
@@ -521,7 +590,7 @@ class App:
         self.Botao3.config(command=partial(self.rosa_2, self.tipos.resp[2], 0, 3), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_rosa_str[self.tipos.resp[2]], width=580)
 
     def rosa_2(self, resp_num, index_resp, index_text):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.fase_2_resp[index_resp] = resp_num
         if index_text == 12:
             self.verifica_repeticao() # parametro apenas de trensporte
@@ -531,7 +600,7 @@ class App:
             self.Botao3.config(command=partial(self.rosa_2, self.tipos.resp[index_text+2], index_resp+1, index_text+3), text=self.tipos.tipo_rosa_str[self.tipos.resp[index_text+2]])
 
     def verifica_repeticao(self):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         i = 0
         while i < 3:
             j = i + 1
@@ -545,20 +614,20 @@ class App:
         self.fase_rosa2_1()
 
     def fase_rosa2_1(self):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.Botao1.config(command=partial(self.fase_rosa2_2, self.tipos.fase_2_resp[0]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[0]])
         self.Botao2.config(command=partial(self.fase_rosa2_2, self.tipos.fase_2_resp[1]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[1]])
         self.Botao3.config(command=partial(self.fase_rosa2_2, self.tipos.fase_2_resp[2]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[2]])
         
     def fase_rosa2_2(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.fase_2_resp[0] = resp_num
         self.Botao1.config(command=partial(self.leve_verificação, self.tipos.fase_2_resp[1]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[1]])
         self.Botao2.config(command=partial(self.leve_verificação, self.tipos.fase_2_resp[2]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[2]])
         self.Botao3.config(command=partial(self.leve_verificação, self.tipos.fase_2_resp[3]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[3]])
 
     def leve_verificação(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.fase_2_resp[1] = resp_num
         contador = 2
         while 1:
@@ -581,7 +650,7 @@ class App:
         self.Botao3.config(command=partial(self.resultado_final, self.tipos.fase_2_resp[1]), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_azul_str[self.tipos.fase_2_resp[1]])
 
     def resultado_final(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.label_azul.destroy()
         self.imagem_azul.close()
         self.mensagem_principal.destroy()
