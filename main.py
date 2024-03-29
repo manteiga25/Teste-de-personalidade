@@ -1,4 +1,4 @@
-﻿from tkinter import *
+from tkinter import *
 import tkinter
 import tkinter as tk
 from tkinter import ttk
@@ -9,7 +9,6 @@ import random
 from validate_email import validate_email
 import os
 import sys
-#import signal # handles do sistema operativo para executar rotinas assincronas quando um evento é acionado
 from PIL import Image, ImageTk
 import requests
 import threading
@@ -28,7 +27,6 @@ class tipos_personalidade:
     fase_2_resp = list(range(4))
     
     # variaveis fase rosa
-    #tipo_rosa_str = [['' for _ in range(3)] for _ in range(10)]
     tipo_rosa_str = ['' for _ in range(10)]
     
     tipo_rosa_str[0] = ""
@@ -42,10 +40,7 @@ class tipos_personalidade:
     tipo_rosa_str[8] = "Os outros veem-me como alguém demasiado frontal, Controlo é importante para mim"
     tipo_rosa_str[9] = "Os outros veem-me como alguém flexível, Harmonia éimportante para mim"
 
-#print(tipo_rosa_str)
-
     # variaveis fase azul
-    #tipo_azul_str = [['' for _ in range(3)] for _ in range(10)]
     tipo_azul_str = ['' for _ in range(10)]
 
     tipo_azul_str[0] = ""
@@ -60,7 +55,6 @@ class tipos_personalidade:
     tipo_azul_str[9] = "Foco na harmonia e consenso, Dificuldade em dizer não, Flexibilidade em aceitar os outros"
 
     # resultado
-    #resultado_str = [['' for _ in range(3)] for _ in range(10)]
     resultado_str = ['' for _ in range(10)]
 
     resultado_str[0] = ""
@@ -87,7 +81,6 @@ class tipos_personalidade:
     inf_personalidade_str[8] = "As personalidades do tipo OITO são caracterizadas por um forte controle sobre seu ambiente e pelo desejo de esconder suas fraquezas a todo custo.\nSão pessoas combativas, agressivas e orientadas para o poder.\nBuscam proteger aqueles indivíduos que eles consideram ""merecedores de proteção"" e tentam impor suas ideias a todo custo.\nPara que um OITO possa crescer emocionalmente é recomendável um trabalho orientado a recuperar a inocência e bondade própria da criança interior, aceitar suas fraquezas e aprender a viver no amor."
     inf_personalidade_str[9] = "As pessoas desse eneatipo são indivíduos tranquilos, mediadores e com tendência a evitar o conflito.\nNecessitam que em seu ambiente reine a paz e a harmonia.\nEles geralmente não enfrentam os outros porque não querem romper essa tranquilidade interna, é por isso que se sentem desconfortáveis com as mudanças e os desafios inesperados.\nOs objetivos recomendados para o tipo de personalidade NOVE estarão relacionados com mostrar suas emoções, aprender a tomar decisões e amar-se, respeitando seus reais desejos."
 
-    # ainda por definir
     caminho_img_fundo_str = ['' for _ in range(10)]
 
     caminho_img_fundo_str[0] = ""
@@ -101,22 +94,9 @@ class tipos_personalidade:
     caminho_img_fundo_str[8] = "D:\\prog\\img\\Confrontador.png"
     caminho_img_fundo_str[9] = "D:\\prog\\img\\Pacifista.png"
 
-# depois vou refatorar o codigo usando recursividade
 class App:
-    #email_cache_escrita = open("email-cache.txt", "wt")
-    #email_cache_leitura = open("email-cache.txt", "rt")
-    
-    # variavel do tipo bool serve para verificar uma condição para ver se é permitido fazer uma leitura de um ficheiro
-  #  leitura = True
-    
-    # metodo assincrono que informa que a rede foi abaixo e pergunta ao utilizador se quer continuar com o programa
-    # parametro signum- valor do signal
-    # parametro janela_principal- sergve para destroir a janela se o utilizador não quiser proseguir
 
     pergunta = ""
-
-# Bloqueio para garantir a exclusão mútua ao modificar a variável interrupted
-    
 
     def erro_de_rede(self):
         global rede_quest
@@ -130,8 +110,6 @@ class App:
             else:
                 rede_quest = False
 
-    
-        
     def cria_xml(self):
         cria = True
         if os.path.exists('resultado.xml'):
@@ -156,16 +134,18 @@ class App:
         for key, value in resultado.items():
             esc_resultado = ET.SubElement(novo_elemento, key)
             esc_resultado.text = str(value)
-    
 
     # fica para mais tarde
     def le_registro_xml(self):
         fich_le_xml = ET.parse('resultado.xml')
         const_dados = fich_le_xml.getroot()
+        numero_de_dados = len(list(const_dados))
+        const_dados_formatados = [['' for _ in range(4)] for _ in range(numero_de_dados)]
         for linha in range(len(list(const_dados))):
             for coluna in range(4):
-                print(const_dados[linha][coluna].text)
-        return const_dados
+                #print(const_dados[linha][coluna].text)
+                const_dados_formatados[linha][coluna] = const_dados[linha][coluna].text
+        return const_dados_formatados
         #for resultados in const_dados.findall('teste0'): # tenho a certeza que esta mal
          #   rank = resultados.find('nome').text
           #  name = resultados.get('email')
@@ -273,16 +253,9 @@ class App:
         grelha.heading('Resultado', text='Resultado')
         grelha.heading('Data', text='Data')
 
-        # tentei transformar numa função mas não deu certo
-        fich_le_xml = ET.parse('resultado.xml')
-        const_dados = fich_le_xml.getroot()
-        numero_de_dados = len(list(const_dados))
-        dados_formatados = [['' for _ in range(4)] for _ in range(numero_de_dados)]
-        for linha in range(numero_de_dados):
-            for coluna in range(4):
-                dados_formatados[linha][coluna] = const_dados[linha][coluna].text
+        dados_formatados = self.le_registro_xml()
 
-        for linha in range(numero_de_dados):
+        for linha in range(len(list(dados_formatados))):
             grelha.insert("", tk.END, values=(dados_formatados[linha][0], dados_formatados[linha][1], dados_formatados[linha][2], dados_formatados[linha][3]))
         
         grelha.pack()
@@ -346,7 +319,6 @@ class App:
             self.label_final.destroy()
             self.Resultado.destroy()
         self.janela_init = janela_init
-      #  self.le_registro_xml()
         self.tipos = tipos
         #self.janela_init.configure(background="white")
         self.janela_init.title("Teste de personalidade")
