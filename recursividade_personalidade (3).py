@@ -345,7 +345,6 @@ class App:
             self.img_final.close()
             self.label_final.destroy()
             self.Resultado.destroy()
-            self.mensagem_principal.destroy()
         self.janela_init = janela_init
       #  self.le_registro_xml()
         self.tipos = tipos
@@ -519,7 +518,7 @@ class App:
     def init_cinzento(self):
        # winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
         #self.janela_init.configure(bg="#808080") # cinzento
-        self.mensagem_principal.config(text="Escolha uma das opções", bg="#808080")
+        self.mensagem_principal.config(text="Escolha uma das opções", bg="#808080", font=("Arial", 25, "bold"), justify="center")
         #self.Botao1 = tk.Button(self.janela_init, text="Direto, Frontal, Impaciente com ritmo de outros, Assertivo", width=60, bg="blue", fg="yellow", command=partial(self.cinzento2, 8))
         self.imagem_botao_pergunta = Image.open("D:\\prog\\img\\botao_c.png")
         self.imagem_botao_pergunta_tk = ImageTk.PhotoImage(self.imagem_botao_pergunta)
@@ -532,6 +531,8 @@ class App:
         self.Botao1.place(x=50, y=450)
         self.Botao2.place(x=350, y=300)
         self.Botao3.place(x=650, y=450)
+        self.mensagem_principal.place(x=450,y=150)
+
 
     def cinzento2(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
@@ -615,7 +616,7 @@ class App:
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
         self.imagem_cinzento.close()
         self.label_cinzento.destroy()
-        self.mensagem_principal.config(text="Escolha uma das opções", bg="pink")
+        self.mensagem_principal["bg"] = "pink"
         self.tipos.resp[11] = resp_num
         self.imagem_botao_pergunta.close()
         self.imagem_botao_pergunta = Image.open("D:\\prog\\img\\botao_r.png")
@@ -689,7 +690,7 @@ class App:
         #self.janela_init.wm_attributes("-topmost", False)
         self.label_rosa.destroy()
         self.imagem_rosa.close()
-        self.mensagem_principal.config(text="Escolha uma das opções", bg="blue")
+        self.mensagem_principal["bg"] = "blue"
         self.imagem_botao_pergunta.close()
         self.imagem_botao_pergunta = Image.open("D:\\prog\\img\\botao_a.png")
         self.imagem_botao_pergunta_tk = ImageTk.PhotoImage(self.imagem_botao_pergunta)
@@ -701,6 +702,7 @@ class App:
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
         self.label_azul.destroy()
         self.imagem_azul.close()
+        self.mensagem_principal.destroy()
         self.img_final = Image.open("D:\\prog\\img\\resultado.png")
         self.img_final_tk = ImageTk.PhotoImage(self.img_final)
         img_menu = Image.open("D:\\prog\\img\\menu.png")
@@ -725,7 +727,7 @@ class App:
         self.botao_info.image = img_inf_tk
         self.botao_menu.place(x=540, y=350)
         self.botao_info.place(x=540, y=410)
-        self.Resultado.place(x=450,y=150)
+        self.Resultado.place(x=430,y=150)
         #self.escreve_resultado(self.nome_id, self.email_check, resultado=self.resultado_do_user)
         tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
         fich_xml = self.cria_xml()
