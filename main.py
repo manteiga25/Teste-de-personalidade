@@ -123,19 +123,15 @@ class App:
         if cria:
         # Se não existir, crie um novo elemento raiz
             self.dados = ET.Element("dados")
-           # tmp = ET.Element("resultados")
             tree = ET.ElementTree(self.dados)
-           # tree_tmp = ET.ElementTree(tmp)
         return tree
 
     def escreve_resultado_xml(self, fich_obj, resultado_index, resultado):
         novo_elemento = ET.SubElement(fich_obj, resultado_index)
-        #resultado_esc.text = child_text
         for key, value in resultado.items():
             esc_resultado = ET.SubElement(novo_elemento, key)
             esc_resultado.text = str(value)
 
-    # fica para mais tarde
     def le_registro_xml(self):
         fich_le_xml = ET.parse('resultado.xml')
         const_dados = fich_le_xml.getroot()
@@ -143,13 +139,8 @@ class App:
         const_dados_formatados = [['' for _ in range(4)] for _ in range(numero_de_dados)]
         for linha in range(len(list(const_dados))):
             for coluna in range(4):
-                #print(const_dados[linha][coluna].text)
                 const_dados_formatados[linha][coluna] = const_dados[linha][coluna].text
         return const_dados_formatados
-        #for resultados in const_dados.findall('teste0'): # tenho a certeza que esta mal
-         #   rank = resultados.find('nome').text
-          #  name = resultados.get('email')
-           # print(name, rank)
     
     # cria e verifica se o ficheiro já existe
     # retona False se o ficheiro já existir
@@ -159,7 +150,6 @@ class App:
             return False
         else:
             ficheiro = open("email-cache.txt", "w") # apenas cria ficheiro
-            #leitura = False
             ficheiro.close()
             return True
         
@@ -172,9 +162,6 @@ class App:
                 break
         email_cache_leitura.close()
         return encontrou
-    
-    def update_label_frame_size(self, event):
-        self.lfr.config(width=self.texto.winfo_width())
 
     def mostrar_info(self, inf_personalidade, tit_personalidade, img_path):
         self.botao_info["state"] = "disabled"
@@ -184,19 +171,13 @@ class App:
         janela_info.title("Informação sobre a personalidade")
         janela_info.resizable(False, False)
         self.centralizar_janela(janela_info)
-        #self.lfr = tk.LabelFrame(janela_info, text=tit_personalidade, font=("Arial", 25, "bold" ))
-        #self.lfr.pack()
         
         fr1 = tk.Frame(janela_info)
         fr2 = tk.Frame(janela_info)
         tit = tk.Label(fr1, text=tit_personalidade, justify="center", font=("Arial", 25, "bold" ))
         tit.pack()
-        #informa = tk.Label(fr2, text=inf_personalidade, justify="center", font=(15))
-
-        #texto = tk.Text(fr2, wrap="word", font=(5), height=8, width=80)
         texto = tk.Label(fr2, text=inf_personalidade, justify="center")
         texto.pack()
-        #texto.insert("1.0", inf_personalidade)
 
         imagem_rep_tk = tk.PhotoImage(file=img_path)
         imagem_reduzida = imagem_rep_tk.subsample(2, 2)
@@ -204,8 +185,6 @@ class App:
         fr3 = tk.Label(janela_info, image=imagem_reduzida)
         fr3.image = imagem_reduzida
 
-       # tit.pack()
-        #informa.pack()
         fr1.pack()
         fr2.pack()
         fr3.pack()
@@ -236,8 +215,6 @@ class App:
         self.botao_registo["state"] = "disabled"
 
         self.janela_reg.protocol("WM_DELETE_WINDOW", self.repoe_botoes_init)
-       # container = Frame(self.janela_reg, )  # Create a frame as the container
-        #container.pack(fill="both", expand=True)  # Pack the frame with expand and fill
 
         colunas = ('Nome', 'Email', 'Resultado', 'Data')
 
@@ -259,12 +236,6 @@ class App:
             grelha.insert("", tk.END, values=(dados_formatados[linha][0], dados_formatados[linha][1], dados_formatados[linha][2], dados_formatados[linha][3]))
         
         grelha.pack()
-        #for string in reg_le:
-         #   label = tk.Label(container, text=string)
-          #  label.grid(row=counter, column=0)
-           # counter += 1
-        #reg_le.close()
-        #rolagem.pack(side="right", fill="y")
         
     def repoe_botoes_init(self):
         self.botao_init["state"] = "normal"
@@ -280,24 +251,15 @@ class App:
     resultado_do_user = 0
     interrupted_rede = False
 
-    # retorna 1 se não tiver rede e o utilizador continuar a querer realizar o teste
     def verifica_rede(self):
-        #global pergunta
         global interrupted_rede
         while not interrupted_rede:
             self.mutex.acquire()
-            #print(interrupted_rede)
-       # if not self.pergunta == "no":
             try:
                 _ = requests.get("http://www.google.com", timeout=5)
                 self.rede = True
-               # print("sucesso")
-                #self.mutex.release()
-           # except requests.ConnectionError:
             except:
                 self.rede = False
-                #print("erro de rede")
-                #self.pergunta = tk.messagebox.askquestion("Erro de rede", "Não foi possível estabelecer conexão á rede, deseja continuar com o teste?")
             finally:
                 if self.mutex.locked():
                     self.mutex.release()
@@ -320,21 +282,12 @@ class App:
             self.Resultado.destroy()
         self.janela_init = janela_init
         self.tipos = tipos
-        #self.janela_init.configure(background="white")
         self.janela_init.title("Teste de personalidade")
         self.janela_init.geometry("1920x1080")
-        
-        # handle para conexão de rede
-        #signal.signal(signal.SIGLOST, self.janela_init)
 
-       # frame_prin = tk.Frame()
-        
-        #imagem = Image.open("C:\\Users\\alexm\\Downloads\\eneagrama_2-removebg_1039x680_1_1008x660.png")
         self.imagem = Image.open("D:\\prog\\img\\fundo_f3.png")
         self.imagem.thumbnail((1920, 860))
         self.imagem_tk = ImageTk.PhotoImage(self.imagem)
-        #frame_main = Frame(self.janela_init)
-        #frame_main.place(x=50,y=0)
         
         self.label1 = Label(self.janela_init, image=self.imagem_tk)
         self.label1.pack()
@@ -344,8 +297,6 @@ class App:
         self.imagem_cinzento = Image.open("D:\\prog\\img\\cinzento.jpg")
         self.imagem_cinzento.thumbnail((1920, 1080))
         self.imagem_cinzento_tk = ImageTk.PhotoImage(self.imagem_cinzento)
-        #frame_main = Frame(self.janela_init)
-        #frame_main.place(x=50,y=0)
         
         self.label_cinzento = Label(self.janela_init, image=self.imagem_cinzento_tk)
         self.label_cinzento.pack()
@@ -355,8 +306,6 @@ class App:
         self.imagem_rosa = Image.open("D:\\prog\\img\\rosa.jpg")
         self.imagem_rosa.thumbnail((1920, 1080))
         self.imagem_rosa_tk = ImageTk.PhotoImage(self.imagem_rosa)
-        #frame_main = Frame(self.janela_init)
-        #frame_main.place(x=50,y=0)
         
         self.label_rosa = Label(self.janela_init, image=self.imagem_rosa_tk)
         self.label_rosa.pack()
@@ -366,15 +315,11 @@ class App:
         self.imagem_azul = Image.open("D:\\prog\\img\\azul.jpg")
         self.imagem_azul.thumbnail((1920, 1080))
         self.imagem_azul_tk = ImageTk.PhotoImage(self.imagem_azul)
-        #frame_main = Frame(self.janela_init)
-        #frame_main.place(x=50,y=0)
         
         self.label_azul = Label(self.janela_init, image=self.imagem_azul_tk)
         self.label_azul.pack()
 
         self.label_azul.imagem = self.imagem_azul_tk
-
-        
 
         imagem_logo = Image.open("D:\\prog\\img\\logo.png")
         logo = ImageTk.PhotoImage(imagem_logo)
@@ -382,28 +327,20 @@ class App:
         imagem_botao = Image.open("D:\\prog\\img\\botao_f.png")
         imagem_botao_f = ImageTk.PhotoImage(imagem_botao)
 
-        imagem_msg = Image.open("D:\\prog\\img\\trans.png")
-        imagem_msg_f = ImageTk.PhotoImage(imagem_msg)
-
         imagem_reg = Image.open("D:\\prog\\img\\reg.png")
         imagem_reg_f = ImageTk.PhotoImage(imagem_reg)
 
         # Defina a imagem como ícone
         self.janela_init.iconphoto(False, logo)
-        #self.mensagem_principal = tk.Label(text="Teste de personalidade", bg="white", font=("Arial", 25, "bold"), justify=CENTER)
         self.mensagem_principal = tk.Label()
-        #self.mensagem_principal = tk.Label(text=-)
         Mensagem_nome = tk.Label(text="Nome:", bg="white", compound="center", font=('Arial Black', 10))
         Mensagem_email = tk.Label(text="Email:", bg="white", font=('Arial Black', 10))
         nome = tk.Entry(width=40, exportselection=True)
         email_entry = tk.Entry(width=40, exportselection=True)
-        #compound="center"
         self.botao_registo = tk.Button(janela_init, image=imagem_reg_f, width=180, height=30, command=partial(self.ver_registro, logo))
         self.botao_init = tk.Button(janela_init, image=imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome, Mensagem_nome, email_entry, Mensagem_email, self.label1))
-       # self.botao_init = tk.Button(janela_init, image=imagem_botao_f)
         self.botao_init.image = imagem_botao_f
         self.botao_registo.image = imagem_reg_f
-        #self.mensagem_principal.place(x=480, y=150)
         Mensagem_nome.place(x=520, y=230)
         nome.place(x=520, y=260)
         Mensagem_email.place(x=520, y=290)
@@ -433,17 +370,10 @@ class App:
             return 1
         elif self.cria_ficheiro() == False:
             econtrou = self.le_cache(self.email_check + "\n")
-        #self.email_check = email.get()
 
-        # tarefa para verificar conexão de rede
-        #time.sleep(2)
         self.mutex.acquire()
         # sem o acesso á rede não podemos validar o email
         if econtrou == False and self.rede == True:
-          #  tk.messagebox.showinfo("Verificando Email", "A verificação de email está a ser executada, esta operação pode demorar dependendo da sua rede.")
-# acho que não precisamos de Mutex
-           # self.mutex = Lock()
-            #self.mutex.acquire(1)
             self.mutex.release()
             #tarefa_inf = threading.Thread(target=self.inf_teste_email)
             #tarefa_inf.start()
@@ -451,7 +381,6 @@ class App:
             
             
             if not validate_email(email_address=self.email_check):
-                #self.mutex.release()
                 #self.janela_inf_email.destroy()
                 self.mutex.acquire()
                 if self.rede == True:
@@ -481,17 +410,13 @@ class App:
         mensagem.destroy()
         email.destroy()
         mensagem_email.destroy()
-        #mensagem_main.destroy()
         self.botao_registo.destroy()
         self.imagem.close()
         img_fundo.destroy()
         self.init_cinzento()
     
     def init_cinzento(self):
-       # winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
-        #self.janela_init.configure(bg="#808080") # cinzento
         self.mensagem_principal.config(text="Escolha uma das opções", bg="#808080", font=("Arial", 25, "bold"), justify="center")
-        #self.Botao1 = tk.Button(self.janela_init, text="Direto, Frontal, Impaciente com ritmo de outros, Assertivo", width=60, bg="blue", fg="yellow", command=partial(self.cinzento2, 8))
         self.imagem_botao_pergunta = Image.open("D:\\prog\\img\\botao_c.png")
         self.imagem_botao_pergunta_tk = ImageTk.PhotoImage(self.imagem_botao_pergunta)
         self.Botao1 = tk.Button(self.janela_init, image=self.imagem_botao_pergunta_tk, text="Direto, Frontal, Impaciente com ritmo de outros, Assertivo", compound="center", width=580, height=40, command=partial(self.cinzento2, 8))
@@ -505,43 +430,41 @@ class App:
         self.Botao3.place(x=650, y=450)
         self.mensagem_principal.place(x=450,y=150)
 
-
     def cinzento2(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
         self.tipos.resp[0] = resp_num
         self.Botao1.config(command=partial(self.cinzento3, 6), text="Questionador, Precavido, Organizado, Antecipa os vários cenários")
         self.Botao2.config(command=partial(self.cinzento3, 7), text="Otimista, Entusiasta, Criativo, Foco em multi-opções")
         self.Botao3.config(command=partial(self.cinzento3, 1), text="Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado")
-    
+
     def cinzento3(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
         self.tipos.resp[1] = resp_num
         self.Botao1.config(command=partial(self.cinzento4, 3), text="Competitivo, Confiante, Foco no sucesso, Objetivo")
         self.Botao2.config(command=partial(self.cinzento4, 4), text="Sonhador, Intenso, Emotivo, Romântico")
         self.Botao3.config(command=partial(self.cinzento4, 9), text="Pacificador, Flexível, Calmo e cordial, Dificuldade em dizer não")
-    
+
     def cinzento4(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
         self.tipos.resp[2] = resp_num
         self.Botao1.config(command=partial(self.cinzento5, 7), text="Otimista, Entusiasta, Criativo, Foco em multi-opções")
         self.Botao2.config(command=partial(self.cinzento5, 3), text="Competitivo, Confiante, Foco no sucesso, Objetivo")
         self.Botao3.config(command=partial(self.cinzento5, 9), text="Pacificador, Flexível, Calmo e cordial, Dificuldade em dizer não")
-    
+
     def cinzento5(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
         self.tipos.resp[3] = resp_num
         self.Botao1.config(command=partial(self.cinzento6, 4), text="Sonhador, Intenso, Emotivo, Romântico")
         self.Botao2.config(command=partial(self.cinzento6, 1), text="Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado")
         self.Botao3.config(command=partial(self.cinzento6, 8), text="Direto, Frontal, Impaciente com ritmo de outros, Assertivo")
-    
-    # não terminado
+
     def cinzento6(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
         self.tipos.resp[4] = resp_num
         self.Botao1.config(command=partial(self.cinzento7, 5), text="Analítico, Observador, Frio Emocionalmente, Independente")
         self.Botao2.config(command=partial(self.cinzento7, 2), text="Empenhado, Habilidade nas relações, Organizado, Voluntarioso")
         self.Botao3.config(command=partial(self.cinzento7, 6), text="Questionador, Precavido, Organizado, Antecipa os vários cenários")
-    
+
     def cinzento7(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
         self.tipos.resp[5] = resp_num
@@ -593,7 +516,6 @@ class App:
         self.imagem_botao_pergunta.close()
         self.imagem_botao_pergunta = Image.open("D:\\prog\\img\\botao_r.png")
         self.imagem_botao_pergunta_tk = ImageTk.PhotoImage(self.imagem_botao_pergunta)
-       # self.janela_init.configure(bg="pink") # rosa
         self.Botao1.config(command=partial(self.rosa_2, self.tipos.resp[0], 0, 3), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_rosa_str[self.tipos.resp[0]], width=580)
         self.Botao2.config(command=partial(self.rosa_2, self.tipos.resp[1], 0, 3), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_rosa_str[self.tipos.resp[1]], width=580)
         self.Botao3.config(command=partial(self.rosa_2, self.tipos.resp[2], 0, 3), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_rosa_str[self.tipos.resp[2]], width=580)
@@ -610,7 +532,6 @@ class App:
 
     def verifica_repeticao(self):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", winsound.SND_FILENAME | winsound.SND_ASYNC) # executa o audio de forma assincrona por causa do elevado tempo de resposta
-       # self.tipos.fase_2_resp[3] = resp_num
         i = 0
         while i < 3:
             j = i + 1
@@ -649,17 +570,6 @@ class App:
         self.init_azul()
 
     def init_azul(self):
-       # canvas = Canvas(self.janela_init)
-        #canvas.pack()
-        #self.imagem = Image.open("C:\\Users\\alexm\\Downloads\\azul.jpg")
-        #imagem = PhotoImage(file="C:\\Users\\alexm\\Downloads\\azul.jpg")
-       # self.imagem.thumbnail((1920, 1080))
-       # self.imagem_tk = ImageTk.PhotoImage(self.imagem)
-        #canvas.create_image(0, 0, image=imagem, anchor="nw")
-        #self.label1 = Label(self.janela_init, image=self.imagem_tk)
-        #self.label1.imagem = self.imagem_tk
-        #self.label1.place(y=0,x=0)
-        #self.janela_init.wm_attributes("-topmost", False)
         self.label_rosa.destroy()
         self.imagem_rosa.close()
         self.mensagem_principal["bg"] = "blue"
@@ -689,10 +599,7 @@ class App:
         self.Botao1.destroy()
 
         self.resultado_do_user = self.tipos.resultado_str[resp_num]
-        #self.mensagem_principal.config(bg="purple", font=("Arial", 30), text="O seu tipo é\n" + str(resp_num) + "-" + self.tipos.resultado_str[resp_num])
         self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="O seu tipo é " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num]) 
-        #self.Botao1.config(command=partial(self.__init__, self.janela_init, self.tipos, 1), text="Voltar ao menu")
-        #self.Botao1.place(x=480, y=300)
         self.botao_menu = tk.Button(width=200, height=40, image=img_menu_tk, command=partial(self.__init__, self.janela_init, self.tipos, 1))
         self.botao_info = tk.Button(width=200, height=60, image=img_inf_tk, command=partial(self.mostrar_info, self.tipos.inf_personalidade_str[resp_num], self.resultado_do_user, self.tipos.caminho_img_fundo_str[resp_num]))
         self.botao_menu.image = img_menu_tk
@@ -700,7 +607,6 @@ class App:
         self.botao_menu.place(x=540, y=350)
         self.botao_info.place(x=540, y=410)
         self.Resultado.place(x=430,y=150)
-        #self.escreve_resultado(self.nome_id, self.email_check, resultado=self.resultado_do_user)
         tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
         fich_xml = self.cria_xml()
         num_resultados = len(list(self.dados))
@@ -709,8 +615,6 @@ class App:
         fich_xml.write("resultado.xml")
 
 janela = Tk()
-print(tkinter.TkVersion)
 personalidades = tipos_personalidade()
-#inicializar(janela)
 app = App(janela, personalidades, 0)
 janela.mainloop()
