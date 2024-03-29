@@ -324,7 +324,7 @@ class App:
         while not interrupted_rede:
             self.mutex.acquire()
             try:
-                _ = requests.get("http://www.google.com", timeout=5)
+                _ = requests.get("http://www.google.com", timeout=10)
                 self.rede = True
             except:
                 self.rede = False
