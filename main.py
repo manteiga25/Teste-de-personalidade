@@ -25,6 +25,20 @@ class tipos_personalidade:
     # lista com as respostas
     resp = list(range(12))
     fase_2_resp = list(range(4))
+
+    # variaveis fase cinzento
+    tipo_cinzento_str = ['' for _ in range(10)]
+
+    tipo_cinzento_str[0] = ""
+    tipo_cinzento_str[1] = "Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado"
+    tipo_cinzento_str[2] = "Empenhado, Habilidade nas relações, Organizado, Voluntarioso"
+    tipo_cinzento_str[3] = "Competitivo, Confiante, Foco no sucesso, Objetivo"
+    tipo_cinzento_str[4] = "Sonhador, Intenso, Emotivo, Romântico"
+    tipo_cinzento_str[5] = "Analítico, Observador, Frio Emocionalmente, Independente"
+    tipo_cinzento_str[6] = "Questionador, Precavido, Organizado, Antecipa os vários cenários"
+    tipo_cinzento_str[7] = "Otimista, Entusiasta, Criativo, Foco em multi-opções"
+    tipo_cinzento_str[8] = "Direto, Frontal, Impaciente com ritmo de outros, Assertivo"
+    tipo_cinzento_str[9] = "Pacificador, Flexível, Calmo e cordial, Dificuldade em dizer não"
     
     # variaveis fase rosa
     tipo_rosa_str = ['' for _ in range(10)]
@@ -96,7 +110,18 @@ class tipos_personalidade:
 
 
     def mudar_idioma(self, botao_selecionado):
-        if botao_selecionado == 1:
+        if botao_selecionado.get() == "PT":
+            self.tipo_cinzento_str[0] = ""
+            self.tipo_cinzento_str[1] = "Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado"
+            self.tipo_cinzento_str[2] = "Empenhado, Habilidade nas relações, Organizado, Voluntarioso"
+            self.tipo_cinzento_str[3] = "Competitivo, Confiante, Foco no sucesso, Objetivo"
+            self.tipo_cinzento_str[4] = "Sonhador, Intenso, Emotivo, Romântico"
+            self.tipo_cinzento_str[5] = "Analítico, Observador, Frio Emocionalmente, Independente"
+            self.tipo_cinzento_str[6] = "Questionador, Precavido, Organizado, Antecipa os vários cenários"
+            self.tipo_cinzento_str[7] = "Otimista, Entusiasta, Criativo, Foco em multi-opções"
+            self.tipo_cinzento_str[8] = "Direto, Frontal, Impaciente com ritmo de outros, Assertivo"
+            self.tipo_cinzento_str[9] = "Pacificador, Flexível, Calmo e cordial, Dificuldade em dizer não"
+
             self.tipo_rosa_str[0] = ""
             self.tipo_rosa_str[1] = "Os outros veem-me como perfeccionista, Disciplina e rigor são importantes para mim"
             self.tipo_rosa_str[2] = "Os outros veem-me como disponível, Conexão com os outros e ajudar é importante para mim"
@@ -129,7 +154,19 @@ class tipos_personalidade:
             self.resultado_str[7] = "Sonhador"
             self.resultado_str[8] = "Confrontador"
             self.resultado_str[9] = "Controlador"
+
+            self.inf_personalidade_str[0] = ""
+            self.inf_personalidade_str[1] = "O primeiro dos eneatipos é caracterizado por um ego muito focado na disciplina, busca destacar sempre os erros de tudo o que vê e é incapaz de deixar um detalhe sem concertar.\nSão ordenados e têm uma concepção muito forte do que é certo e do que é errado.\nApesar de suas boas intenções, em sua busca pela perfeição, podem ferir os sentimentos alheios ao destacar sempre os detalhes negativos.\nO trabalho psicológico do UM será baseado em encontrar a paz, ser menos auto exigente, cultivar a bondade, aceitar a si mesmo e aos outros."
+            self.inf_personalidade_str[2] = "As pessoas desse eneatipo concentram toda sua atenção nos outros, buscam o amor através de atos ou gestos de ajuda para os outros e geralmente sentem um tipo de ""orgulho"" ao sentir que alguém precisa deles.\nQuerem ser amados e se sentir queridos ao preço que faça falta.\nNão se concentram em suas necessidades e isso pode afetar seu bem-estar pessoal.\nO objetivo de crescimento de um DOIS será aprender a dar amor e deixar de precisar de carinho externo, reconhecer sua humildade e deixar para trás o sentimento de orgulho."
+            self.inf_personalidade_str[3] = "O tipo TRÊS é caracterizado por uma tendência a agir como ele ou ela acredita que os outros querem que ele aja.\nEles se preocupam muitíssimo com a imagem que projetam para os outros e vivem por e para ela.\nO caminho para o bem-estar do tipo TRÊS será orientado a deixar para trás a vaidade e agir de acordo com seus sentimentos e emoções próprias, deixando de focar no que os outros pensam."
+            self.inf_personalidade_str[4] = "Essas pessoas se conectam profundamente com as emoções, têm uma forte necessidade inconsciente de se sentirem amados, de serem únicos e especiais.\nFrequentemente desenvolvem transtornos relacionados com a depressão e tem um profundo sentimento de inferioridade.\nSão o tipo de personalidade mais criativo, mas ao mesmo tempo mais melancólico e pessimista.\nO conselho psicológico para um indivíduo com personalidade QUATRO estará focado em cultivar um sentimento de igualdade em relação aos outros, a autoestima e deixar-se amar."
+            self.inf_personalidade_str[5] = "Aquelas pessoas analíticas, observadoras e perceptivas são geralmente descritas no tipo de personalidade CINCO.\nSeu mundo está em sua cabeça e eles raramente o compartilham, têm uma profunda dificuldade para conectar com as emoções e ainda mais se eles são estrangeiros.\nO caminho para o crescimento de uma pessoa com um eneatipo CINCO será direcionado para fora do isolamento pessoal e compartilhar seus pensamentos e emoções com outras pessoas."
+            self.inf_personalidade_str[6] = "Os indivíduos que são definidos como eneatipo SEIS são aqueles cujo valor principal é a sinceridade e a fidelidade.\nGeralmente são extremamente ansiosos e desconfiados, têm medo do desconhecido de tudo que pode causar algum tipo de dano emocional.\nOs objetivos emocionais do SEIS serão encontrar o valor dentro deles e aprender a confiar em suas atitudes."
+            self.inf_personalidade_str[7] = "Ativos, vivazes, distraídos...os SETE são um eneatipo cheio de energia e desejo de liberdade.\nSão pessoas que fogem da rotina fazendo mil planos para se distrair, buscam constantemente experiências novas e satisfatórias e geralmente vivem sob uma máscara de alegria para evitar conectar com a dor e a realidade quando essa é pouco agradável.\nA dica psicológica que o tipo SETE pode melhorar se baseará na tomada de responsabilidades, a maturidade emocional e a conexão com a realidade."
+            self.inf_personalidade_str[8] = "As personalidades do tipo OITO são caracterizadas por um forte controle sobre seu ambiente e pelo desejo de esconder suas fraquezas a todo custo.\nSão pessoas combativas, agressivas e orientadas para o poder.\nBuscam proteger aqueles indivíduos que eles consideram ""merecedores de proteção"" e tentam impor suas ideias a todo custo.\nPara que um OITO possa crescer emocionalmente é recomendável um trabalho orientado a recuperar a inocência e bondade própria da criança interior, aceitar suas fraquezas e aprender a viver no amor."
+            self.inf_personalidade_str[9] = "As pessoas desse eneatipo são indivíduos tranquilos, mediadores e com tendência a evitar o conflito.\nNecessitam que em seu ambiente reine a paz e a harmonia.\nEles geralmente não enfrentam os outros porque não querem romper essa tranquilidade interna, é por isso que se sentem desconfortáveis com as mudanças e os desafios inesperados.\nOs objetivos recomendados para o tipo de personalidade NOVE estarão relacionados com mostrar suas emoções, aprender a tomar decisões e amar-se, respeitando seus reais desejos."
         else:
+            print("hello")
             self.tipo_rosa_str[0] = ""
             self.tipo_rosa_str[1] = "Others see me as a perfectionist, Discipline and rigor are important to me"
             self.tipo_rosa_str[2] = "Others see me as available, Connection with others and helping is important to me"
@@ -162,6 +199,28 @@ class tipos_personalidade:
             self.resultado_str[7] = "Dreamer"
             self.resultado_str[8] = "Confrontational"
             self.resultado_str[9] = "Controller"
+
+            self.inf_personalidade_str[0] = ""
+            self.inf_personalidade_str[1] = "The first of the enneatypes is characterized by an ego that is very focused on discipline, it always seeks to highlight the errors in everything it sees and is incapable of leaving a detail unaddressed.\nThey are orderly and have a very strong conception of what is right and what is wrong.\nDespite their good intentions, in their search for perfection, they can hurt other people's feelings by always highlighting the negative details.\nThe ONE's psychological work will be based on finding peace, being less self-demanding, cultivating kindness, accept yourself and others."
+            self.inf_personalidade_str[2] = "People of this enneatype focus all their attention on others, seek love through acts or gestures of helping others and generally feel a type of ""pride"" when they feel that someone needs them.\nThey want to be loved and feel wanted at a cost that is needed.\nThey do not focus on their needs and this can affect their personal well-being.\nThe growth objective of a TWO will be to learn to give love and stop needing external affection, recognize their humility and let it go brings a feeling of pride."
+            self.inf_personalidade_str[3] = "Type THREE is characterized by a tendency to act as he or she believes others want him or her to act.\nThey care greatly about the image they project to others and live by and for it.\nThe path to good- Being a THREE will be guided to leave vanity behind and act according to their own feelings and emotions, ceasing to focus on what others think."
+            self.inf_personalidade_str[4] = "These people connect deeply with emotions, they have a strong unconscious need to feel loved, to be unique and special.\nThey often develop disorders related to depression and have a deep feeling of inferiority.\nThey are the most creative personality type, but at the same time more melancholic and pessimistic.\nPsychological advice for an individual with a FOUR personality will be focused on cultivating a feeling of equality in relation to others, self-esteem and letting oneself be loved."
+            self.inf_personalidade_str[5] = "Those analytical, observant and perceptive people are generally described as personality type FIVE.\nTheir world is in their head and they rarely share it, they have a deep difficulty connecting with emotions and even more so if they are foreigners.\nThe path to The growth of a person with an enneatype FIVE will be directed away from personal isolation and sharing their thoughts and emotions with others."
+            self.inf_personalidade_str[6] = "Individuals who are defined as enneatype SIX are those whose main value is sincerity and fidelity.\nThey are generally extremely anxious and suspicious, they are afraid of the unknown and everything that can cause some type of emotional harm.\nThe emotional goals of the SIX will be find the value within them and learn to trust their attitudes."
+            self.inf_personalidade_str[7] = "Active, lively, distracted... the SEVEN are an enneatype full of energy and desire for freedom.\nThey are people who escape routine by making a thousand plans to distract themselves, constantly seek new and satisfying experiences and generally live under a mask of joy to avoid connecting with pain and reality when it is not pleasant.\nThe psychological tip that type SEVEN can improve will be based on taking responsibility, emotional maturity and connection with reality."
+            self.inf_personalidade_str[8] = "Type EIGHT personalities are characterized by strong control over their environment and the desire to hide their weaknesses at all costs.\nThey are combative, aggressive and power-oriented people.\nThey seek to protect those individuals who they consider ""deserving of protection "" and try to impose their ideas at all costs.\nFor an EIGHT to grow emotionally, work aimed at recovering the innocence and kindness of the inner child, accepting their weaknesses and learning to live in love is recommended."
+            self.inf_personalidade_str[9] = "People of this enneatype are calm, mediating individuals with a tendency to avoid conflict.\nThey need peace and harmony to reign in their environment.\nThey generally do not confront others because they do not want to break this internal tranquility, which is why they They feel uncomfortable with changes and unexpected challenges.\nThe recommended goals for personality type NINE will be related to showing your emotions, learning to make decisions and loving yourself, respecting your real desires."
+
+            self.tipo_cinzento_str[0] = ""
+            self.tipo_cinzento_str[1] = "Perfectionism, Disciplined, Focus on detail Rigid and determined"
+            self.tipo_cinzento_str[2] = "Committed, Relationship skills, Organized, Voluntary"
+            self.tipo_cinzento_str[3] = "Competitive, Confident, Focus on success, Objective"
+            self.tipo_cinzento_str[4] = "Dreamy, Intense, Emotional, Romantic"
+            self.tipo_cinzento_str[5] = "Analytical, Observant, Emotionally Cold, Independent"
+            self.tipo_cinzento_str[6] = "Questioning, Cautious, Organized, Anticipates various scenarios"
+            self.tipo_cinzento_str[7] = "Optimistic, Enthusiastic, Creative, Focus on multi-options"
+            self.tipo_cinzento_str[8] = "Direct, Frontal, Impatient with others' pace, Assertive"
+            self.tipo_cinzento_str[9] = "Peacemaker, Flexible, Calm and cordial, Difficulty saying no"
 
 class App:
 
@@ -315,6 +374,20 @@ class App:
         self.botao_menu["state"] = "normal"
         janela_inf.destroy()
 
+    def definicoes(self, logo):
+        janela_def = Toplevel(self.janela_init)
+        janela_def.title("definições")
+        janela_def.iconphoto(False, logo)
+
+        idioma = tk.StringVar()
+        botao_r_in = ttk.Radiobutton(janela_def, text='Inglês', value='IN', variable=idioma)
+        botao_r_pt = ttk.Radiobutton(janela_def, text='Português', value='PT', variable=idioma)
+        botao_aplicar_idioma = tk.Button(janela_def, text="Aplicar idioma", command=partial(self.tipos.mudar_idioma, idioma))
+
+        botao_r_in.place(x=400, y=100)
+        botao_r_pt.place(x=300, y=100)
+        botao_aplicar_idioma.place(x=350, y=150)
+
     # atributos globais
     resultado_do_user = 0
     interrupted_rede = False
@@ -353,7 +426,7 @@ class App:
         self.janela_init.title("Teste de personalidade")
         self.janela_init.geometry("1920x1080")
 
-        self.imagem = Image.open("D:\\prog\\img\\fundo_f_3.png")
+        self.imagem = Image.open("D:\\prog\\img\\fundo_f_f2_ing.png")
         #self.imagem.thumbnail((1920, 860))
         self.imagem.thumbnail((1920, 1080))
         self.imagem_tk = ImageTk.PhotoImage(self.imagem)
@@ -408,9 +481,18 @@ class App:
         email_entry = tk.Entry(width=40, exportselection=True)
         self.botao_registo = tk.Button(janela_init, image=imagem_reg_f, width=180, height=30, command=partial(self.ver_registro, logo))
         self.botao_init = tk.Button(janela_init, image=imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome, Mensagem_nome, email_entry, Mensagem_email, self.label1))
+        self.botao_opcoes = tk.Button(janela_init, text="Opções", command=partial(self.definicoes, logo))
         self.botao_init.image = imagem_botao_f
         self.botao_registo.image = imagem_reg_f
         #Mensagem_nome.place(x=520, y=230)
+        #selected = tk.StringVar()
+        #r1 = ttk.Radiobutton(janela_init, text='Inglês', value='IN', variable=selected)
+        #r2 = ttk.Radiobutton(janela_init, text='Português', value='PT', variable=selected)
+        #botao_aplicar_idioma = tk.Button(janela_init, text="Aplicar idioma", command=partial(tipos.mudar_idioma, selected))
+        #r1.place(x=520, y=480)
+        #r2.place(x=520, y= 520)
+        #botao_aplicar_idioma.place(x=520, y=560)
+        self.botao_opcoes.place(x=520, y=560)
         nome.place(x=520, y=260)
         #Mensagem_email.place(x=520, y=290)
         email_entry.place(x=520, y=320)
@@ -488,11 +570,11 @@ class App:
         self.mensagem_principal.config(text="Escolha uma das opções", bg="#808080", font=("Arial", 25, "bold"), justify="center")
         self.imagem_botao_pergunta = Image.open("D:\\prog\\img\\botao_c.png")
         self.imagem_botao_pergunta_tk = ImageTk.PhotoImage(self.imagem_botao_pergunta)
-        self.Botao1 = tk.Button(self.janela_init, image=self.imagem_botao_pergunta_tk, text="Direto, Frontal, Impaciente com ritmo de outros, Assertivo", compound="center", width=580, height=40, command=partial(self.cinzento2, 8))
+        self.Botao1 = tk.Button(self.janela_init, image=self.imagem_botao_pergunta_tk, text=self.tipos.tipo_cinzento_str[8], compound="center", width=580, height=40, command=partial(self.cinzento2, 8))
         self.Botao1.image = self.imagem_botao_pergunta_tk
-        self.Botao2 = tk.Button(self.janela_init, image=self.imagem_botao_pergunta_tk, text="Analítico, Observador, Frio Emocionalmente, Independente", compound="center", width=580, height=40, command=partial(self.cinzento2, 5))
+        self.Botao2 = tk.Button(self.janela_init, image=self.imagem_botao_pergunta_tk, text=self.tipos.tipo_cinzento_str[5], compound="center", width=580, height=40, command=partial(self.cinzento2, 5))
         self.Botao2.image = self.imagem_botao_pergunta_tk
-        self.Botao3 = tk.Button(self.janela_init, image=self.imagem_botao_pergunta_tk, text="Empenhado, Habilidade nas relações, Organizado, Voluntarioso", compound="center", width=580, height=40, command=partial(self.cinzento2, 2))
+        self.Botao3 = tk.Button(self.janela_init, image=self.imagem_botao_pergunta_tk, text=self.tipos.tipo_cinzento_str[2], compound="center", width=580, height=40, command=partial(self.cinzento2, 2))
         self.Botao3.image = self.imagem_botao_pergunta_tk
         self.Botao1.place(x=50, y=450)
         self.Botao2.place(x=350, y=300)
@@ -502,79 +584,79 @@ class App:
     def cinzento2(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[0] = resp_num
-        self.Botao1.config(command=partial(self.cinzento3, 6), text="Questionador, Precavido, Organizado, Antecipa os vários cenários")
-        self.Botao2.config(command=partial(self.cinzento3, 7), text="Otimista, Entusiasta, Criativo, Foco em multi-opções")
-        self.Botao3.config(command=partial(self.cinzento3, 1), text="Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado")
+        self.Botao1.config(command=partial(self.cinzento3, 6), text=self.tipos.tipo_cinzento_str[6])
+        self.Botao2.config(command=partial(self.cinzento3, 7), text=self.tipos.tipo_cinzento_str[7])
+        self.Botao3.config(command=partial(self.cinzento3, 1), text=self.tipos.tipo_cinzento_str[1])
 
     def cinzento3(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[1] = resp_num
-        self.Botao1.config(command=partial(self.cinzento4, 3), text="Competitivo, Confiante, Foco no sucesso, Objetivo")
-        self.Botao2.config(command=partial(self.cinzento4, 4), text="Sonhador, Intenso, Emotivo, Romântico")
-        self.Botao3.config(command=partial(self.cinzento4, 9), text="Pacificador, Flexível, Calmo e cordial, Dificuldade em dizer não")
+        self.Botao1.config(command=partial(self.cinzento4, 3), text=self.tipos.tipo_cinzento_str[3])
+        self.Botao2.config(command=partial(self.cinzento4, 4), text=self.tipos.tipo_cinzento_str[4])
+        self.Botao3.config(command=partial(self.cinzento4, 9), text=self.tipos.tipo_cinzento_str[9])
 
     def cinzento4(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[2] = resp_num
-        self.Botao1.config(command=partial(self.cinzento5, 7), text="Otimista, Entusiasta, Criativo, Foco em multi-opções")
-        self.Botao2.config(command=partial(self.cinzento5, 3), text="Competitivo, Confiante, Foco no sucesso, Objetivo")
-        self.Botao3.config(command=partial(self.cinzento5, 9), text="Pacificador, Flexível, Calmo e cordial, Dificuldade em dizer não")
+        self.Botao1.config(command=partial(self.cinzento5, 7), text=self.tipos.tipo_cinzento_str[7])
+        self.Botao2.config(command=partial(self.cinzento5, 3), text=self.tipos.tipo_cinzento_str[3])
+        self.Botao3.config(command=partial(self.cinzento5, 9), text=self.tipos.tipo_cinzento_str[9])
 
     def cinzento5(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[3] = resp_num
-        self.Botao1.config(command=partial(self.cinzento6, 4), text="Sonhador, Intenso, Emotivo, Romântico")
-        self.Botao2.config(command=partial(self.cinzento6, 1), text="Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado")
-        self.Botao3.config(command=partial(self.cinzento6, 8), text="Direto, Frontal, Impaciente com ritmo de outros, Assertivo")
+        self.Botao1.config(command=partial(self.cinzento6, 4), text=self.tipos.tipo_cinzento_str[4])
+        self.Botao2.config(command=partial(self.cinzento6, 1), text=self.tipos.tipo_cinzento_str[1])
+        self.Botao3.config(command=partial(self.cinzento6, 8), text=self.tipos.tipo_cinzento_str[8])
 
     def cinzento6(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[4] = resp_num
-        self.Botao1.config(command=partial(self.cinzento7, 5), text="Analítico, Observador, Frio Emocionalmente, Independente")
-        self.Botao2.config(command=partial(self.cinzento7, 2), text="Empenhado, Habilidade nas relações, Organizado, Voluntarioso")
-        self.Botao3.config(command=partial(self.cinzento7, 6), text="Questionador, Precavido, Organizado, Antecipa os vários cenários")
+        self.Botao1.config(command=partial(self.cinzento7, 5), text=self.tipos.tipo_cinzento_str[5])
+        self.Botao2.config(command=partial(self.cinzento7, 2), text=self.tipos.tipo_cinzento_str[2])
+        self.Botao3.config(command=partial(self.cinzento7, 6), text=self.tipos.tipo_cinzento_str[6])
 
     def cinzento7(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[5] = resp_num
-        self.Botao1.config(command=partial(self.cinzento8, 7), text="Otimista, Entusiasta, Criativo, Foco em multi-opções")
-        self.Botao2.config(command=partial(self.cinzento8, 9), text="Pacificador, Flexível, Calmo e cordial, Dificuldade em dizer não")
-        self.Botao3.config(command=partial(self.cinzento8, 2), text="Empenhado, Habilidade nas relações, Organizado, Voluntarioso")
+        self.Botao1.config(command=partial(self.cinzento8, 7), text=self.tipos.tipo_cinzento_str[7])
+        self.Botao2.config(command=partial(self.cinzento8, 9), text=self.tipos.tipo_cinzento_str[9])
+        self.Botao3.config(command=partial(self.cinzento8, 2), text=self.tipos.tipo_cinzento_str[2])
     
     def cinzento8(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[6] = resp_num
-        self.Botao1.config(command=partial(self.cinzento9, 6), text="Questionador, Precavido, Organizado, Antecipa os vários cenários")
-        self.Botao2.config(command=partial(self.cinzento9, 8), text="Direto, Frontal, Impaciente com ritmo de outros, Assertivo")
-        self.Botao3.config(command=partial(self.cinzento9, 4), text="Sonhador, Intenso, Emotivo, Romântico")
+        self.Botao1.config(command=partial(self.cinzento9, 6), text=self.tipos.tipo_cinzento_str[6])
+        self.Botao2.config(command=partial(self.cinzento9, 8), text=self.tipos.tipo_cinzento_str[8])
+        self.Botao3.config(command=partial(self.cinzento9, 4), text=self.tipos.tipo_cinzento_str[4])
     
     def cinzento9(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[7] = resp_num
-        self.Botao1.config(command=partial(self.cinzento10, 5), text="Analítico, Observador, Frio Emocionalmente, Independente")
-        self.Botao2.config(command=partial(self.cinzento10, 1), text="Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado")
-        self.Botao3.config(command=partial(self.cinzento10, 3), text="Competitivo, Confiante, Foco no sucesso, Objetivo")
+        self.Botao1.config(command=partial(self.cinzento10, 5), text=self.tipos.tipo_cinzento_str[5])
+        self.Botao2.config(command=partial(self.cinzento10, 1), text=self.tipos.tipo_cinzento_str[1])
+        self.Botao3.config(command=partial(self.cinzento10, 3), text=self.tipos.tipo_cinzento_str[3])
     
     def cinzento10(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[8] = resp_num
-        self.Botao1.config(command=partial(self.cinzento11, 9), text="Pacificador, Flexível, Calmo e cordial, Dificuldade em dizer não")
-        self.Botao2.config(command=partial(self.cinzento11, 8), text="Direto, Frontal, Impaciente com ritmo de outros, Assertivo")
-        self.Botao3.config(command=partial(self.cinzento11, 3), text="Competitivo, Confiante, Foco no sucesso, Objetivo")
+        self.Botao1.config(command=partial(self.cinzento11, 9), text=self.tipos.tipo_cinzento_str[9])
+        self.Botao2.config(command=partial(self.cinzento11, 8), text=self.tipos.tipo_cinzento_str[8])
+        self.Botao3.config(command=partial(self.cinzento11, 3), text=self.tipos.tipo_cinzento_str[3])
     
     def cinzento11(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[9] = resp_num
-        self.Botao1.config(command=partial(self.cinzento12, 4), text="Sonhador, Intenso, Emotivo, Romântico")
-        self.Botao2.config(command=partial(self.cinzento12, 7), text="Otimista, Entusiasta, Criativo, Foco em multi-opções")
-        self.Botao3.config(command=partial(self.cinzento12, 1), text="Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado")
+        self.Botao1.config(command=partial(self.cinzento12, 4), text=self.tipos.tipo_cinzento_str[4])
+        self.Botao2.config(command=partial(self.cinzento12, 7), text=self.tipos.tipo_cinzento_str[7])
+        self.Botao3.config(command=partial(self.cinzento12, 1), text=self.tipos.tipo_cinzento_str[1])
     
     def cinzento12(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.tipos.resp[10] = resp_num
-        self.Botao1.config(command=partial(self.init_fase_rosa, 2), text="Empenhado, Habilidade nas relações, Organizado, Voluntarioso")
-        self.Botao2.config(command=partial(self.init_fase_rosa, 6), text="Questionador, Precavido, Organizado, Antecipa os vários cenários")
-        self.Botao3.config(command=partial(self.init_fase_rosa, 5), text="Analítico, Observador, Frio Emocionalmente, Independente")
+        self.Botao1.config(command=partial(self.init_fase_rosa, 2), text=self.tipos.tipo_cinzento_str[2])
+        self.Botao2.config(command=partial(self.init_fase_rosa, 6), text=self.tipos.tipo_cinzento_str[6])
+        self.Botao3.config(command=partial(self.init_fase_rosa, 5), text=self.tipos.tipo_cinzento_str[5])
     
     def init_fase_rosa(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
