@@ -20,6 +20,7 @@ from time import gmtime, strftime
 rede_quest = True
 fich_async = winsound.SND_FILENAME | winsound.SND_ASYNC
 idioma = 'PT'
+mudou = False
 
 # se o ficheiro não existir cria um ficheiro e coloca o idioma português por padrão
 def detectar_idioma_padrao():
@@ -129,6 +130,7 @@ class tipos_personalidade:
     # return 0 se idioma for o mesmo
     def verificar_idioma(self, idioma_str):
         idioma_sel = idioma_str.get()
+        global idioma
         if idioma_sel == idioma:
             return 0
         else:
@@ -140,6 +142,8 @@ class tipos_personalidade:
                 return 1
             self.mudar_idioma(idioma_sel)
             escrever_idioma(idioma_sel)
+            global mudou
+            mudou = True
 
     def mudar_idioma(self, idioma_str):
         global idioma
@@ -259,6 +263,7 @@ class tipos_personalidade:
             self.tipo_cinzento_str[7] = "Optimistic, Enthusiastic, Creative, Focus on multi-options"
             self.tipo_cinzento_str[8] = "Direct, Frontal, Impatient with others' pace, Assertive"
             self.tipo_cinzento_str[9] = "Peacemaker, Flexible, Calm and cordial, Difficulty saying no"
+
 
 class App:
 
@@ -420,7 +425,18 @@ class App:
         self.botao_menu["state"] = "normal"
         janela_inf.destroy()
 
-    def definicoes(self, logo):
+    def verificar_mudou_idioma(self, idioma_e):
+        self.tipos.verificar_idioma(idioma_e)
+        global mudou
+        if mudou == True:
+            imagem_de_fundo_nova = Image.open(self.tipos.caminho_img_fundo_init_str)
+            imagem_de_fundo_nova.thumbnail((1920, 1080))
+            imagem_de_fundo_nova_tk = ImageTk.PhotoImage(imagem_de_fundo_nova)
+            self.label1.configure(image=imagem_de_fundo_nova_tk)
+            self.label1.image = imagem_de_fundo_nova_tk
+            self.repoe_botoes_init_idioma()
+
+    def idioma(self, logo):
         self.janela_def = Toplevel(self.janela_init)
         self.janela_def.title("Idioma")
         self.janela_def.iconphoto(False, logo)
@@ -431,12 +447,10 @@ class App:
         self.botao_idioma["state"] = "disabled"
 
         self.janela_def.protocol("WM_DELETE_WINDOW", self.repoe_botoes_init_idioma)
-        global idioma
         idioma_b = tk.StringVar(value=idioma)
         botao_r_in = ttk.Radiobutton(self.janela_def, text='Inglês', value='IN', variable=idioma_b)
         botao_r_pt = ttk.Radiobutton(self.janela_def, text='Português', value='PT', variable=idioma_b)
-        botao_aplicar_idioma = tk.Button(self.janela_def, text="Aplicar idioma", command=partial(self.tipos.verificar_idioma, idioma_b))
-
+        botao_aplicar_idioma = tk.Button(self.janela_def, text="Aplicar idioma", command=partial(self.verificar_mudou_idioma, idioma_b))
         botao_r_in.place(x=30, y=10)
         botao_r_pt.place(x=100, y=10)
         botao_aplicar_idioma.place(x=60, y=40)
@@ -535,7 +549,7 @@ class App:
         email_entry = tk.Entry(width=40, exportselection=True)
         self.botao_registo = tk.Button(janela_init, image=imagem_reg_f, width=180, height=30, command=partial(self.ver_registro, logo))
         self.botao_init = tk.Button(janela_init, image=imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome, Mensagem_nome, email_entry, Mensagem_email, self.label1))
-        self.botao_idioma = tk.Button(janela_init, text="Opções", command=partial(self.definicoes, logo))
+        self.botao_idioma = tk.Button(janela_init, text="Idioma", command=partial(self.idioma, logo))
         self.botao_init.image = imagem_botao_f
         self.botao_registo.image = imagem_reg_f
         #Mensagem_nome.place(x=520, y=230)
@@ -546,7 +560,7 @@ class App:
         #r1.place(x=520, y=480)
         #r2.place(x=520, y= 520)
         #botao_aplicar_idioma.place(x=520, y=560)
-        self.botao_idioma.place(x=520, y=560)
+        self.botao_idioma.place(x=560, y=500)
         nome.place(x=520, y=260)
         #Mensagem_email.place(x=520, y=290)
         email_entry.place(x=520, y=320)
@@ -621,9 +635,13 @@ class App:
         self.imagem.close()
         img_fundo.destroy()
         self.init_cinzento()
+        self.botao_idioma.destroy()
     
     def init_cinzento(self):
-        self.mensagem_principal.config(text="Escolha uma das opções", bg="#808080", font=("Arial", 25, "bold"), justify="center")
+        if self.idioma == "PT":
+            self.mensagem_principal.config(text="Escolha uma das opções", bg="#808080", font=("Arial", 25, "bold"), justify="center")
+        else:
+            self.mensagem_principal.config(text="Choose one option", bg="#808080", font=("Arial", 25, "bold"), justify="center")
         self.imagem_botao_pergunta = Image.open("D:\\prog\\img\\botao_c.png")
         self.imagem_botao_pergunta_tk = ImageTk.PhotoImage(self.imagem_botao_pergunta)
         self.Botao1 = tk.Button(self.janela_init, image=self.imagem_botao_pergunta_tk, text=self.tipos.tipo_cinzento_str[8], compound="center", width=580, height=40, command=partial(self.cinzento2, 8))
@@ -635,7 +653,10 @@ class App:
         self.Botao1.place(x=50, y=450)
         self.Botao2.place(x=350, y=300)
         self.Botao3.place(x=650, y=450)
-        self.mensagem_principal.place(x=450,y=150)
+        if self.idioma == "PT":
+            self.mensagem_principal.place(x=450, y=150)
+        else:
+            self.mensagem_principal.place(x=500, y=150)
 
     def cinzento2(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
@@ -806,14 +827,20 @@ class App:
         self.Botao1.destroy()
 
         self.resultado_do_user = self.tipos.resultado_str[resp_num]
-        self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="O seu tipo é " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num]) 
+        if self.idioma == "PT":
+            self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="O seu tipo é " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num])
+        else:
+            self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="Your type is " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num])
         self.botao_menu = tk.Button(width=200, height=40, image=img_menu_tk, command=partial(self.__init__, self.janela_init, self.tipos, 1))
         self.botao_info = tk.Button(width=200, height=60, image=img_inf_tk, command=partial(self.mostrar_info, self.tipos.inf_personalidade_str[resp_num], self.resultado_do_user, self.tipos.caminho_img_fundo_str[resp_num]))
         self.botao_menu.image = img_menu_tk
         self.botao_info.image = img_inf_tk
         self.botao_menu.place(x=540, y=350)
         self.botao_info.place(x=540, y=410)
-        self.Resultado.place(x=430,y=150)
+        if self.idioma == "PT":
+            self.Resultado.place(x=430,y=150)
+        else:
+            self.Resultado.place(x=380, y=150)
         tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
         fich_xml = self.cria_xml()
         num_resultados = len(list(self.dados))
