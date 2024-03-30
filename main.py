@@ -19,9 +19,25 @@ from time import gmtime, strftime
 #Variavel Global do programa todo
 rede_quest = True
 fich_async = winsound.SND_FILENAME | winsound.SND_ASYNC
+idioma = 'PT'
+
+# se o ficheiro não existir cria um ficheiro e coloca o idioma português por padrão
+def detectar_idioma_padrao():
+    global idioma
+    if not os.path.exists("Idioma.txt"):
+        idioma_fd = open("Idioma.txt", "w")
+        idioma_fd.write("PT")
+    else:
+        idioma_fd = open("Idioma.txt", "r")
+        if idioma_fd.read() == "IN":
+            idioma = 'IN'
+
+def escrever_idioma(idioma_str):
+    esc_idi = open("Idioma.txt", "w") # não á problema em recriar o ficheiro
+    esc_idi.write(idioma_str)
 
 class tipos_personalidade:
-    
+
     # lista com as respostas
     resp = list(range(12))
     fase_2_resp = list(range(4))
@@ -95,6 +111,8 @@ class tipos_personalidade:
     inf_personalidade_str[8] = "As personalidades do tipo OITO são caracterizadas por um forte controle sobre seu ambiente e pelo desejo de esconder suas fraquezas a todo custo.\nSão pessoas combativas, agressivas e orientadas para o poder.\nBuscam proteger aqueles indivíduos que eles consideram ""merecedores de proteção"" e tentam impor suas ideias a todo custo.\nPara que um OITO possa crescer emocionalmente é recomendável um trabalho orientado a recuperar a inocência e bondade própria da criança interior, aceitar suas fraquezas e aprender a viver no amor."
     inf_personalidade_str[9] = "As pessoas desse eneatipo são indivíduos tranquilos, mediadores e com tendência a evitar o conflito.\nNecessitam que em seu ambiente reine a paz e a harmonia.\nEles geralmente não enfrentam os outros porque não querem romper essa tranquilidade interna, é por isso que se sentem desconfortáveis com as mudanças e os desafios inesperados.\nOs objetivos recomendados para o tipo de personalidade NOVE estarão relacionados com mostrar suas emoções, aprender a tomar decisões e amar-se, respeitando seus reais desejos."
 
+    caminho_img_fundo_init_str = ""
+
     caminho_img_fundo_str = ['' for _ in range(10)]
 
     caminho_img_fundo_str[0] = ""
@@ -108,9 +126,28 @@ class tipos_personalidade:
     caminho_img_fundo_str[8] = "D:\\prog\\img\\Confrontador.png"
     caminho_img_fundo_str[9] = "D:\\prog\\img\\Pacifista.png"
 
+    # return 0 se idioma for o mesmo
+    def verificar_idioma(self, idioma_str):
+        idioma_sel = idioma_str.get()
+        if idioma_sel == idioma:
+            return 0
+        else:
+            if idioma_sel == "IN":
+                pergunta_idioma = tk.messagebox.askquestion("Mudar Idioma", "Tem certeza que quer mudar o idioma?")
+            else:
+                pergunta_idioma = tk.messagebox.askquestion("Switch Language", "Are you sure you want to change the language?")
+            if pergunta_idioma == "no":
+                return 1
+            self.mudar_idioma(idioma_sel)
+            escrever_idioma(idioma_sel)
 
-    def mudar_idioma(self, botao_selecionado):
-        if botao_selecionado.get() == "PT":
+    def mudar_idioma(self, idioma_str):
+        global idioma
+        idioma = idioma_str
+        # Não faz nada se for o mesmo idioma, vai ser util para o futuro
+        if idioma_str == "PT":
+            self.caminho_img_fundo_init_str = "D:\\prog\\img\\fundo_init.png"
+            
             self.tipo_cinzento_str[0] = ""
             self.tipo_cinzento_str[1] = "Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado"
             self.tipo_cinzento_str[2] = "Empenhado, Habilidade nas relações, Organizado, Voluntarioso"
@@ -166,7 +203,8 @@ class tipos_personalidade:
             self.inf_personalidade_str[8] = "As personalidades do tipo OITO são caracterizadas por um forte controle sobre seu ambiente e pelo desejo de esconder suas fraquezas a todo custo.\nSão pessoas combativas, agressivas e orientadas para o poder.\nBuscam proteger aqueles indivíduos que eles consideram ""merecedores de proteção"" e tentam impor suas ideias a todo custo.\nPara que um OITO possa crescer emocionalmente é recomendável um trabalho orientado a recuperar a inocência e bondade própria da criança interior, aceitar suas fraquezas e aprender a viver no amor."
             self.inf_personalidade_str[9] = "As pessoas desse eneatipo são indivíduos tranquilos, mediadores e com tendência a evitar o conflito.\nNecessitam que em seu ambiente reine a paz e a harmonia.\nEles geralmente não enfrentam os outros porque não querem romper essa tranquilidade interna, é por isso que se sentem desconfortáveis com as mudanças e os desafios inesperados.\nOs objetivos recomendados para o tipo de personalidade NOVE estarão relacionados com mostrar suas emoções, aprender a tomar decisões e amar-se, respeitando seus reais desejos."
         else:
-            print("hello")
+            self.caminho_img_fundo_init_str = "D:\\prog\\img\\fundo_init_ing.png"
+
             self.tipo_rosa_str[0] = ""
             self.tipo_rosa_str[1] = "Others see me as a perfectionist, Discipline and rigor are important to me"
             self.tipo_rosa_str[2] = "Others see me as available, Connection with others and helping is important to me"
@@ -340,8 +378,9 @@ class App:
 
         self.botao_init["state"] = "disabled"
         self.botao_registo["state"] = "disabled"
+        self.botao_idioma["state"] = "disabled"
 
-        self.janela_reg.protocol("WM_DELETE_WINDOW", self.repoe_botoes_init)
+        self.janela_reg.protocol("WM_DELETE_WINDOW", self.repoe_botoes_init_reg)
 
         colunas = ('Nome', 'Email', 'Resultado', 'Data')
 
@@ -364,10 +403,17 @@ class App:
         
         grelha.pack()
         
-    def repoe_botoes_init(self):
+    def repoe_botoes_init_reg(self):
         self.botao_init["state"] = "normal"
         self.botao_registo["state"] = "normal"
+        self.botao_idioma["state"] = "normal"
         self.janela_reg.destroy()
+
+    def repoe_botoes_init_idioma(self):
+        self.botao_init["state"] = "normal"
+        self.botao_registo["state"] = "normal"
+        self.botao_idioma["state"] = "normal"
+        self.janela_def.destroy()
 
     def repoe_botoes_final(self, janela_inf):
         self.botao_info["state"] = "normal"
@@ -375,18 +421,25 @@ class App:
         janela_inf.destroy()
 
     def definicoes(self, logo):
-        janela_def = Toplevel(self.janela_init)
-        janela_def.title("definições")
-        janela_def.iconphoto(False, logo)
+        self.janela_def = Toplevel(self.janela_init)
+        self.janela_def.title("Idioma")
+        self.janela_def.iconphoto(False, logo)
+        self.janela_def.geometry("200x100")
+        self.centralizar_janela(self.janela_def)
+        self.botao_init["state"] = "disabled"
+        self.botao_registo["state"] = "disabled"
+        self.botao_idioma["state"] = "disabled"
 
-        idioma = tk.StringVar()
-        botao_r_in = ttk.Radiobutton(janela_def, text='Inglês', value='IN', variable=idioma)
-        botao_r_pt = ttk.Radiobutton(janela_def, text='Português', value='PT', variable=idioma)
-        botao_aplicar_idioma = tk.Button(janela_def, text="Aplicar idioma", command=partial(self.tipos.mudar_idioma, idioma))
+        self.janela_def.protocol("WM_DELETE_WINDOW", self.repoe_botoes_init_idioma)
+        global idioma
+        idioma_b = tk.StringVar(value=idioma)
+        botao_r_in = ttk.Radiobutton(self.janela_def, text='Inglês', value='IN', variable=idioma_b)
+        botao_r_pt = ttk.Radiobutton(self.janela_def, text='Português', value='PT', variable=idioma_b)
+        botao_aplicar_idioma = tk.Button(self.janela_def, text="Aplicar idioma", command=partial(self.tipos.verificar_idioma, idioma_b))
 
-        botao_r_in.place(x=400, y=100)
-        botao_r_pt.place(x=300, y=100)
-        botao_aplicar_idioma.place(x=350, y=150)
+        botao_r_in.place(x=30, y=10)
+        botao_r_pt.place(x=100, y=10)
+        botao_aplicar_idioma.place(x=60, y=40)
 
     # atributos globais
     resultado_do_user = 0
@@ -423,10 +476,11 @@ class App:
             self.Resultado.destroy()
         self.janela_init = janela_init
         self.tipos = tipos
+        self.tipos.mudar_idioma
         self.janela_init.title("Teste de personalidade")
         self.janela_init.geometry("1920x1080")
 
-        self.imagem = Image.open("D:\\prog\\img\\fundo_f_f2_ing.png")
+        self.imagem = Image.open(self.tipos.caminho_img_fundo_init_str)
         #self.imagem.thumbnail((1920, 860))
         self.imagem.thumbnail((1920, 1080))
         self.imagem_tk = ImageTk.PhotoImage(self.imagem)
@@ -481,7 +535,7 @@ class App:
         email_entry = tk.Entry(width=40, exportselection=True)
         self.botao_registo = tk.Button(janela_init, image=imagem_reg_f, width=180, height=30, command=partial(self.ver_registro, logo))
         self.botao_init = tk.Button(janela_init, image=imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome, Mensagem_nome, email_entry, Mensagem_email, self.label1))
-        self.botao_opcoes = tk.Button(janela_init, text="Opções", command=partial(self.definicoes, logo))
+        self.botao_idioma = tk.Button(janela_init, text="Opções", command=partial(self.definicoes, logo))
         self.botao_init.image = imagem_botao_f
         self.botao_registo.image = imagem_reg_f
         #Mensagem_nome.place(x=520, y=230)
@@ -492,7 +546,7 @@ class App:
         #r1.place(x=520, y=480)
         #r2.place(x=520, y= 520)
         #botao_aplicar_idioma.place(x=520, y=560)
-        self.botao_opcoes.place(x=520, y=560)
+        self.botao_idioma.place(x=520, y=560)
         nome.place(x=520, y=260)
         #Mensagem_email.place(x=520, y=290)
         email_entry.place(x=520, y=320)
@@ -501,6 +555,8 @@ class App:
     
     def verifica(self, id, mensagem, email, mensagem_email, img_fundo):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        global idioma
+        self.idioma = idioma
         global interrupted_rede
         interrupted_rede = False
         self.email_check = email.get()
@@ -765,7 +821,10 @@ class App:
         self.escreve_resultado_xml(self.dados, "teste" + str(num_resultados), resultado_lista)
         fich_xml.write("resultado.xml")
 
-janela = Tk()
+# Inicio do programa
 personalidades = tipos_personalidade()
+detectar_idioma_padrao()
+personalidades.mudar_idioma(idioma)
+janela = Tk()
 app = App(janela, personalidades, 0)
 janela.mainloop()
