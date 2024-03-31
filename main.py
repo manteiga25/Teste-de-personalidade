@@ -15,6 +15,53 @@ import threading
 import xml.etree.ElementTree as ET
 import time
 from time import gmtime, strftime
+import psycopg2
+from urllib.parse import urlparse
+
+def conectar_banco_de_dados():
+    # Substitua a URL pelo URL fornecido pelo ElephantSQL
+    url = "postgres://tgzkwyzy:pMRrG6CmTqWzwtXGWPsj3R9ohD82OXf6@surus.db.elephantsql.com/tgzkwyzy"
+
+    # Parseie a URL para extrair as informações de conexão
+    parsed_url = urlparse(url)
+    
+    # Extraia as informações de conexão do URL
+    user = parsed_url.username
+    password = parsed_url.password
+    host = parsed_url.hostname
+    port = parsed_url.port
+    database = parsed_url.path.lstrip('/')
+    print(user)
+    print(password)
+    print(host)
+    print(port)
+    print(database)
+    # Conecte-se ao banco de dados remoto
+    conexao = psycopg2.connect(
+        host=host,
+        port=port,
+        user=user,
+        password=password,
+        database=database
+    )
+    return conexao
+
+
+def inserir_usuario(nome, email, resultado, data):
+    conexao = conectar_banco_de_dados()
+    cursor = conexao.cursor()
+
+    comando_sql = '''
+        INSERT INTO usuarios (nome, email, resultado, data) 
+        VALUES (%s, %s, %s, %s)
+    '''
+    
+    # Executa o comando SQL para inserir um novo usuário
+    cursor.execute(comando_sql, (nome, email, resultado, data))
+
+    # Confirma a transação e fecha a conexão
+    conexao.commit()
+    conexao.close()
 
 #Variavel Global do programa todo
 rede_quest = True
@@ -812,12 +859,12 @@ class App:
         self.imagem_botao_pergunta.close()
         self.mensagem_principal.destroy()
         self.imagem = Image.open("D:\\prog\\img\\resultado.png")
-        self.imagem_tk = ImageTk.PhotoImage(self.imagem)
-        img_menu = Image.open(self.tipos.caminho_img_botoes_str[3])
-        img_menu_tk = ImageTk.PhotoImage(img_menu)
-        img_inf = Image.open(self.tipos.caminho_img_botoes_str[4])
-        img_inf_tk = ImageTk.PhotoImage(img_inf)
-        self.label1.configure(image=self.imagem_tk)
+        imagem_tk = ImageTk.PhotoImage(self.imagem)
+        self.img_menu = Image.open(self.tipos.caminho_img_botoes_str[3])
+        img_menu_tk = ImageTk.PhotoImage(self.img_menu)
+        self.img_inf = Image.open(self.tipos.caminho_img_botoes_str[4])
+        img_inf_tk = ImageTk.PhotoImage(self.img_inf)
+        self.label1.configure(image=imagem_tk)
 
         self.label1.imagem = self.imagem_tk
         self.Botao3.destroy()
@@ -844,12 +891,15 @@ class App:
         resultado_lista = {"nome": self.nome_id, "email": self.email_check, "resultado": resp_num, "tempo": tempo}
         self.escreve_resultado_xml(self.dados, "teste" + str(num_resultados), resultado_lista)
         fich_xml.write("resultado.xml")
+        inserir_usuario(self.nome_id, self.email_check, resp_num, tempo)
 
     def fim(self):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.botao_menu.destroy()
         self.botao_info.destroy()
         self.imagem.close()
+        self.img_inf.close()
+        self.img_menu.close()
         self.label1.destroy()
         self.Resultado.destroy()
         self.__init__(self.janela_init, self.tipos)
