@@ -19,7 +19,7 @@ import psycopg2
 from urllib.parse import urlparse
 
 def conectar_banco_de_dados():
-    # Substitua a URL pelo URL fornecido pelo ElephantSQL
+    # URL fornecido pelo ElephantSQL
     url = "postgres://tgzkwyzy:pMRrG6CmTqWzwtXGWPsj3R9ohD82OXf6@surus.db.elephantsql.com/tgzkwyzy"
 
     # Parseie a URL para extrair as informações de conexão
@@ -31,11 +31,6 @@ def conectar_banco_de_dados():
     host = parsed_url.hostname
     port = parsed_url.port
     database = parsed_url.path.lstrip('/')
-    print(user)
-    print(password)
-    print(host)
-    print(port)
-    print(database)
     # Conecte-se ao banco de dados remoto
     conexao = psycopg2.connect(
         host=host,
@@ -52,7 +47,7 @@ def inserir_usuario(nome, email, resultado, data):
     cursor = conexao.cursor()
 
     comando_sql = '''
-        INSERT INTO usuarios (nome, email, resultado, data) 
+        INSERT INTO testes (nome, email, resultado, data) 
         VALUES (%s, %s, %s, %s)
     '''
     
@@ -534,7 +529,7 @@ class App:
             self.centralizar_janela(self.janela_inf_email)
             global idioma
             if idioma == "PT":
-                informa = tk.Label(self.janela_inf_email, font=("Arial", "bold"), text="Verificando email. A verificação de email está a ser executada, esta operação pode demorar dependendo da sua rede.")
+                informa = tk.Label(self.janela_inf_email, text="Verificando email. A verificação de email está a ser executada, esta operação pode demorar dependendo da sua rede.")
             else:
                 informa = tk.Label(self.janela_inf_email, text="Cheking email. The email check is running, this operation may take time depending on your network.")
             informa.place(x=40, y=30)
@@ -870,12 +865,14 @@ class App:
         self.Botao3.destroy()
         self.Botao1.destroy()
 
+        tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
+
         self.resultado_do_user = self.tipos.resultado_str[resp_num]
         if self.idioma == "PT":
             self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="O seu tipo é " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num])
         else:
             self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="Your type is " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num])
-        self.botao_menu = tk.Button(width=200, height=40, image=img_menu_tk, command=self.fim)
+        self.botao_menu = tk.Button(width=200, height=40, image=img_menu_tk, command=partial(self.fim, resp_num, tempo))
         self.botao_info = tk.Button(width=200, height=60, image=img_inf_tk, command=partial(self.mostrar_info, self.tipos.inf_personalidade_str[resp_num], self.resultado_do_user, self.tipos.caminho_img_fundo_str[resp_num]))
         self.botao_menu.image = img_menu_tk
         self.botao_info.image = img_inf_tk
@@ -885,16 +882,16 @@ class App:
             self.Resultado.place(x=430,y=150)
         else:
             self.Resultado.place(x=380, y=150)
-        tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
+        #tempo = strftime("%d-%m-%Y", gmtime(time.time()))
         fich_xml = self.cria_xml()
         num_resultados = len(list(self.dados))
         resultado_lista = {"nome": self.nome_id, "email": self.email_check, "resultado": resp_num, "tempo": tempo}
         self.escreve_resultado_xml(self.dados, "teste" + str(num_resultados), resultado_lista)
         fich_xml.write("resultado.xml")
-        inserir_usuario(self.nome_id, self.email_check, resp_num, tempo)
 
-    def fim(self):
+    def fim(self, resp_num, tempo):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        inserir_usuario(self.nome_id, self.email_check, resp_num, tempo)
         self.botao_menu.destroy()
         self.botao_info.destroy()
         self.imagem.close()
