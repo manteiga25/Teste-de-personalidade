@@ -495,14 +495,7 @@ class App:
             self.janela_inf_email.destroy()
             self.mutex_info.release()
 
-    def __init__ (self, janela_init, tipos, back):
-        if back:
-            winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
-            self.botao_menu.destroy()
-            self.botao_info.destroy()
-            self.imagem.close()
-            self.label1.destroy()
-            self.Resultado.destroy()
+    def __init__ (self, janela_init, tipos):
         self.janela_init = janela_init
         self.tipos = tipos
         self.janela_init.title("Teste de personalidade")
@@ -835,7 +828,7 @@ class App:
             self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="O seu tipo é " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num])
         else:
             self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="Your type is " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num])
-        self.botao_menu = tk.Button(width=200, height=40, image=img_menu_tk, command=partial(self.__init__, self.janela_init, self.tipos, 1))
+        self.botao_menu = tk.Button(width=200, height=40, image=img_menu_tk, command=self.fim)
         self.botao_info = tk.Button(width=200, height=60, image=img_inf_tk, command=partial(self.mostrar_info, self.tipos.inf_personalidade_str[resp_num], self.resultado_do_user, self.tipos.caminho_img_fundo_str[resp_num]))
         self.botao_menu.image = img_menu_tk
         self.botao_info.image = img_inf_tk
@@ -852,10 +845,19 @@ class App:
         self.escreve_resultado_xml(self.dados, "teste" + str(num_resultados), resultado_lista)
         fich_xml.write("resultado.xml")
 
+    def fim(self):
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        self.botao_menu.destroy()
+        self.botao_info.destroy()
+        self.imagem.close()
+        self.label1.destroy()
+        self.Resultado.destroy()
+        self.__init__(self.janela_init, self.tipos)
+
 # Inicio do programa
 personalidades = tipos_personalidade()
 detectar_idioma_padrao()
 personalidades.mudar_idioma(idioma)
 janela = Tk()
-app = App(janela, personalidades, 0)
+app = App(janela, personalidades)
 janela.mainloop()
