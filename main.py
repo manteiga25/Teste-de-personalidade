@@ -45,74 +45,21 @@ class tipos_personalidade:
 
     # variaveis fase cinzento
     tipo_cinzento_str = ['' for _ in range(10)]
-
-    tipo_cinzento_str[0] = ""
-    tipo_cinzento_str[1] = "Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado"
-    tipo_cinzento_str[2] = "Empenhado, Habilidade nas relações, Organizado, Voluntarioso"
-    tipo_cinzento_str[3] = "Competitivo, Confiante, Foco no sucesso, Objetivo"
-    tipo_cinzento_str[4] = "Sonhador, Intenso, Emotivo, Romântico"
-    tipo_cinzento_str[5] = "Analítico, Observador, Frio Emocionalmente, Independente"
-    tipo_cinzento_str[6] = "Questionador, Precavido, Organizado, Antecipa os vários cenários"
-    tipo_cinzento_str[7] = "Otimista, Entusiasta, Criativo, Foco em multi-opções"
-    tipo_cinzento_str[8] = "Direto, Frontal, Impaciente com ritmo de outros, Assertivo"
-    tipo_cinzento_str[9] = "Pacificador, Flexível, Calmo e cordial, Dificuldade em dizer não"
     
     # variaveis fase rosa
     tipo_rosa_str = ['' for _ in range(10)]
-    
-    tipo_rosa_str[0] = ""
-    tipo_rosa_str[1] = "Os outros veem-me como perfeccionista, Disciplina e rigor são importantes para mim"
-    tipo_rosa_str[2] = "Os outros veem-me como disponível, Conexão com os outros e ajudar é importante para mim"
-    tipo_rosa_str[3] = "Os outros veem-me como alguém bem sucedido, O resultado e o reconhecimento são importantes para mim"
-    tipo_rosa_str[4] = "Os outros veem-me como alguém diferente, Sentir-me especial é importante para mim"
-    tipo_rosa_str[5] = "Os outros veem-me como alguém frio e distante, Conhecimento e isolamento são importantes para mim"
-    tipo_rosa_str[6] = "Os outros veem-me como alguém desconfiado, Antecipação de cenários é importantepara mim"
-    tipo_rosa_str[7] = "Os outros veem-me como alguém entusiasta, Ter planos e várias opções é importante para mim"
-    tipo_rosa_str[8] = "Os outros veem-me como alguém demasiado frontal, Controlo é importante para mim"
-    tipo_rosa_str[9] = "Os outros veem-me como alguém flexível, Harmonia éimportante para mim"
 
     # variaveis fase azul
     tipo_azul_str = ['' for _ in range(10)]
 
-    tipo_azul_str[0] = ""
-    tipo_azul_str[1] = "Foco no acerto e errado, Alto nível de exigência, Foco no detalhe e no rigor"
-    tipo_azul_str[2] = "Foco em ajudar os outros,  Fácil comunicar e relacionar, Proatividade na ajuda aos outros"
-    tipo_azul_str[3] = "Foco nas metas e concretização, Vaidade pelas suas conquistas, Foco na imagem e performance"
-    tipo_azul_str[4] = "Preocupação em ser diferente, Intensidade emocional, Muito exigenteconsigo mesmo"
-    tipo_azul_str[5] = "Foco na sua privacidade, Prazer pelo isolamento, Frieza, lógica e racionalidade"
-    tipo_azul_str[6] = "Foco em antecipar, Dificuldade em confiar, Hábil em fazer questões"
-    tipo_azul_str[7] = "Foco em manter varias opções, Entusiasmo e criatividade, Otimismo e foco no prazer"
-    tipo_azul_str[8] = "Foco em manter o controlo, Frontalidade e assertividade, Justiça e defesa dos mais fracos"
-    tipo_azul_str[9] = "Foco na harmonia e consenso, Dificuldade em dizer não, Flexibilidade em aceitar os outros"
-
     # resultado
     resultado_str = ['' for _ in range(10)]
 
-    resultado_str[0] = ""
-    resultado_str[1] = "Perfecionista"
-    resultado_str[2] = "Prestativo"
-    resultado_str[3] = "Bem-sucedido"
-    resultado_str[4] = "Romantico"
-    resultado_str[5] = "Frio"
-    resultado_str[6] = "Questionador"
-    resultado_str[7] = "Sonhador"
-    resultado_str[8] = "Confrontador"
-    resultado_str[9] = "Controlador"
-
     inf_personalidade_str = ['' for _ in range(10)]
 
-    inf_personalidade_str[0] = ""
-    inf_personalidade_str[1] = "O primeiro dos eneatipos é caracterizado por um ego muito focado na disciplina, busca destacar sempre os erros de tudo o que vê e é incapaz de deixar um detalhe sem concertar.\nSão ordenados e têm uma concepção muito forte do que é certo e do que é errado.\nApesar de suas boas intenções, em sua busca pela perfeição, podem ferir os sentimentos alheios ao destacar sempre os detalhes negativos.\nO trabalho psicológico do UM será baseado em encontrar a paz, ser menos auto exigente, cultivar a bondade, aceitar a si mesmo e aos outros."
-    inf_personalidade_str[2] = "As pessoas desse eneatipo concentram toda sua atenção nos outros, buscam o amor através de atos ou gestos de ajuda para os outros e geralmente sentem um tipo de ""orgulho"" ao sentir que alguém precisa deles.\nQuerem ser amados e se sentir queridos ao preço que faça falta.\nNão se concentram em suas necessidades e isso pode afetar seu bem-estar pessoal.\nO objetivo de crescimento de um DOIS será aprender a dar amor e deixar de precisar de carinho externo, reconhecer sua humildade e deixar para trás o sentimento de orgulho."
-    inf_personalidade_str[3] = "O tipo TRÊS é caracterizado por uma tendência a agir como ele ou ela acredita que os outros querem que ele aja.\nEles se preocupam muitíssimo com a imagem que projetam para os outros e vivem por e para ela.\nO caminho para o bem-estar do tipo TRÊS será orientado a deixar para trás a vaidade e agir de acordo com seus sentimentos e emoções próprias, deixando de focar no que os outros pensam."
-    inf_personalidade_str[4] = "Essas pessoas se conectam profundamente com as emoções, têm uma forte necessidade inconsciente de se sentirem amados, de serem únicos e especiais.\nFrequentemente desenvolvem transtornos relacionados com a depressão e tem um profundo sentimento de inferioridade.\nSão o tipo de personalidade mais criativo, mas ao mesmo tempo mais melancólico e pessimista.\nO conselho psicológico para um indivíduo com personalidade QUATRO estará focado em cultivar um sentimento de igualdade em relação aos outros, a autoestima e deixar-se amar."
-    inf_personalidade_str[5] = "Aquelas pessoas analíticas, observadoras e perceptivas são geralmente descritas no tipo de personalidade CINCO.\nSeu mundo está em sua cabeça e eles raramente o compartilham, têm uma profunda dificuldade para conectar com as emoções e ainda mais se eles são estrangeiros.\nO caminho para o crescimento de uma pessoa com um eneatipo CINCO será direcionado para fora do isolamento pessoal e compartilhar seus pensamentos e emoções com outras pessoas."
-    inf_personalidade_str[6] = "Os indivíduos que são definidos como eneatipo SEIS são aqueles cujo valor principal é a sinceridade e a fidelidade.\nGeralmente são extremamente ansiosos e desconfiados, têm medo do desconhecido de tudo que pode causar algum tipo de dano emocional.\nOs objetivos emocionais do SEIS serão encontrar o valor dentro deles e aprender a confiar em suas atitudes."
-    inf_personalidade_str[7] = "Ativos, vivazes, distraídos...os SETE são um eneatipo cheio de energia e desejo de liberdade.\nSão pessoas que fogem da rotina fazendo mil planos para se distrair, buscam constantemente experiências novas e satisfatórias e geralmente vivem sob uma máscara de alegria para evitar conectar com a dor e a realidade quando essa é pouco agradável.\nA dica psicológica que o tipo SETE pode melhorar se baseará na tomada de responsabilidades, a maturidade emocional e a conexão com a realidade."
-    inf_personalidade_str[8] = "As personalidades do tipo OITO são caracterizadas por um forte controle sobre seu ambiente e pelo desejo de esconder suas fraquezas a todo custo.\nSão pessoas combativas, agressivas e orientadas para o poder.\nBuscam proteger aqueles indivíduos que eles consideram ""merecedores de proteção"" e tentam impor suas ideias a todo custo.\nPara que um OITO possa crescer emocionalmente é recomendável um trabalho orientado a recuperar a inocência e bondade própria da criança interior, aceitar suas fraquezas e aprender a viver no amor."
-    inf_personalidade_str[9] = "As pessoas desse eneatipo são indivíduos tranquilos, mediadores e com tendência a evitar o conflito.\nNecessitam que em seu ambiente reine a paz e a harmonia.\nEles geralmente não enfrentam os outros porque não querem romper essa tranquilidade interna, é por isso que se sentem desconfortáveis com as mudanças e os desafios inesperados.\nOs objetivos recomendados para o tipo de personalidade NOVE estarão relacionados com mostrar suas emoções, aprender a tomar decisões e amar-se, respeitando seus reais desejos."
-
     caminho_img_fundo_init_str = ""
+
+    caminho_img_botoes_str = ['' for _ in range(10)]
 
     caminho_img_fundo_str = ['' for _ in range(10)]
 
@@ -130,8 +77,10 @@ class tipos_personalidade:
     # return 0 se idioma for o mesmo
     def verificar_idioma(self, idioma_str):
         idioma_sel = idioma_str.get()
+        global mudou
         global idioma
         if idioma_sel == idioma:
+            mudou = False
             return 0
         else:
             if idioma_sel == "IN":
@@ -142,7 +91,6 @@ class tipos_personalidade:
                 return 1
             self.mudar_idioma(idioma_sel)
             escrever_idioma(idioma_sel)
-            global mudou
             mudou = True
 
     def mudar_idioma(self, idioma_str):
@@ -151,7 +99,13 @@ class tipos_personalidade:
         # Não faz nada se for o mesmo idioma, vai ser util para o futuro
         if idioma_str == "PT":
             self.caminho_img_fundo_init_str = "D:\\prog\\img\\fundo_init.png"
-            
+
+            self.caminho_img_botoes_str[0] = "D:\\prog\\img\\botao_f.png"
+            self.caminho_img_botoes_str[1] = "D:\\prog\\img\\reg.png"
+            self.caminho_img_botoes_str[2] = "D:\\prog\\img\\idioma.png"
+            self.caminho_img_botoes_str[3] = "D:\\prog\\img\\menu.png"
+            self.caminho_img_botoes_str[4] = "D:\\prog\\img\\mais.png"
+
             self.tipo_cinzento_str[0] = ""
             self.tipo_cinzento_str[1] = "Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado"
             self.tipo_cinzento_str[2] = "Empenhado, Habilidade nas relações, Organizado, Voluntarioso"
@@ -208,6 +162,12 @@ class tipos_personalidade:
             self.inf_personalidade_str[9] = "As pessoas desse eneatipo são indivíduos tranquilos, mediadores e com tendência a evitar o conflito.\nNecessitam que em seu ambiente reine a paz e a harmonia.\nEles geralmente não enfrentam os outros porque não querem romper essa tranquilidade interna, é por isso que se sentem desconfortáveis com as mudanças e os desafios inesperados.\nOs objetivos recomendados para o tipo de personalidade NOVE estarão relacionados com mostrar suas emoções, aprender a tomar decisões e amar-se, respeitando seus reais desejos."
         else:
             self.caminho_img_fundo_init_str = "D:\\prog\\img\\fundo_init_ing.png"
+
+            self.caminho_img_botoes_str[0] = "D:\\prog\\img\\botao_init_ing.png"
+            self.caminho_img_botoes_str[1] = "D:\\prog\\img\\reg_ing.png"
+            self.caminho_img_botoes_str[2] = "D:\\prog\\img\\idioma_ing.png"
+            self.caminho_img_botoes_str[3] = "D:\\prog\\img\\botao_menu_ing.png"
+            self.caminho_img_botoes_str[4] = "D:\\prog\\img\\mais_ing.png"
 
             self.tipo_rosa_str[0] = ""
             self.tipo_rosa_str[1] = "Others see me as a perfectionist, Discipline and rigor are important to me"
@@ -290,7 +250,10 @@ class App:
                 self.dados = tree.getroot()
                 cria = False
             except:
-                tk.messagebox.showerror("Erro de escrita", "Foi detectado uma possível violação no ficheiro de registro do programa.", detail="O ficheiro sera recriado")
+                if idioma == "PT":
+                    tk.messagebox.showerror("Erro de escrita", "Foi detectado uma possível violação no ficheiro de registro do programa.", detail="O ficheiro sera recriado.")
+                else:
+                    tk.messagebox.showerror("Write error", "A possible violation has been detected in the program's log file.", detail="The file will be recreated.")
         if cria:
         # Se não existir, crie um novo elemento raiz
             self.dados = ET.Element("dados")
@@ -339,7 +302,10 @@ class App:
         self.botao_menu["state"] = "disabled"
         janela_info = Toplevel(self.janela_init)
         janela_info.protocol("WM_DELETE_WINDOW", lambda : self.repoe_botoes_final(janela_info))
-        janela_info.title("Informação sobre a personalidade")
+        if idioma == "PT":
+            janela_info.title("Informação sobre a personalidade")
+        else:
+            janela_info.title("Information about personalities")
         janela_info.resizable(False, False)
         self.centralizar_janela(janela_info)
         
@@ -369,13 +335,19 @@ class App:
 
     def ver_registro(self, logo):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
-
+        global idioma
         if not os.path.exists("resultado.xml"):
-            tk.messagebox.showinfo("Sem dados", "Não foi detectado nenhum dado no registro, realize um teste")
+            if idioma == "PT":
+                tk.messagebox.showinfo("Sem dados", "Não foi detectado nenhum dado no registro, realize um teste")
+            else:
+                tk.messagebox.showinfo("Data empty", "No data was detected in the log, perform a test")
             return 1
         
         self.janela_reg = Toplevel(self.janela_init)
-        self.janela_reg.title("Registro")
+        if idioma == "PT":
+            self.janela_reg.title("Registro")
+        else:
+            self.janela_reg.title("Register")
         self.janela_reg.resizable(False, False)
         self.janela_reg.iconphoto(False, logo)
         self.centralizar_janela(self.janela_reg)
@@ -396,15 +368,21 @@ class App:
 
         grelha.config(yscrollcommand=rolagem.set)
 
-        grelha.heading('Nome', text='Nome')
-        grelha.heading('Email', text='Email')
-        grelha.heading('Resultado', text='Resultado')
-        grelha.heading('Data', text='Data')
+        if idioma == "PT":
+            grelha.heading('Nome', text='Nome')
+            grelha.heading('Email', text='Email')
+            grelha.heading('Resultado', text='Resultado')
+            grelha.heading('Data', text='Data')
+        else:
+            grelha.heading('Nome', text='Name')
+            grelha.heading('Email', text='Email')
+            grelha.heading('Resultado', text='Result')
+            grelha.heading('Data', text='Data')
 
         dados_formatados = self.le_registro_xml()
 
         for linha in range(len(list(dados_formatados))):
-            grelha.insert("", tk.END, values=(dados_formatados[linha][0], dados_formatados[linha][1], dados_formatados[linha][2], dados_formatados[linha][3]))
+            grelha.insert("", tk.END, values=(dados_formatados[linha][0], dados_formatados[linha][1], self.tipos.resultado_str[int(dados_formatados[linha][2])], dados_formatados[linha][3]))
         
         grelha.pack()
         
@@ -434,11 +412,30 @@ class App:
             imagem_de_fundo_nova_tk = ImageTk.PhotoImage(imagem_de_fundo_nova)
             self.label1.configure(image=imagem_de_fundo_nova_tk)
             self.label1.image = imagem_de_fundo_nova_tk
+            imagem_botao_init_nova = Image.open(self.tipos.caminho_img_botoes_str[0])
+            imagem_botao_init_nova.thumbnail((1920, 1080))
+            imagem_botao_init_nova_tk = ImageTk.PhotoImage(imagem_botao_init_nova)
+            self.botao_init.configure(image=imagem_botao_init_nova_tk)
+            self.botao_init.image = imagem_botao_init_nova_tk
+            imagem_botao_reg_nova = Image.open(self.tipos.caminho_img_botoes_str[1])
+            imagem_botao_reg_nova.thumbnail((1920, 1080))
+            imagem_reg_nova_tk = ImageTk.PhotoImage(imagem_botao_reg_nova)
+            self.botao_registo.configure(image=imagem_reg_nova_tk)
+            self.botao_registo.image = imagem_reg_nova_tk
+            imagem_botao_idioma_nova = Image.open(self.tipos.caminho_img_botoes_str[2])
+            imagem_botao_idioma_nova.thumbnail((1920, 1080))
+            imagem_idioma_nova_tk = ImageTk.PhotoImage(imagem_botao_idioma_nova)
+            self.botao_idioma.configure(image=imagem_idioma_nova_tk)
+            self.botao_idioma.image = imagem_idioma_nova_tk
+            
             self.repoe_botoes_init_idioma()
 
-    def idioma(self, logo):
+    def idioma_janela(self, logo):
         self.janela_def = Toplevel(self.janela_init)
-        self.janela_def.title("Idioma")
+        if idioma == "PT":
+            self.janela_def.title("Idioma")
+        else:
+            self.janela_def.title("Language")
         self.janela_def.iconphoto(False, logo)
         self.janela_def.geometry("200x100")
         self.centralizar_janela(self.janela_def)
@@ -448,9 +445,14 @@ class App:
 
         self.janela_def.protocol("WM_DELETE_WINDOW", self.repoe_botoes_init_idioma)
         idioma_b = tk.StringVar(value=idioma)
-        botao_r_in = ttk.Radiobutton(self.janela_def, text='Inglês', value='IN', variable=idioma_b)
-        botao_r_pt = ttk.Radiobutton(self.janela_def, text='Português', value='PT', variable=idioma_b)
-        botao_aplicar_idioma = tk.Button(self.janela_def, text="Aplicar idioma", command=partial(self.verificar_mudou_idioma, idioma_b))
+        if idioma == "PT":
+            botao_r_in = ttk.Radiobutton(self.janela_def, text='Inglês', value='IN', variable=idioma_b)
+            botao_r_pt = ttk.Radiobutton(self.janela_def, text='Português', value='PT', variable=idioma_b)
+            botao_aplicar_idioma = tk.Button(self.janela_def, text="Aplicar idioma", command=partial(self.verificar_mudou_idioma, idioma_b))
+        else:
+            botao_r_in = ttk.Radiobutton(self.janela_def, text='English', value='IN', variable=idioma_b)
+            botao_r_pt = ttk.Radiobutton(self.janela_def, text='Portuguese', value='PT', variable=idioma_b)
+            botao_aplicar_idioma = tk.Button(self.janela_def, text="Aply Language", command=partial(self.verificar_mudou_idioma, idioma_b))
         botao_r_in.place(x=30, y=10)
         botao_r_pt.place(x=100, y=10)
         botao_aplicar_idioma.place(x=60, y=40)
@@ -474,11 +476,15 @@ class App:
             time.sleep(0.1)
 
     # informa ao utilizador de forma paralela que a validação de email esta a ser executada
+    # não terminado
     def inf_teste_email(self):
             self.janela_inf_email = tk.Toplevel()
             self.janela_inf_email.withdraw()
-            
-            tk.messagebox.showinfo("Verificando email", "A verificação de email está a ser executada, esta operação pode demorar dependendo da sua rede.")
+            global idioma
+            if idioma == "PT":
+                tk.messagebox.showinfo("Verificando email", "A verificação de email está a ser executada, esta operação pode demorar dependendo da sua rede.")
+            else:
+                tk.messagebox.showinfo("Cheking email", "The email check is running, this operation may take time depending on your network.")
 
     def __init__ (self, janela_init, tipos, back):
         if back:
@@ -486,16 +492,15 @@ class App:
             self.botao_menu.destroy()
             self.botao_info.destroy()
             self.img_final.close()
-            self.label_final.destroy()
+            self.label1.destroy()
             self.Resultado.destroy()
         self.janela_init = janela_init
         self.tipos = tipos
-        self.tipos.mudar_idioma
+        #self.tipos.mudar_idioma
         self.janela_init.title("Teste de personalidade")
         self.janela_init.geometry("1920x1080")
 
         self.imagem = Image.open(self.tipos.caminho_img_fundo_init_str)
-        #self.imagem.thumbnail((1920, 860))
         self.imagem.thumbnail((1920, 1080))
         self.imagem_tk = ImageTk.PhotoImage(self.imagem)
         
@@ -504,41 +509,17 @@ class App:
 
         self.label1.imagem = self.imagem_tk
 
-        self.imagem_cinzento = Image.open("D:\\prog\\img\\cinzento.jpg")
-        self.imagem_cinzento.thumbnail((1920, 1080))
-        self.imagem_cinzento_tk = ImageTk.PhotoImage(self.imagem_cinzento)
-        
-        self.label_cinzento = Label(self.janela_init, image=self.imagem_cinzento_tk)
-        self.label_cinzento.pack()
-
-        self.label_cinzento.imagem = self.imagem_cinzento_tk
-
-        self.imagem_rosa = Image.open("D:\\prog\\img\\rosa.jpg")
-        self.imagem_rosa.thumbnail((1920, 1080))
-        self.imagem_rosa_tk = ImageTk.PhotoImage(self.imagem_rosa)
-        
-        self.label_rosa = Label(self.janela_init, image=self.imagem_rosa_tk)
-        self.label_rosa.pack()
-
-        self.label_rosa.imagem = self.imagem_rosa_tk
-
-        self.imagem_azul = Image.open("D:\\prog\\img\\azul.jpg")
-        self.imagem_azul.thumbnail((1920, 1080))
-        self.imagem_azul_tk = ImageTk.PhotoImage(self.imagem_azul)
-        
-        self.label_azul = Label(self.janela_init, image=self.imagem_azul_tk)
-        self.label_azul.pack()
-
-        self.label_azul.imagem = self.imagem_azul_tk
-
         imagem_logo = Image.open("D:\\prog\\img\\logo.png")
         logo = ImageTk.PhotoImage(imagem_logo)
 
-        imagem_botao = Image.open("D:\\prog\\img\\botao_f.png")
+        imagem_botao = Image.open(self.tipos.caminho_img_botoes_str[0])
         imagem_botao_f = ImageTk.PhotoImage(imagem_botao)
 
-        imagem_reg = Image.open("D:\\prog\\img\\reg.png")
+        imagem_reg = Image.open(self.tipos.caminho_img_botoes_str[1])
         imagem_reg_f = ImageTk.PhotoImage(imagem_reg)
+
+        imagem_botao_idioma = Image.open(self.tipos.caminho_img_botoes_str[2])
+        imagem_botao_idioma_f = ImageTk.PhotoImage(imagem_botao_idioma)
 
         # Defina a imagem como ícone
         self.janela_init.iconphoto(False, logo)
@@ -549,9 +530,10 @@ class App:
         email_entry = tk.Entry(width=40, exportselection=True)
         self.botao_registo = tk.Button(janela_init, image=imagem_reg_f, width=180, height=30, command=partial(self.ver_registro, logo))
         self.botao_init = tk.Button(janela_init, image=imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome, Mensagem_nome, email_entry, Mensagem_email, self.label1))
-        self.botao_idioma = tk.Button(janela_init, text="Idioma", command=partial(self.idioma, logo))
+        self.botao_idioma = tk.Button(janela_init, image=imagem_botao_idioma_f, width=180, height=30, text="Idioma", command=partial(self.idioma_janela, logo))
         self.botao_init.image = imagem_botao_f
         self.botao_registo.image = imagem_reg_f
+        self.botao_idioma.image = imagem_botao_idioma_f
         #Mensagem_nome.place(x=520, y=230)
         #selected = tk.StringVar()
         #r1 = ttk.Radiobutton(janela_init, text='Inglês', value='IN', variable=selected)
@@ -560,12 +542,12 @@ class App:
         #r1.place(x=520, y=480)
         #r2.place(x=520, y= 520)
         #botao_aplicar_idioma.place(x=520, y=560)
-        self.botao_idioma.place(x=560, y=500)
+        self.botao_idioma.place(x=550, y=480)
         nome.place(x=520, y=260)
         #Mensagem_email.place(x=520, y=290)
         email_entry.place(x=520, y=320)
         self.botao_init.place(x=520, y=360)
-        self.botao_registo.place(x=560, y=430)
+        self.botao_registo.place(x=550, y=430)
     
     def verifica(self, id, mensagem, email, mensagem_email, img_fundo):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
@@ -582,11 +564,17 @@ class App:
         tarefa_rede = threading.Thread(target=self.verifica_rede)
         tarefa_rede.start()
         if self.nome_id == "":
-            tk.messagebox.showerror("Preencha o campo nome", "É obrigatorio introduzor o nome")
+            if self.idioma == "PT":
+                tk.messagebox.showerror("Preencha o campo nome", "É obrigatorio introduzor o nome")
+            else:
+                tk.messagebox.showerror("Fill in the name field", "It is mandatory to enter the name")
             id.config(bg="#FFC0CB")
             return 1
         elif self.email_check == "":
-            tk.messagebox.showerror("Preencha o campo email", "É obrigatorio introduzor o email")
+            if self.idioma == "PT":
+                tk.messagebox.showerror("Preencha o campo email", "É obrigatorio introduzor o email")
+            else:
+                tk.messagebox.showerror("Fill in the email field", "It is mandatory to enter the email")
             email.config(bg="#FFC0CB")
             return 1
         elif self.cria_ficheiro() == False:
@@ -605,20 +593,29 @@ class App:
                 #self.janela_inf_email.destroy()
                 self.mutex.acquire()
                 if self.rede == True:
-                    tk.messagebox.showerror("Email invalido", "O email introduzido é invlido ou não existe, reescreva")
+                    if self.idioma == "PT":
+                        tk.messagebox.showerror("Email invalido", "O email introduzido é invlido ou não existe, reescreva")
+                    else:
+                        tk.messagebox.showerror("Invalid Email", "The email you entered does not exist, please rewrite")
                     email.config(bg="#FFC0CB")
                     interrupted_rede = True
                     self.mutex.release()
                     return 1
                 else:
-                    self.pergunta = tk.messagebox.askquestion("Erro de rede", "Não foi possível estabelecer conexão á rede, deseja continuar com o teste?")
+                    if self.idioma == "PT":
+                        self.pergunta = tk.messagebox.askquestion("Erro de rede", "Não foi possível estabelecer conexão á rede, deseja continuar com o teste?")
+                    else:
+                        self.pergunta = tk.messagebox.askquestion("Network error", "Unable to connect to the network, do you want to continue with the test?")
                     self.mutex.release()
             else: # se o email estiver correto mas o utilizador não tiver o acessso a rede o email não sera guardado no ficheiro de cache
                 ficheiro_cache_escrita = open("email-cache.txt", "a")
                 ficheiro_cache_escrita.write(self.email_check + "\n")
                 ficheiro_cache_escrita.close()
         elif self.rede == False:
-            self.pergunta = tk.messagebox.askquestion("Erro de rede", "Não foi possível estabelecer conexão á rede, deseja continuar com o teste?")
+            if self.idioma == "PT":
+                self.pergunta = tk.messagebox.askquestion("Erro de rede", "Não foi possível estabelecer conexão á rede, deseja continuar com o teste?")
+            else:
+                self.pergunta = tk.messagebox.askquestion("Network error", "Unable to connect to the network, do you want to continue with the test?")
 
         if self.mutex.locked():
             self.mutex.release()
@@ -633,11 +630,16 @@ class App:
         mensagem_email.destroy()
         self.botao_registo.destroy()
         self.imagem.close()
-        img_fundo.destroy()
-        self.init_cinzento()
+        #img_fundo.destroy()
         self.botao_idioma.destroy()
+        self.init_cinzento()
     
     def init_cinzento(self):
+        self.imagem_cinzento = Image.open("D:\\prog\\img\\cinzento.jpg")
+        self.imagem_cinzento.thumbnail((1920, 1080))
+        self.imagem_cinzento_tk = ImageTk.PhotoImage(self.imagem_cinzento)
+        self.label1.configure(image=self.imagem_cinzento_tk)
+        self.label1.image = self.imagem_cinzento_tk
         if self.idioma == "PT":
             self.mensagem_principal.config(text="Escolha uma das opções", bg="#808080", font=("Arial", 25, "bold"), justify="center")
         else:
@@ -738,7 +740,12 @@ class App:
     def init_fase_rosa(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.imagem_cinzento.close()
-        self.label_cinzento.destroy()
+        self.imagem_rosa = Image.open("D:\\prog\\img\\rosa.jpg")
+        self.imagem_rosa.thumbnail((1920, 1080))
+        self.imagem_rosa_tk = ImageTk.PhotoImage(self.imagem_rosa)
+        self.label1.configure(image=self.imagem_rosa_tk)
+        self.label1.image = self.imagem_rosa_tk
+        self.imagem_cinzento.close()
         self.mensagem_principal["bg"] = "pink"
         self.tipos.resp[11] = resp_num
         self.imagem_botao_pergunta.close()
@@ -798,8 +805,12 @@ class App:
         self.init_azul()
 
     def init_azul(self):
-        self.label_rosa.destroy()
         self.imagem_rosa.close()
+        self.imagem_azul = Image.open("D:\\prog\\img\\azul.jpg")
+        self.imagem_azul.thumbnail((1920, 1080))
+        self.imagem_azul_tk = ImageTk.PhotoImage(self.imagem_azul)
+        self.label1.configure(image=self.imagem_azul_tk)
+        self.label1.image = self.imagem_azul_tk
         self.mensagem_principal["bg"] = "blue"
         self.imagem_botao_pergunta.close()
         self.imagem_botao_pergunta = Image.open("D:\\prog\\img\\botao_a.png")
@@ -810,19 +821,17 @@ class App:
 
     def resultado_final(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
-        self.label_azul.destroy()
         self.imagem_azul.close()
         self.mensagem_principal.destroy()
         self.img_final = Image.open("D:\\prog\\img\\resultado.png")
         self.img_final_tk = ImageTk.PhotoImage(self.img_final)
-        img_menu = Image.open("D:\\prog\\img\\menu.png")
+        img_menu = Image.open(self.tipos.caminho_img_botoes_str[3])
         img_menu_tk = ImageTk.PhotoImage(img_menu)
-        img_inf = Image.open("D:\\prog\\img\\mais.png")
+        img_inf = Image.open(self.tipos.caminho_img_botoes_str[4])
         img_inf_tk = ImageTk.PhotoImage(img_inf)
-        self.label_final = Label(self.janela_init, image=self.img_final_tk)
-        self.label_final.pack()
+        self.label1.configure(image=self.img_final_tk)
 
-        self.label_final.imagem = self.img_final_tk
+        self.label1.imagem = self.img_final_tk
         self.Botao3.destroy()
         self.Botao1.destroy()
 
@@ -844,7 +853,8 @@ class App:
         tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
         fich_xml = self.cria_xml()
         num_resultados = len(list(self.dados))
-        resultado_lista = {"nome": self.nome_id, "email": self.email_check, "resultado": self.resultado_do_user, "tempo": tempo}
+        #resultado_lista = {"nome": self.nome_id, "email": self.email_check, "resultado": self.resultado_do_user, "tempo": tempo}
+        resultado_lista = {"nome": self.nome_id, "email": self.email_check, "resultado": resp_num, "tempo": tempo}
         self.escreve_resultado_xml(self.dados, "teste" + str(num_resultados), resultado_lista)
         fich_xml.write("resultado.xml")
 
