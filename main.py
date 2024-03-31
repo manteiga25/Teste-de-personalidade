@@ -59,7 +59,7 @@ class tipos_personalidade:
 
     caminho_img_fundo_init_str = ""
 
-    caminho_img_botoes_str = ['' for _ in range(10)]
+    caminho_img_botoes_str = ['' for _ in range(5)]
 
     caminho_img_fundo_str = ['' for _ in range(10)]
 
@@ -223,7 +223,6 @@ class tipos_personalidade:
             self.tipo_cinzento_str[7] = "Optimistic, Enthusiastic, Creative, Focus on multi-options"
             self.tipo_cinzento_str[8] = "Direct, Frontal, Impatient with others' pace, Assertive"
             self.tipo_cinzento_str[9] = "Peacemaker, Flexible, Calm and cordial, Difficulty saying no"
-
 
 class App:
 
@@ -407,26 +406,30 @@ class App:
         self.tipos.verificar_idioma(idioma_e)
         global mudou
         if mudou == True:
-            imagem_de_fundo_nova = Image.open(self.tipos.caminho_img_fundo_init_str)
-            imagem_de_fundo_nova.thumbnail((1920, 1080))
-            imagem_de_fundo_nova_tk = ImageTk.PhotoImage(imagem_de_fundo_nova)
-            self.label1.configure(image=imagem_de_fundo_nova_tk)
-            self.label1.image = imagem_de_fundo_nova_tk
-            imagem_botao_init_nova = Image.open(self.tipos.caminho_img_botoes_str[0])
-            imagem_botao_init_nova.thumbnail((1920, 1080))
-            imagem_botao_init_nova_tk = ImageTk.PhotoImage(imagem_botao_init_nova)
-            self.botao_init.configure(image=imagem_botao_init_nova_tk)
-            self.botao_init.image = imagem_botao_init_nova_tk
-            imagem_botao_reg_nova = Image.open(self.tipos.caminho_img_botoes_str[1])
-            imagem_botao_reg_nova.thumbnail((1920, 1080))
-            imagem_reg_nova_tk = ImageTk.PhotoImage(imagem_botao_reg_nova)
-            self.botao_registo.configure(image=imagem_reg_nova_tk)
-            self.botao_registo.image = imagem_reg_nova_tk
-            imagem_botao_idioma_nova = Image.open(self.tipos.caminho_img_botoes_str[2])
-            imagem_botao_idioma_nova.thumbnail((1920, 1080))
-            imagem_idioma_nova_tk = ImageTk.PhotoImage(imagem_botao_idioma_nova)
-            self.botao_idioma.configure(image=imagem_idioma_nova_tk)
-            self.botao_idioma.image = imagem_idioma_nova_tk
+            self.imagem.close()
+            self.imagem_botao.close()
+            self.imagem_reg.close()
+            self.imagem_botao_idioma.close()
+            self.imagem = Image.open(self.tipos.caminho_img_fundo_init_str)
+            self.imagem.thumbnail((1920, 1080))
+            self.imagem_tk = ImageTk.PhotoImage(self.imagem)
+            self.label1.configure(image=self.imagem_tk)
+            self.label1.image = self.imagem_tk
+            self.imagem_botao = Image.open(self.tipos.caminho_img_botoes_str[0])
+            self.imagem_botao.thumbnail((1920, 1080))
+            self.imagem_botao_f = ImageTk.PhotoImage(self.imagem_botao)
+            self.botao_init.configure(image=self.imagem_botao_f)
+            self.botao_init.image = self.imagem_botao_f
+            self.imagem_reg = Image.open(self.tipos.caminho_img_botoes_str[1])
+            self.imagem_reg.thumbnail((1920, 1080))
+            self.imagem_reg_f = ImageTk.PhotoImage(self.imagem_reg)
+            self.botao_registo.configure(image=self.imagem_reg_f)
+            self.botao_registo.image = self.imagem_reg_f
+            self.imagem_botao_idioma = Image.open(self.tipos.caminho_img_botoes_str[2])
+            self.imagem_botao_idioma.thumbnail((1920, 1080))
+            self.imagem_botao_idioma_f = ImageTk.PhotoImage(self.imagem_botao_idioma)
+            self.botao_idioma.configure(image=self.imagem_botao_idioma_f)
+            self.botao_idioma.image = self.imagem_botao_idioma_f
             
             self.repoe_botoes_init_idioma()
 
@@ -491,12 +494,11 @@ class App:
             winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
             self.botao_menu.destroy()
             self.botao_info.destroy()
-            self.img_final.close()
+            self.imagem.close()
             self.label1.destroy()
             self.Resultado.destroy()
         self.janela_init = janela_init
         self.tipos = tipos
-        #self.tipos.mudar_idioma
         self.janela_init.title("Teste de personalidade")
         self.janela_init.geometry("1920x1080")
 
@@ -512,44 +514,33 @@ class App:
         imagem_logo = Image.open("D:\\prog\\img\\logo.png")
         logo = ImageTk.PhotoImage(imagem_logo)
 
-        imagem_botao = Image.open(self.tipos.caminho_img_botoes_str[0])
-        imagem_botao_f = ImageTk.PhotoImage(imagem_botao)
+        self.imagem_botao = Image.open(self.tipos.caminho_img_botoes_str[0])
+        self.imagem_botao_f = ImageTk.PhotoImage(self.imagem_botao)
 
-        imagem_reg = Image.open(self.tipos.caminho_img_botoes_str[1])
-        imagem_reg_f = ImageTk.PhotoImage(imagem_reg)
+        self.imagem_reg = Image.open(self.tipos.caminho_img_botoes_str[1])
+        self.imagem_reg_f = ImageTk.PhotoImage(self.imagem_reg)
 
-        imagem_botao_idioma = Image.open(self.tipos.caminho_img_botoes_str[2])
-        imagem_botao_idioma_f = ImageTk.PhotoImage(imagem_botao_idioma)
+        self.imagem_botao_idioma = Image.open(self.tipos.caminho_img_botoes_str[2])
+        self.imagem_botao_idioma_f = ImageTk.PhotoImage(self.imagem_botao_idioma)
 
         # Defina a imagem como ícone
         self.janela_init.iconphoto(False, logo)
         self.mensagem_principal = tk.Label()
-        Mensagem_nome = tk.Label(text="Nome:", bg="white", compound="center", font=('Arial Black', 10))
-        Mensagem_email = tk.Label(text="Email:", bg="white", font=('Arial Black', 10))
         nome = tk.Entry(width=40, exportselection=True)
         email_entry = tk.Entry(width=40, exportselection=True)
-        self.botao_registo = tk.Button(janela_init, image=imagem_reg_f, width=180, height=30, command=partial(self.ver_registro, logo))
-        self.botao_init = tk.Button(janela_init, image=imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome, Mensagem_nome, email_entry, Mensagem_email, self.label1))
-        self.botao_idioma = tk.Button(janela_init, image=imagem_botao_idioma_f, width=180, height=30, text="Idioma", command=partial(self.idioma_janela, logo))
-        self.botao_init.image = imagem_botao_f
-        self.botao_registo.image = imagem_reg_f
-        self.botao_idioma.image = imagem_botao_idioma_f
-        #Mensagem_nome.place(x=520, y=230)
-        #selected = tk.StringVar()
-        #r1 = ttk.Radiobutton(janela_init, text='Inglês', value='IN', variable=selected)
-        #r2 = ttk.Radiobutton(janela_init, text='Português', value='PT', variable=selected)
-        #botao_aplicar_idioma = tk.Button(janela_init, text="Aplicar idioma", command=partial(tipos.mudar_idioma, selected))
-        #r1.place(x=520, y=480)
-        #r2.place(x=520, y= 520)
-        #botao_aplicar_idioma.place(x=520, y=560)
+        self.botao_registo = tk.Button(janela_init, image=self.imagem_reg_f, width=180, height=30, command=partial(self.ver_registro, logo))
+        self.botao_init = tk.Button(janela_init, image=self.imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome, email_entry))
+        self.botao_idioma = tk.Button(janela_init, image=self.imagem_botao_idioma_f, width=180, height=30, text="Idioma", command=partial(self.idioma_janela, logo))
+        self.botao_init.image = self.imagem_botao_f
+        self.botao_registo.image = self.imagem_reg_f
+        self.botao_idioma.image = self.imagem_botao_idioma_f
         self.botao_idioma.place(x=550, y=480)
         nome.place(x=520, y=260)
-        #Mensagem_email.place(x=520, y=290)
         email_entry.place(x=520, y=320)
         self.botao_init.place(x=520, y=360)
         self.botao_registo.place(x=550, y=430)
     
-    def verifica(self, id, mensagem, email, mensagem_email, img_fundo):
+    def verifica(self, id, email):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         global idioma
         self.idioma = idioma
@@ -625,21 +616,20 @@ class App:
 
         self.botao_init.destroy()
         id.destroy()
-        mensagem.destroy()
         email.destroy()
-        mensagem_email.destroy()
         self.botao_registo.destroy()
         self.imagem.close()
-        #img_fundo.destroy()
+        self.imagem_botao_idioma.close()
+        self.imagem_reg.close()
         self.botao_idioma.destroy()
         self.init_cinzento()
     
     def init_cinzento(self):
-        self.imagem_cinzento = Image.open("D:\\prog\\img\\cinzento.jpg")
-        self.imagem_cinzento.thumbnail((1920, 1080))
-        self.imagem_cinzento_tk = ImageTk.PhotoImage(self.imagem_cinzento)
-        self.label1.configure(image=self.imagem_cinzento_tk)
-        self.label1.image = self.imagem_cinzento_tk
+        self.imagem = Image.open("D:\\prog\\img\\cinzento.jpg")
+        self.imagem.thumbnail((1920, 1080))
+        self.imagem_tk = ImageTk.PhotoImage(self.imagem)
+        self.label1.configure(image=self.imagem_tk)
+        self.label1.image = self.imagem_tk
         if self.idioma == "PT":
             self.mensagem_principal.config(text="Escolha uma das opções", bg="#808080", font=("Arial", 25, "bold"), justify="center")
         else:
@@ -739,13 +729,12 @@ class App:
     
     def init_fase_rosa(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
-        self.imagem_cinzento.close()
-        self.imagem_rosa = Image.open("D:\\prog\\img\\rosa.jpg")
-        self.imagem_rosa.thumbnail((1920, 1080))
-        self.imagem_rosa_tk = ImageTk.PhotoImage(self.imagem_rosa)
-        self.label1.configure(image=self.imagem_rosa_tk)
-        self.label1.image = self.imagem_rosa_tk
-        self.imagem_cinzento.close()
+        self.imagem.close()
+        self.imagem = Image.open("D:\\prog\\img\\rosa.jpg")
+        self.imagem.thumbnail((1920, 1080))
+        self.imagem_tk = ImageTk.PhotoImage(self.imagem)
+        self.label1.configure(image=self.imagem_tk)
+        self.label1.image = self.imagem_tk
         self.mensagem_principal["bg"] = "pink"
         self.tipos.resp[11] = resp_num
         self.imagem_botao_pergunta.close()
@@ -805,12 +794,12 @@ class App:
         self.init_azul()
 
     def init_azul(self):
-        self.imagem_rosa.close()
-        self.imagem_azul = Image.open("D:\\prog\\img\\azul.jpg")
-        self.imagem_azul.thumbnail((1920, 1080))
-        self.imagem_azul_tk = ImageTk.PhotoImage(self.imagem_azul)
-        self.label1.configure(image=self.imagem_azul_tk)
-        self.label1.image = self.imagem_azul_tk
+        self.imagem.close()
+        self.imagem = Image.open("D:\\prog\\img\\azul.jpg")
+        self.imagem.thumbnail((1920, 1080))
+        self.imagem_tk = ImageTk.PhotoImage(self.imagem)
+        self.label1.configure(image=self.imagem_tk)
+        self.label1.image = self.imagem_tk
         self.mensagem_principal["bg"] = "blue"
         self.imagem_botao_pergunta.close()
         self.imagem_botao_pergunta = Image.open("D:\\prog\\img\\botao_a.png")
@@ -821,17 +810,18 @@ class App:
 
     def resultado_final(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
-        self.imagem_azul.close()
+        self.imagem.close()
+        self.imagem_botao_pergunta.close()
         self.mensagem_principal.destroy()
-        self.img_final = Image.open("D:\\prog\\img\\resultado.png")
-        self.img_final_tk = ImageTk.PhotoImage(self.img_final)
+        self.imagem = Image.open("D:\\prog\\img\\resultado.png")
+        self.imagem_tk = ImageTk.PhotoImage(self.imagem)
         img_menu = Image.open(self.tipos.caminho_img_botoes_str[3])
         img_menu_tk = ImageTk.PhotoImage(img_menu)
         img_inf = Image.open(self.tipos.caminho_img_botoes_str[4])
         img_inf_tk = ImageTk.PhotoImage(img_inf)
-        self.label1.configure(image=self.img_final_tk)
+        self.label1.configure(image=self.imagem_tk)
 
-        self.label1.imagem = self.img_final_tk
+        self.label1.imagem = self.imagem_tk
         self.Botao3.destroy()
         self.Botao1.destroy()
 
@@ -853,7 +843,6 @@ class App:
         tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
         fich_xml = self.cria_xml()
         num_resultados = len(list(self.dados))
-        #resultado_lista = {"nome": self.nome_id, "email": self.email_check, "resultado": self.resultado_do_user, "tempo": tempo}
         resultado_lista = {"nome": self.nome_id, "email": self.email_check, "resultado": resp_num, "tempo": tempo}
         self.escreve_resultado_xml(self.dados, "teste" + str(num_resultados), resultado_lista)
         fich_xml.write("resultado.xml")
