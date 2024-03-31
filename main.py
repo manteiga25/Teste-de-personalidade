@@ -481,13 +481,19 @@ class App:
     # informa ao utilizador de forma paralela que a validação de email esta a ser executada
     # não terminado
     def inf_teste_email(self):
-            self.janela_inf_email = tk.Toplevel()
-            self.janela_inf_email.withdraw()
+            self.janela_inf_email = tk.Toplevel(self.janela_init)
+            self.janela_inf_email.title("Email")
+            self.janela_inf_email.geometry("600x80")
+            self.centralizar_janela(self.janela_inf_email)
             global idioma
             if idioma == "PT":
-                tk.messagebox.showinfo("Verificando email", "A verificação de email está a ser executada, esta operação pode demorar dependendo da sua rede.")
+                informa = tk.Label(self.janela_inf_email, font=("Arial", "bold"), text="Verificando email. A verificação de email está a ser executada, esta operação pode demorar dependendo da sua rede.")
             else:
-                tk.messagebox.showinfo("Cheking email", "The email check is running, this operation may take time depending on your network.")
+                informa = tk.Label(self.janela_inf_email, text="Cheking email. The email check is running, this operation may take time depending on your network.")
+            informa.place(x=40, y=30)
+            self.mutex_info.acquire()
+            self.janela_inf_email.destroy()
+            self.mutex_info.release()
 
     def __init__ (self, janela_init, tipos, back):
         if back:
@@ -551,6 +557,8 @@ class App:
         self.rede = True
         self.pergunta = ""
         self.mutex = threading.Lock()
+        self.mutex_info = threading.Lock()
+        self.mutex_info.acquire() # adquire o mutex o mais rapido possivel
         econtrou = False
         tarefa_rede = threading.Thread(target=self.verifica_rede)
         tarefa_rede.start()
@@ -575,13 +583,10 @@ class App:
         # sem o acesso á rede não podemos validar o email
         if econtrou == False and self.rede == True:
             self.mutex.release()
-            #tarefa_inf = threading.Thread(target=self.inf_teste_email)
-            #tarefa_inf.start()
-            
-            
-            
+            tarefa_inf = threading.Thread(target=self.inf_teste_email)
+            tarefa_inf.start()
             if not validate_email(email_address=self.email_check):
-                #self.janela_inf_email.destroy()
+                self.mutex_info.release()
                 self.mutex.acquire()
                 if self.rede == True:
                     if self.idioma == "PT":
