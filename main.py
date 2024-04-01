@@ -8,7 +8,6 @@ import winsound
 import random
 from validate_email import validate_email
 import os
-import sys
 from PIL import Image, ImageTk
 import requests
 import threading
@@ -59,9 +58,8 @@ def inserir_usuario(nome, email, resultado, data):
     conexao.close()
 
 #Variavel Global do programa todo
-rede_quest = True
-fich_async = winsound.SND_FILENAME | winsound.SND_ASYNC
 idioma = 'PT'
+fich_async = winsound.SND_FILENAME | winsound.SND_ASYNC
 mudou = False
 
 # se o ficheiro não existir cria um ficheiro e coloca o idioma português por padrão
@@ -267,20 +265,6 @@ class tipos_personalidade:
             self.tipo_cinzento_str[9] = "Peacemaker, Flexible, Calm and cordial, Difficulty saying no"
 
 class App:
-
-    pergunta = ""
-
-    def erro_de_rede(self):
-        global rede_quest
-        print(rede_quest)
-        if rede_quest:
-            global pergunta
-            pergunta = tk.messagebox.askquestion("Erro de rede", "Não foi possível estabelecer conexão á rede, deseja continuar com o teste?")
-            if pergunta == "no":
-                self.janela_init.destroy() # acho que destroi tudo exceto o processo
-                sys.exit(0) # destroi o processo
-            else:
-                rede_quest = False
 
     def cria_xml(self):
         cria = True
@@ -885,17 +869,19 @@ class App:
         resultado_lista = {"nome": self.nome_id, "email": self.email_check, "resultado": resp_num, "tempo": tempo}
         self.escreve_resultado_xml(self.dados, "teste" + str(num_resultados), resultado_lista)
         fich_xml.write("resultado.xml")
-        while 1:
-            try:
-                inserir_usuario(self.nome_id, self.email_check, resp_num, tempo)
-                break
-            except:
-                if idioma == "PT":
-                    resposta = tk.messagebox.askquestion("Erro de conexão", "Não foi possivel conectar ao banco de dados, deseja tentar outra vez?")
-                else:
-                    resposta = tk.messagebox.askquestion("Connection error", "Unable to connect database, try again?")
-                if resposta == "no":
+        if self.pergunta == "": # não ocorreu erro de rede na primeira fase
+            while 1:
+                try:
+                    inserir_usuario(self.nome_id, self.email_check, resp_num, tempo)
                     break
+                except:
+                    if idioma == "PT":
+                        resposta = tk.messagebox.askquestion("Erro de conexão", "Não foi possivel conectar ao banco de dados, deseja tentar outra vez?")
+                    else:
+                        resposta = tk.messagebox.askquestion("Connection error", "Unable to connect database, try again?")
+                    if resposta == "no":
+                        break
+
     def fim(self):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         self.botao_menu.destroy()
