@@ -15,28 +15,15 @@ import xml.etree.ElementTree as ET
 import time
 from time import gmtime, strftime
 import psycopg2
-from urllib.parse import urlparse
 
 def conectar_banco_de_dados():
-    # URL fornecido pelo ElephantSQL
-    url = "postgres://tgzkwyzy:pMRrG6CmTqWzwtXGWPsj3R9ohD82OXf6@surus.db.elephantsql.com/tgzkwyzy"
-
-    # Parseie a URL para extrair as informações de conexão
-    parsed_url = urlparse(url)
-    
-    # Extraia as informações de conexão do URL
-    user = parsed_url.username
-    password = parsed_url.password
-    host = parsed_url.hostname
-    port = parsed_url.port
-    database = parsed_url.path.lstrip('/')
     # Conecte-se ao banco de dados remoto
     conexao = psycopg2.connect(
-        host=host,
-        port=port,
-        user=user,
-        password=password,
-        database=database
+        host="surus.db.elephantsql.com",
+        port=None,
+        user="tgzkwyzy",
+        password="pMRrG6CmTqWzwtXGWPsj3R9ohD82OXf6",
+        database="tgzkwyzy"
     )
     return conexao
 
