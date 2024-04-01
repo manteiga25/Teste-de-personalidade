@@ -389,7 +389,6 @@ class App:
             self.janela_reg.title("Registro")
         else:
             self.janela_reg.title("Register")
-        self.janela_reg.resizable(False, False)
         self.janela_reg.iconphoto(False, logo)
         self.centralizar_janela(self.janela_reg)
         
@@ -425,7 +424,7 @@ class App:
         for linha in range(len(list(dados_formatados))):
             grelha.insert("", tk.END, values=(dados_formatados[linha][0], dados_formatados[linha][1], self.tipos.resultado_str[int(dados_formatados[linha][2])], dados_formatados[linha][3]))
         
-        grelha.pack()
+        grelha.pack(expand=True, fill=tk.BOTH)
         
     def repoe_botoes_init_reg(self):
         self.botao_init["state"] = "normal"
@@ -477,6 +476,7 @@ class App:
 
     def idioma_janela(self, logo):
         self.janela_def = Toplevel(self.janela_init)
+        self.janela_def.resizable(False, False)
         if idioma == "PT":
             self.janela_def.title("Idioma")
         else:
@@ -542,7 +542,6 @@ class App:
         self.tipos = tipos
         self.janela_init.title("Teste de personalidade")
         self.janela_init.geometry("1920x1080")
-
         self.imagem = Image.open(self.tipos.caminho_img_fundo_init_str)
         self.imagem.thumbnail((1920, 1080))
         self.imagem_tk = ImageTk.PhotoImage(self.imagem)
@@ -850,6 +849,7 @@ class App:
 
     def resultado_final(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
         self.imagem.close()
         self.imagem_botao_pergunta.close()
         self.mensagem_principal.destroy()
@@ -861,18 +861,16 @@ class App:
         img_inf_tk = ImageTk.PhotoImage(self.img_inf)
         self.label1.configure(image=imagem_tk)
 
-        self.label1.imagem = self.imagem_tk
+        self.label1.imagem = imagem_tk
         self.Botao3.destroy()
         self.Botao1.destroy()
-
-        tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
 
         self.resultado_do_user = self.tipos.resultado_str[resp_num]
         if self.idioma == "PT":
             self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="O seu tipo é " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num])
         else:
             self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="Your type is " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num])
-        self.botao_menu = tk.Button(width=200, height=40, image=img_menu_tk, command=partial(self.fim, resp_num, tempo))
+        self.botao_menu = tk.Button(width=200, height=40, image=img_menu_tk, command=self.fim)
         self.botao_info = tk.Button(width=200, height=60, image=img_inf_tk, command=partial(self.mostrar_info, self.tipos.inf_personalidade_str[resp_num], self.resultado_do_user, self.tipos.caminho_img_fundo_str[resp_num]))
         self.botao_menu.image = img_menu_tk
         self.botao_info.image = img_inf_tk
@@ -882,16 +880,24 @@ class App:
             self.Resultado.place(x=430,y=150)
         else:
             self.Resultado.place(x=380, y=150)
-        #tempo = strftime("%d-%m-%Y", gmtime(time.time()))
         fich_xml = self.cria_xml()
         num_resultados = len(list(self.dados))
         resultado_lista = {"nome": self.nome_id, "email": self.email_check, "resultado": resp_num, "tempo": tempo}
         self.escreve_resultado_xml(self.dados, "teste" + str(num_resultados), resultado_lista)
         fich_xml.write("resultado.xml")
-
-    def fim(self, resp_num, tempo):
+        while 1:
+            try:
+                inserir_usuario(self.nome_id, self.email_check, resp_num, tempo)
+                break
+            except:
+                if idioma == "PT":
+                    resposta = tk.messagebox.askquestion("Erro de conexão", "Não foi possivel conectar ao banco de dados, deseja tentar outra vez?")
+                else:
+                    resposta = tk.messagebox.askquestion("Connection error", "Unable to connect database, try again?")
+                if resposta == "no":
+                    break
+    def fim(self):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
-        inserir_usuario(self.nome_id, self.email_check, resp_num, tempo)
         self.botao_menu.destroy()
         self.botao_info.destroy()
         self.imagem.close()
