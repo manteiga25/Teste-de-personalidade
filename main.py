@@ -373,7 +373,7 @@ class App:
         y = int((janela_principal.winfo_height() - janela.winfo_height()) / 2.5)
         janela.geometry(f"+{x}+{y}")
 
-    def ver_registro(self, logo):
+    def ver_registro(self):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         global idioma
         if not os.path.exists("resultado.xml"):
@@ -388,7 +388,6 @@ class App:
             self.janela_reg.title("Registro")
         else:
             self.janela_reg.title("Register")
-        self.janela_reg.iconphoto(False, logo)
         self.centralizar_janela(self.janela_reg)
 
         self.botao_init["state"] = "disabled"
@@ -482,14 +481,13 @@ class App:
             
             self.repoe_botoes_init_idioma()
 
-    def idioma_janela(self, logo):
+    def idioma_janela(self):
         self.janela_def = Toplevel(self.janela_init)
         self.janela_def.resizable(False, False)
         if idioma == "PT":
             self.janela_def.title("Idioma")
         else:
             self.janela_def.title("Language")
-        self.janela_def.iconphoto(False, logo)
         self.janela_def.geometry("200x100")
         self.centralizar_janela(self.janela_def)
         self.botao_init["state"] = "disabled"
@@ -511,7 +509,7 @@ class App:
         botao_r_pt.place(x=100, y=10)
         botao_aplicar_idioma.place(x=60, y=40)
 
-    def rank(self, logo):
+    def rank(self):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
 
         try:
@@ -520,13 +518,13 @@ class App:
             if idioma == "PT":
                 tk.messagebox.showinfo("Erro de rede", "Não foi possivel estabelecer ligação ao banco de dados")
             else:
-                tk.messagebox.showinfo("Network error", "No data was detected in the log, perform a test")
+                tk.messagebox.showinfo("Network error", "Unable to connect to database")
             return 1
 
         self.janela_rank = Toplevel(self.janela_init)
         self.janela_rank.title("Ranking")
-        self.janela_rank.iconphoto(False, logo)
         self.centralizar_janela(self.janela_rank)
+        self.janela_rank.resizable(False, False)
 
         self.botao_init["state"] = "disabled"
         self.botao_registo["state"] = "disabled"
@@ -581,8 +579,13 @@ class App:
         for coluna in colunas:
             grelha.column(coluna, anchor='center')
 
+        if idioma == "PT":
+            lugar = "º Lugar"
+        else:
+            lugar = " Place"
+
         for num in range(9):
-            grelha.insert("", tk.END, values=(str(num+1) + "º Lugar", self.tipos.resultado_str[quantidade_tipos_str_int[num]], quantidade_tipos[num], str(round((quantidade_tipos[num] / total_dados) * 100, 1)) + "%")) # porentagem fica para a frente
+            grelha.insert("", tk.END, values=(str(num+1) + lugar, self.tipos.resultado_str[quantidade_tipos_str_int[num]], quantidade_tipos[num], str(round((quantidade_tipos[num] / total_dados) * 100, 1)) + "%")) # porentagem fica para a frente
         
         grelha.pack(expand=True, fill=tk.BOTH)
 
@@ -651,14 +654,14 @@ class App:
         self.imagem_botao_rank_f = ImageTk.PhotoImage(self.imagem_botao_rank)
 
         # Defina a imagem como ícone
-        self.janela_init.iconphoto(False, logo)
+        self.janela_init.iconphoto(True, logo)
         self.mensagem_principal = tk.Label()
         nome = tk.Entry(width=40, exportselection=True)
         email_entry = tk.Entry(width=40, exportselection=True)
-        self.botao_registo = tk.Button(janela_init, image=self.imagem_reg_f, width=180, height=30, command=partial(self.ver_registro, logo))
+        self.botao_registo = tk.Button(janela_init, image=self.imagem_reg_f, width=180, height=30, command=self.ver_registro)
         self.botao_init = tk.Button(janela_init, image=self.imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome, email_entry))
-        self.botao_idioma = tk.Button(janela_init, image=self.imagem_botao_idioma_f, width=180, height=30, text="Idioma", command=partial(self.idioma_janela, logo))
-        self.botao_rank = tk.Button(janela_init, image=self.imagem_botao_rank_f, width=180, height=30, command=partial(self.rank, logo))
+        self.botao_idioma = tk.Button(janela_init, image=self.imagem_botao_idioma_f, width=180, height=30, text="Idioma", command=self.idioma_janela)
+        self.botao_rank = tk.Button(janela_init, image=self.imagem_botao_rank_f, width=180, height=30, command=self.rank)
         self.botao_init.image = self.imagem_botao_f
         self.botao_registo.image = self.imagem_reg_f
         self.botao_idioma.image = self.imagem_botao_idioma_f
@@ -668,7 +671,7 @@ class App:
         self.botao_init.place(x=520, y=360)
         self.botao_registo.place(x=550, y=430)
         self.botao_rank.place(x=550, y=510)
-    
+
     def verifica(self, id, email):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
         global idioma
@@ -1001,7 +1004,6 @@ class App:
         self.__init__(self.janela_init, self.tipos)
 
 # Inicio do programa
-receber_dados()
 personalidades = tipos_personalidade()
 detectar_idioma_padrao()
 personalidades.mudar_idioma(idioma)
