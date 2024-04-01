@@ -57,6 +57,21 @@ def inserir_usuario(nome, email, resultado, data):
     conexao.commit()
     conexao.close()
 
+def receber_dados():
+    conexao = conectar_banco_de_dados()
+    cursor = conexao.cursor()
+    
+    # Executa o comando SQL para inserir um novo usuário
+    cursor.execute("SELECT resultado FROM testes")
+    dados_res = cursor.fetchall()
+    dados_formatados = list(range(len(dados_res)))
+    for i in range(len(dados_res)):
+        resultado_s = str(dados_res[i]).strip('(),')
+        dados_formatados[i] = int(resultado_s)
+
+    conexao.close()
+    return dados_formatados
+
 #Variavel Global do programa todo
 idioma = 'PT'
 fich_async = winsound.SND_FILENAME | winsound.SND_ASYNC
@@ -188,7 +203,7 @@ class tipos_personalidade:
             self.resultado_str[6] = "Questionador"
             self.resultado_str[7] = "Sonhador"
             self.resultado_str[8] = "Confrontador"
-            self.resultado_str[9] = "Controlador"
+            self.resultado_str[9] = "Pacificador"
 
             self.inf_personalidade_str[0] = ""
             self.inf_personalidade_str[1] = "O primeiro dos eneatipos é caracterizado por um ego muito focado na disciplina, busca destacar sempre os erros de tudo o que vê e é incapaz de deixar um detalhe sem concertar.\nSão ordenados e têm uma concepção muito forte do que é certo e do que é errado.\nApesar de suas boas intenções, em sua busca pela perfeição, podem ferir os sentimentos alheios ao destacar sempre os detalhes negativos.\nO trabalho psicológico do UM será baseado em encontrar a paz, ser menos auto exigente, cultivar a bondade, aceitar a si mesmo e aos outros."
@@ -375,11 +390,11 @@ class App:
             self.janela_reg.title("Register")
         self.janela_reg.iconphoto(False, logo)
         self.centralizar_janela(self.janela_reg)
-        
 
         self.botao_init["state"] = "disabled"
         self.botao_registo["state"] = "disabled"
         self.botao_idioma["state"] = "disabled"
+        self.botao_rank["state"] = "disabled"
 
         self.janela_reg.protocol("WM_DELETE_WINDOW", self.repoe_botoes_init_reg)
 
@@ -414,18 +429,27 @@ class App:
         self.botao_init["state"] = "normal"
         self.botao_registo["state"] = "normal"
         self.botao_idioma["state"] = "normal"
+        self.botao_rank["state"] = "normal"
         self.janela_reg.destroy()
-
-    def repoe_botoes_init_idioma(self):
-        self.botao_init["state"] = "normal"
-        self.botao_registo["state"] = "normal"
-        self.botao_idioma["state"] = "normal"
-        self.janela_def.destroy()
 
     def repoe_botoes_final(self, janela_inf):
         self.botao_info["state"] = "normal"
         self.botao_menu["state"] = "normal"
         janela_inf.destroy()
+
+    def repoe_botoes_init_idioma(self):
+        self.botao_init["state"] = "normal"
+        self.botao_registo["state"] = "normal"
+        self.botao_idioma["state"] = "normal"
+        self.botao_rank["state"] = "normal"
+        self.janela_def.destroy()
+
+    def repoe_botoes_init_rank(self):
+        self.botao_init["state"] = "normal"
+        self.botao_registo["state"] = "normal"
+        self.botao_idioma["state"] = "normal"
+        self.botao_rank["state"] = "normal"
+        self.janela_rank.destroy()
 
     def verificar_mudou_idioma(self, idioma_e):
         self.tipos.verificar_idioma(idioma_e)
@@ -471,6 +495,7 @@ class App:
         self.botao_init["state"] = "disabled"
         self.botao_registo["state"] = "disabled"
         self.botao_idioma["state"] = "disabled"
+        self.botao_rank["state"] = "disabled"
 
         self.janela_def.protocol("WM_DELETE_WINDOW", self.repoe_botoes_init_idioma)
         idioma_b = tk.StringVar(value=idioma)
@@ -485,6 +510,81 @@ class App:
         botao_r_in.place(x=30, y=10)
         botao_r_pt.place(x=100, y=10)
         botao_aplicar_idioma.place(x=60, y=40)
+
+    def rank(self, logo):
+        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+
+        try:
+            dados_resultados = receber_dados()
+        except:
+            if idioma == "PT":
+                tk.messagebox.showinfo("Erro de rede", "Não foi possivel estabelecer ligação ao banco de dados")
+            else:
+                tk.messagebox.showinfo("Network error", "No data was detected in the log, perform a test")
+            return 1
+
+        self.janela_rank = Toplevel(self.janela_init)
+        self.janela_rank.title("Ranking")
+        self.janela_rank.iconphoto(False, logo)
+        self.centralizar_janela(self.janela_rank)
+
+        self.botao_init["state"] = "disabled"
+        self.botao_registo["state"] = "disabled"
+        self.botao_idioma["state"] = "disabled"
+        self.botao_rank["state"] = "disabled"
+
+        self.janela_rank.protocol("WM_DELETE_WINDOW", self.repoe_botoes_init_rank)
+
+        quantidade_tipos = list(range(9))
+        quantidade_tipos_str = ['' for _ in range(9)]
+        quantidade_tipos_str_int = list(range(9))
+
+        for i in range(9):
+            quantidade_tipos_str[i] = str(dados_resultados).count(str(i+1))
+            quantidade_tipos[i] = int(quantidade_tipos_str[i])
+            quantidade_tipos_str_int[i] = i + 1
+
+        total_dados = sum(quantidade_tipos)
+
+        # ordena
+        linha = 0
+        while linha < 9:
+            coluna = linha + 1
+            while coluna < 9:
+                if quantidade_tipos[linha] < quantidade_tipos[coluna]:
+                    tmp = quantidade_tipos[linha]
+                    quantidade_tipos[linha] = quantidade_tipos[coluna]
+                    quantidade_tipos[coluna] = tmp
+                    tmp = quantidade_tipos_str_int[linha]
+                    quantidade_tipos_str_int[linha] = quantidade_tipos_str_int[coluna]
+                    quantidade_tipos_str_int[coluna] = tmp
+                    linha = 0
+                else:
+                    coluna += 1
+            linha += 1
+
+        colunas = ('Lugar', 'Tipo', 'Quantidade_bruta', 'Percentagem')
+
+        grelha = ttk.Treeview(self.janela_rank, columns=colunas, show='headings')
+
+        if idioma == "PT":
+            grelha.heading('Lugar', text='Classificação')
+            grelha.heading('Tipo', text='Tipo')
+            grelha.heading('Quantidade_bruta', text='Total')
+            grelha.heading('Percentagem', text='Total porcento (%)')
+        else:
+            grelha.heading('Lugar', text='Classification')
+            grelha.heading('Tipo', text='Type')
+            grelha.heading('Quantidade_bruta', text='Total')
+            grelha.heading('Percentagem', text='Total porcentage (%)')
+
+        for coluna in colunas:
+            grelha.column(coluna, anchor='center')
+
+        for num in range(9):
+            grelha.insert("", tk.END, values=(str(num+1) + "º Lugar", self.tipos.resultado_str[quantidade_tipos_str_int[num]], quantidade_tipos[num], str(round((quantidade_tipos[num] / total_dados) * 100, 1)) + "%")) # porentagem fica para a frente
+        
+        grelha.pack(expand=True, fill=tk.BOTH)
 
     # atributos globais
     resultado_do_user = 0
@@ -547,6 +647,9 @@ class App:
         self.imagem_botao_idioma = Image.open(self.tipos.caminho_img_botoes_str[2])
         self.imagem_botao_idioma_f = ImageTk.PhotoImage(self.imagem_botao_idioma)
 
+        self.imagem_botao_rank = Image.open("D:\\prog\\img\\rank.png")
+        self.imagem_botao_rank_f = ImageTk.PhotoImage(self.imagem_botao_rank)
+
         # Defina a imagem como ícone
         self.janela_init.iconphoto(False, logo)
         self.mensagem_principal = tk.Label()
@@ -555,14 +658,16 @@ class App:
         self.botao_registo = tk.Button(janela_init, image=self.imagem_reg_f, width=180, height=30, command=partial(self.ver_registro, logo))
         self.botao_init = tk.Button(janela_init, image=self.imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome, email_entry))
         self.botao_idioma = tk.Button(janela_init, image=self.imagem_botao_idioma_f, width=180, height=30, text="Idioma", command=partial(self.idioma_janela, logo))
+        self.botao_rank = tk.Button(janela_init, image=self.imagem_botao_rank_f, width=180, height=30, command=partial(self.rank, logo))
         self.botao_init.image = self.imagem_botao_f
         self.botao_registo.image = self.imagem_reg_f
         self.botao_idioma.image = self.imagem_botao_idioma_f
-        self.botao_idioma.place(x=550, y=480)
+        self.botao_idioma.place(x=550, y=470)
         nome.place(x=520, y=260)
         email_entry.place(x=520, y=320)
         self.botao_init.place(x=520, y=360)
         self.botao_registo.place(x=550, y=430)
+        self.botao_rank.place(x=550, y=510)
     
     def verifica(self, id, email):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
@@ -644,7 +749,9 @@ class App:
         self.imagem.close()
         self.imagem_botao_idioma.close()
         self.imagem_reg.close()
+        self.imagem_botao_rank.close()
         self.botao_idioma.destroy()
+        self.botao_rank.destroy()
         self.init_cinzento()
     
     def init_cinzento(self):
@@ -894,6 +1001,7 @@ class App:
         self.__init__(self.janela_init, self.tipos)
 
 # Inicio do programa
+receber_dados()
 personalidades = tipos_personalidade()
 detectar_idioma_padrao()
 personalidades.mudar_idioma(idioma)
