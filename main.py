@@ -63,6 +63,7 @@ rede_quest = True
 fich_async = winsound.SND_FILENAME | winsound.SND_ASYNC
 idioma = 'PT'
 mudou = False
+full = 0
 
 # se o ficheiro não existir cria um ficheiro e coloca o idioma português por padrão
 def detectar_idioma_padrao():
@@ -100,6 +101,7 @@ class tipos_personalidade:
     inf_personalidade_str = ['' for _ in range(10)]
 
     caminho_img_fundo_init_str = ""
+    caminho_img_fundo_full_init_str = ""
 
     caminho_img_botoes_str = ['' for _ in range(5)]
 
@@ -203,6 +205,7 @@ class tipos_personalidade:
             self.inf_personalidade_str[8] = "As personalidades do tipo OITO são caracterizadas por um forte controle sobre seu ambiente e pelo desejo de esconder suas fraquezas a todo custo.\nSão pessoas combativas, agressivas e orientadas para o poder.\nBuscam proteger aqueles indivíduos que eles consideram ""merecedores de proteção"" e tentam impor suas ideias a todo custo.\nPara que um OITO possa crescer emocionalmente é recomendável um trabalho orientado a recuperar a inocência e bondade própria da criança interior, aceitar suas fraquezas e aprender a viver no amor."
             self.inf_personalidade_str[9] = "As pessoas desse eneatipo são indivíduos tranquilos, mediadores e com tendência a evitar o conflito.\nNecessitam que em seu ambiente reine a paz e a harmonia.\nEles geralmente não enfrentam os outros porque não querem romper essa tranquilidade interna, é por isso que se sentem desconfortáveis com as mudanças e os desafios inesperados.\nOs objetivos recomendados para o tipo de personalidade NOVE estarão relacionados com mostrar suas emoções, aprender a tomar decisões e amar-se, respeitando seus reais desejos."
         else:
+            self.caminho_img_fundo_full_init_str = "D:\\prog\\img\\fundo_f_ing2.png"
             self.caminho_img_fundo_init_str = "D:\\prog\\img\\fundo_init_ing.png"
 
             self.caminho_img_botoes_str[0] = "D:\\prog\\img\\botao_init_ing.png"
@@ -389,7 +392,6 @@ class App:
             self.janela_reg.title("Registro")
         else:
             self.janela_reg.title("Register")
-        self.janela_reg.resizable(False, False)
         self.janela_reg.iconphoto(False, logo)
         self.centralizar_janela(self.janela_reg)
         
@@ -425,7 +427,7 @@ class App:
         for linha in range(len(list(dados_formatados))):
             grelha.insert("", tk.END, values=(dados_formatados[linha][0], dados_formatados[linha][1], self.tipos.resultado_str[int(dados_formatados[linha][2])], dados_formatados[linha][3]))
         
-        grelha.pack()
+        grelha.pack(expand=True, fill=tk.BOTH)
         
     def repoe_botoes_init_reg(self):
         self.botao_init["state"] = "normal"
@@ -477,6 +479,7 @@ class App:
 
     def idioma_janela(self, logo):
         self.janela_def = Toplevel(self.janela_init)
+        self.janela_def.resizable(False, False)
         if idioma == "PT":
             self.janela_def.title("Idioma")
         else:
@@ -537,13 +540,55 @@ class App:
             self.janela_inf_email.destroy()
             self.mutex_info.release()
 
+    def fullscreen_click(self, event):
+        if self.janela_init.winfo_width() == self.janela_init.winfo_screenwidth() and self.janela_init.winfo_height() == self.janela_init.winfo_screenheight():
+            return 0
+        global full
+        if self.init == 2:
+            return 0
+        elif self.init == 1:
+            self.init = 0
+            return 0
+        else:
+            self.init = 1
+        print("entrou")
+        self.imagem.close()
+        #if self.full == 1:
+        if full == 1:
+            if idioma == "PT":
+                pass
+            else:
+                self.imagem = Image.open(self.tipos.caminho_img_fundo_init_str)
+                self.imagem.thumbnail((1920, 1080))
+                self.imagem_tk = ImageTk.PhotoImage(self.imagem)
+                #self.full = 2 # depois coloco para tras
+                full = 2
+        else:
+            if idioma == "PT":
+                pass
+            else:
+                self.imagem = Image.open(self.tipos.caminho_img_fundo_full_init_str)
+                self.imagem.thumbnail((1920, 1080))
+                self.imagem_tk = ImageTk.PhotoImage(self.imagem)
+                #self.full = 1 # depois coloco para tras
+                full = 1
+        self.label1.configure(image=self.imagem_tk)
+        self.label1.image = self.imagem_tk
+
     def __init__ (self, janela_init, tipos):
         self.janela_init = janela_init
         self.tipos = tipos
         self.janela_init.title("Teste de personalidade")
-        self.janela_init.geometry("1920x1080")
-
-        self.imagem = Image.open(self.tipos.caminho_img_fundo_init_str)
+        self.janela_init.geometry("2560x1440")
+        #self.full = 0
+        global full
+        self.init = 1
+        print(self.init)
+        self.janela_init.after(1000, lambda: self.janela_init.bind("<Configure>", self.fullscreen_click)) # o tkinter faz um spam enorme com os sinais de evento
+        if full == 0:
+            self.imagem = Image.open(self.tipos.caminho_img_fundo_init_str)
+        else:
+            self.imagem = Image.open(self.tipos.caminho_img_fundo_full_init_str)
         self.imagem.thumbnail((1920, 1080))
         self.imagem_tk = ImageTk.PhotoImage(self.imagem)
         
@@ -662,6 +707,8 @@ class App:
         self.imagem_botao_idioma.close()
         self.imagem_reg.close()
         self.botao_idioma.destroy()
+        self.init = 2
+        self.janela_init.unbind("<Configure>")
         self.init_cinzento()
     
     def init_cinzento(self):
@@ -850,6 +897,7 @@ class App:
 
     def resultado_final(self, resp_num):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
         self.imagem.close()
         self.imagem_botao_pergunta.close()
         self.mensagem_principal.destroy()
@@ -861,18 +909,16 @@ class App:
         img_inf_tk = ImageTk.PhotoImage(self.img_inf)
         self.label1.configure(image=imagem_tk)
 
-        self.label1.imagem = self.imagem_tk
+        self.label1.imagem = imagem_tk
         self.Botao3.destroy()
         self.Botao1.destroy()
-
-        tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
 
         self.resultado_do_user = self.tipos.resultado_str[resp_num]
         if self.idioma == "PT":
             self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="O seu tipo é " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num])
         else:
             self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="Your type is " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num])
-        self.botao_menu = tk.Button(width=200, height=40, image=img_menu_tk, command=partial(self.fim, resp_num, tempo))
+        self.botao_menu = tk.Button(width=200, height=40, image=img_menu_tk, command=self.fim)
         self.botao_info = tk.Button(width=200, height=60, image=img_inf_tk, command=partial(self.mostrar_info, self.tipos.inf_personalidade_str[resp_num], self.resultado_do_user, self.tipos.caminho_img_fundo_str[resp_num]))
         self.botao_menu.image = img_menu_tk
         self.botao_info.image = img_inf_tk
@@ -882,16 +928,24 @@ class App:
             self.Resultado.place(x=430,y=150)
         else:
             self.Resultado.place(x=380, y=150)
-        #tempo = strftime("%d-%m-%Y", gmtime(time.time()))
         fich_xml = self.cria_xml()
         num_resultados = len(list(self.dados))
         resultado_lista = {"nome": self.nome_id, "email": self.email_check, "resultado": resp_num, "tempo": tempo}
         self.escreve_resultado_xml(self.dados, "teste" + str(num_resultados), resultado_lista)
         fich_xml.write("resultado.xml")
-
-    def fim(self, resp_num, tempo):
+        while 1:
+            try:
+                inserir_usuario(self.nome_id, self.email_check, resp_num, tempo)
+                break
+            except:
+                if idioma == "PT":
+                    resposta = tk.messagebox.askquestion("Erro de conexão", "Não foi possivel conectar ao banco de dados, deseja tentar outra vez?")
+                else:
+                    resposta = tk.messagebox.askquestion("Connection error", "Unable to connect database, try again?")
+                if resposta == "no":
+                    break
+    def fim(self):
         winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
-        inserir_usuario(self.nome_id, self.email_check, resp_num, tempo)
         self.botao_menu.destroy()
         self.botao_info.destroy()
         self.imagem.close()
@@ -899,6 +953,8 @@ class App:
         self.img_menu.close()
         self.label1.destroy()
         self.Resultado.destroy()
+#        global full
+ #       full = 1
         self.__init__(self.janela_init, self.tipos)
 
 # Inicio do programa
