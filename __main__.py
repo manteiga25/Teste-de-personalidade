@@ -1,5 +1,4 @@
 from tkinter import *
-import tkinter
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -15,6 +14,16 @@ import xml.etree.ElementTree as ET
 import time
 from time import gmtime, strftime
 import psycopg2
+
+def inicializa_diretorio():
+    diretorio_de_dados = os.path.join(os.getenv('APPDATA'), 'Teste_de_personalidade')
+    print(diretorio_de_dados)
+
+    # Cria o diretório se não existir
+    if not os.path.exists(diretorio_de_dados):
+        os.makedirs(diretorio_de_dados)
+
+    os.chdir(diretorio_de_dados)
 
 def conectar_banco_de_dados():
     # Conecte-se ao banco de dados remoto
@@ -63,6 +72,7 @@ def receber_dados():
 idioma = 'PT'
 fich_async = winsound.SND_FILENAME | winsound.SND_ASYNC
 mudou = False
+diretorio = ""
 
 # se o ficheiro não existir cria um ficheiro e coloca o idioma português por padrão
 def detectar_idioma_padrao():
@@ -599,14 +609,18 @@ class App:
     def inf_teste_email(self):
             self.janela_inf_email = tk.Toplevel(self.janela_init)
             self.janela_inf_email.title("Email")
-            self.janela_inf_email.geometry("600x80")
+            self.janela_inf_email.geometry("650x80")
             self.centralizar_janela(self.janela_inf_email)
+            cor1 = tk.Label()
+            cor2 = tk.Label()
             global idioma
             if idioma == "PT":
-                informa = tk.Label(self.janela_inf_email, text="Verificando email. A verificação de email está a ser executada, esta operação pode demorar dependendo da sua rede.")
+                informa = tk.Label(self.janela_inf_email, background="white", text="Verificando email. A verificação de email está a ser executada, esta operação pode demorar dependendo da sua rede.")
             else:
                 informa = tk.Label(self.janela_inf_email, text="Cheking email. The email check is running, this operation may take time depending on your network.")
-            informa.place(x=40, y=30)
+            cor1.place(x=0, y=5)
+            informa.place(x=15, y=30)
+            cor2.place(x=0, y=40)
             self.mutex_info.acquire()
             self.janela_inf_email.destroy()
             self.mutex_info.release()
@@ -728,6 +742,8 @@ class App:
 
         if self.mutex.locked():
             self.mutex.release()
+        if self.mutex_info.locked():
+            self.mutex_info.release()
         interrupted_rede = True
         if self.pergunta == "no":
             return 1
@@ -991,6 +1007,7 @@ class App:
         self.__init__(self.janela_init, self.tipos)
 
 # Inicio do programa
+inicializa_diretorio()
 personalidades = tipos_personalidade()
 detectar_idioma_padrao()
 personalidades.mudar_idioma(idioma)
