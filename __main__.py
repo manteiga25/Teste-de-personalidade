@@ -72,7 +72,6 @@ def receber_dados():
 idioma = 'PT'
 fich_async = winsound.SND_FILENAME | winsound.SND_ASYNC
 mudou = False
-diretorio = ""
 
 # se o ficheiro não existir cria um ficheiro e coloca o idioma português por padrão
 def detectar_idioma_padrao():
@@ -611,16 +610,12 @@ class App:
             self.janela_inf_email.title("Email")
             self.janela_inf_email.geometry("650x80")
             self.centralizar_janela(self.janela_inf_email)
-            cor1 = tk.Label()
-            cor2 = tk.Label()
             global idioma
             if idioma == "PT":
                 informa = tk.Label(self.janela_inf_email, background="white", text="Verificando email. A verificação de email está a ser executada, esta operação pode demorar dependendo da sua rede.")
             else:
                 informa = tk.Label(self.janela_inf_email, text="Cheking email. The email check is running, this operation may take time depending on your network.")
-            cor1.place(x=0, y=5)
             informa.place(x=15, y=30)
-            cor2.place(x=0, y=40)
             self.mutex_info.acquire()
             self.janela_inf_email.destroy()
             self.mutex_info.release()
