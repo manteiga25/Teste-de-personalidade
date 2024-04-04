@@ -487,17 +487,14 @@ class App:
             self.label1.configure(image=self.imagem_tk)
             self.label1.image = self.imagem_tk
             self.imagem_botao = Image.open(self.tipos.caminho_img_botoes_str[0])
-            #self.imagem_botao.thumbnail((1920, 1080))
             self.imagem_botao_f = ImageTk.PhotoImage(self.imagem_botao)
             self.botao_init.configure(image=self.imagem_botao_f)
             self.botao_init.image = self.imagem_botao_f
             self.imagem_reg = Image.open(self.tipos.caminho_img_botoes_str[1])
-           # self.imagem_reg.thumbnail((1920, 1080))
             self.imagem_reg_f = ImageTk.PhotoImage(self.imagem_reg)
             self.botao_registo.configure(image=self.imagem_reg_f)
             self.botao_registo.image = self.imagem_reg_f
             self.imagem_botao_idioma = Image.open(self.tipos.caminho_img_botoes_str[2])
-          #  self.imagem_botao_idioma.thumbnail((1920, 1080))
             self.imagem_botao_idioma_f = ImageTk.PhotoImage(self.imagem_botao_idioma)
             self.botao_idioma.configure(image=self.imagem_botao_idioma_f)
             self.botao_idioma.image = self.imagem_botao_idioma_f
@@ -1043,7 +1040,10 @@ personalidades.mudar_idioma(idioma)
 janela = Tk()
 if not os.path.exists(dir + "\\assets"):
     janela.withdraw()
-    quest = tk.messagebox.askquestion("Resources not found", "Intall resouces", icon='error')
+    if idioma == "PT":
+        quest = tk.messagebox.askquestion("Arquivo não encontrado", "Não foi possivel encontrar o arquivo assets do programa, deseja instalar?", detail = "Não, fecha o programa", icon='error')
+    else:
+        quest = tk.messagebox.askquestion("Resources not found", "Intall resouces?", detail = "No, program close", icon='error')
     if quest == "yes":
         install_resource("https://github.com/manteiga25/assets_teste_de_personalidade.git", dir)
         janela.deiconify()
