@@ -7,6 +7,7 @@ import winsound
 import random
 from validate_email import validate_email
 import os
+import sys
 from PIL import Image, ImageTk
 import requests
 import threading
@@ -15,9 +16,31 @@ import time
 from time import gmtime, strftime
 import psycopg2
 
+diretorio_g = ""
+diretorio_audio = ""
+diretorio_audio_b = ""
+
+def install_resource(url, diretorio):
+    import git
+
+    while 1:
+        try:
+            git.Repo.clone_from(url, diretorio + "\\assets")
+            if idioma == "PT":
+                tk.messagebox.showinfo("Sucesso", "Ficheiros instalados com sucesso")
+            else:
+                tk.messagebox.showinfo("Sucess", "Files are instaled with sucess")
+            break
+        except:
+            if idioma == "PT":
+                voltar = tk.messagebox.askquestion("Erro de conexão", "Ocorreu um erro no download, quer voltar a tentar?", detail="verifique a sua ligação", icon='error')
+            else:
+                voltar = tk.messagebox.askquestion("Error to connect", "Download error, try again?", detail="verify your network", icon='error')
+            if voltar == "no":
+                sys.exit(1)
+
 def inicializa_diretorio():
     diretorio_de_dados = os.path.join(os.getenv('APPDATA'), 'Teste_de_personalidade')
-    print(diretorio_de_dados)
 
     # Cria o diretório se não existir
     if not os.path.exists(diretorio_de_dados):
@@ -93,6 +116,7 @@ class tipos_personalidade:
     # lista com as respostas
     resp = list(range(12))
     fase_2_resp = list(range(4))
+    fase_2_1_resp = list(range(2))
 
     # variaveis fase cinzento
     tipo_cinzento_str = ['' for _ in range(10)]
@@ -115,15 +139,15 @@ class tipos_personalidade:
     caminho_img_fundo_str = ['' for _ in range(10)]
 
     caminho_img_fundo_str[0] = ""
-    caminho_img_fundo_str[1] = "D:\\prog\\img\\perfecionista.png"
-    caminho_img_fundo_str[2] = "D:\\prog\\img\\prestativo.png"
-    caminho_img_fundo_str[3] = "D:\\prog\\img\\Bem-sucedido.png"
-    caminho_img_fundo_str[4] = "D:\\prog\\img\\Individual.png"
-    caminho_img_fundo_str[5] = "D:\\prog\\img\\Observador.png"
-    caminho_img_fundo_str[6] = "D:\\prog\\img\\Questionador.png"
-    caminho_img_fundo_str[7] = "D:\\prog\\img\\Sonhador.png"
-    caminho_img_fundo_str[8] = "D:\\prog\\img\\Confrontador.png"
-    caminho_img_fundo_str[9] = "D:\\prog\\img\\Pacifista.png"
+    caminho_img_fundo_str[1] = diretorio_g + "perfecionista.png"
+    caminho_img_fundo_str[2] = diretorio_g + "prestativo.png"
+    caminho_img_fundo_str[3] = diretorio_g + "Bem-sucedido.png"
+    caminho_img_fundo_str[4] = diretorio_g + "Individual.png"
+    caminho_img_fundo_str[5] = diretorio_g + "Observador.png"
+    caminho_img_fundo_str[6] = diretorio_g + "Questionador.png"
+    caminho_img_fundo_str[7] = diretorio_g + "Sonhador.png"
+    caminho_img_fundo_str[8] = diretorio_g + "Confrontador.png"
+    caminho_img_fundo_str[9] = diretorio_g + "Pacifista.png"
 
     # return 0 se idioma for o mesmo
     def verificar_idioma(self, idioma_str):
@@ -149,13 +173,14 @@ class tipos_personalidade:
         idioma = idioma_str
         # Não faz nada se for o mesmo idioma, vai ser util para o futuro
         if idioma_str == "PT":
-            self.caminho_img_fundo_init_str = "D:\\prog\\img\\fundo_init.png"
+    
+            self.caminho_img_fundo_init_str = diretorio_g + "fundo_init.png"
 
-            self.caminho_img_botoes_str[0] = "D:\\prog\\img\\botao_f.png"
-            self.caminho_img_botoes_str[1] = "D:\\prog\\img\\reg.png"
-            self.caminho_img_botoes_str[2] = "D:\\prog\\img\\idioma.png"
-            self.caminho_img_botoes_str[3] = "D:\\prog\\img\\menu.png"
-            self.caminho_img_botoes_str[4] = "D:\\prog\\img\\mais.png"
+            self.caminho_img_botoes_str[0] = diretorio_g + "botao_f.png"
+            self.caminho_img_botoes_str[1] = diretorio_g + "reg.png"
+            self.caminho_img_botoes_str[2] = diretorio_g + "idioma.png"
+            self.caminho_img_botoes_str[3] = diretorio_g + "menu.png"
+            self.caminho_img_botoes_str[4] = diretorio_g + "mais.png"
 
             self.tipo_cinzento_str[0] = ""
             self.tipo_cinzento_str[1] = "Perfeccionismo, Disciplinado, Foco no detalhe Rígido e determinado"
@@ -212,13 +237,13 @@ class tipos_personalidade:
             self.inf_personalidade_str[8] = "As personalidades do tipo OITO são caracterizadas por um forte controle sobre seu ambiente e pelo desejo de esconder suas fraquezas a todo custo.\nSão pessoas combativas, agressivas e orientadas para o poder.\nBuscam proteger aqueles indivíduos que eles consideram ""merecedores de proteção"" e tentam impor suas ideias a todo custo.\nPara que um OITO possa crescer emocionalmente é recomendável um trabalho orientado a recuperar a inocência e bondade própria da criança interior, aceitar suas fraquezas e aprender a viver no amor."
             self.inf_personalidade_str[9] = "As pessoas desse eneatipo são indivíduos tranquilos, mediadores e com tendência a evitar o conflito.\nNecessitam que em seu ambiente reine a paz e a harmonia.\nEles geralmente não enfrentam os outros porque não querem romper essa tranquilidade interna, é por isso que se sentem desconfortáveis com as mudanças e os desafios inesperados.\nOs objetivos recomendados para o tipo de personalidade NOVE estarão relacionados com mostrar suas emoções, aprender a tomar decisões e amar-se, respeitando seus reais desejos."
         else:
-            self.caminho_img_fundo_init_str = "D:\\prog\\img\\fundo_init_ing.png"
+            self.caminho_img_fundo_init_str = diretorio_g + "fundo_init_ing.png"
 
-            self.caminho_img_botoes_str[0] = "D:\\prog\\img\\botao_init_ing.png"
-            self.caminho_img_botoes_str[1] = "D:\\prog\\img\\reg_ing.png"
-            self.caminho_img_botoes_str[2] = "D:\\prog\\img\\idioma_ing.png"
-            self.caminho_img_botoes_str[3] = "D:\\prog\\img\\botao_menu_ing.png"
-            self.caminho_img_botoes_str[4] = "D:\\prog\\img\\mais_ing.png"
+            self.caminho_img_botoes_str[0] = diretorio_g + "botao_init_ing.png"
+            self.caminho_img_botoes_str[1] = diretorio_g + "reg_ing.png"
+            self.caminho_img_botoes_str[2] = diretorio_g + "idioma_ing.png"
+            self.caminho_img_botoes_str[3] = diretorio_g + "botao_menu_ing.png"
+            self.caminho_img_botoes_str[4] = diretorio_g + "mais_ing.png"
 
             self.tipo_rosa_str[0] = ""
             self.tipo_rosa_str[1] = "Others see me as a perfectionist, Discipline and rigor are important to me"
@@ -276,6 +301,8 @@ class tipos_personalidade:
             self.tipo_cinzento_str[9] = "Peacemaker, Flexible, Calm and cordial, Difficulty saying no"
 
 class App:
+
+    global diretorio_audio_b
 
     def cria_xml(self):
         cria = True
@@ -370,7 +397,7 @@ class App:
         janela.geometry(f"+{x}+{y}")
 
     def ver_registro(self):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         global idioma
         if not os.path.exists("resultado.xml"):
             if idioma == "PT":
@@ -460,17 +487,17 @@ class App:
             self.label1.configure(image=self.imagem_tk)
             self.label1.image = self.imagem_tk
             self.imagem_botao = Image.open(self.tipos.caminho_img_botoes_str[0])
-            self.imagem_botao.thumbnail((1920, 1080))
+            #self.imagem_botao.thumbnail((1920, 1080))
             self.imagem_botao_f = ImageTk.PhotoImage(self.imagem_botao)
             self.botao_init.configure(image=self.imagem_botao_f)
             self.botao_init.image = self.imagem_botao_f
             self.imagem_reg = Image.open(self.tipos.caminho_img_botoes_str[1])
-            self.imagem_reg.thumbnail((1920, 1080))
+           # self.imagem_reg.thumbnail((1920, 1080))
             self.imagem_reg_f = ImageTk.PhotoImage(self.imagem_reg)
             self.botao_registo.configure(image=self.imagem_reg_f)
             self.botao_registo.image = self.imagem_reg_f
             self.imagem_botao_idioma = Image.open(self.tipos.caminho_img_botoes_str[2])
-            self.imagem_botao_idioma.thumbnail((1920, 1080))
+          #  self.imagem_botao_idioma.thumbnail((1920, 1080))
             self.imagem_botao_idioma_f = ImageTk.PhotoImage(self.imagem_botao_idioma)
             self.botao_idioma.configure(image=self.imagem_botao_idioma_f)
             self.botao_idioma.image = self.imagem_botao_idioma_f
@@ -506,7 +533,7 @@ class App:
         botao_aplicar_idioma.place(x=60, y=40)
 
     def rank(self):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
 
         try:
             dados_resultados = receber_dados()
@@ -634,7 +661,7 @@ class App:
 
         self.label1.imagem = self.imagem_tk
 
-        imagem_logo = Image.open("D:\\prog\\img\\logo.png")
+        imagem_logo = Image.open(diretorio_g + "logo.png")
         logo = ImageTk.PhotoImage(imagem_logo)
 
         self.imagem_botao = Image.open(self.tipos.caminho_img_botoes_str[0])
@@ -646,7 +673,7 @@ class App:
         self.imagem_botao_idioma = Image.open(self.tipos.caminho_img_botoes_str[2])
         self.imagem_botao_idioma_f = ImageTk.PhotoImage(self.imagem_botao_idioma)
 
-        self.imagem_botao_rank = Image.open("D:\\prog\\img\\rank.png")
+        self.imagem_botao_rank = Image.open(diretorio_g + "rank.png")
         self.imagem_botao_rank_f = ImageTk.PhotoImage(self.imagem_botao_rank)
 
         # Defina a imagem como ícone
@@ -669,7 +696,7 @@ class App:
         self.botao_rank.place(x=550, y=510)
 
     def verifica(self, id, email):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         global idioma
         self.idioma = idioma
         global interrupted_rede
@@ -756,7 +783,7 @@ class App:
         self.init_cinzento()
     
     def init_cinzento(self):
-        self.imagem = Image.open("D:\\prog\\img\\cinzento.jpg")
+        self.imagem = Image.open(diretorio_g + "cinzento.jpg")
         self.imagem.thumbnail((1920, 1080))
         self.imagem_tk = ImageTk.PhotoImage(self.imagem)
         self.label1.configure(image=self.imagem_tk)
@@ -765,7 +792,7 @@ class App:
             self.mensagem_principal.config(text="Escolha uma das opções", bg="#808080", font=("Arial", 25, "bold"), justify="center")
         else:
             self.mensagem_principal.config(text="Choose one option", bg="#808080", font=("Arial", 25, "bold"), justify="center")
-        self.imagem_botao_pergunta = Image.open("D:\\prog\\img\\botao_c.png")
+        self.imagem_botao_pergunta = Image.open(diretorio_g + "botao_c.png")
         self.imagem_botao_pergunta_tk = ImageTk.PhotoImage(self.imagem_botao_pergunta)
         self.Botao1 = tk.Button(self.janela_init, image=self.imagem_botao_pergunta_tk, text=self.tipos.tipo_cinzento_str[8], compound="center", width=580, height=40, command=partial(self.cinzento2, 8))
         self.Botao1.image = self.imagem_botao_pergunta_tk
@@ -782,86 +809,86 @@ class App:
             self.mensagem_principal.place(x=500, y=150)
 
     def cinzento2(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[0] = resp_num
         self.Botao1.config(command=partial(self.cinzento3, 6), text=self.tipos.tipo_cinzento_str[6])
         self.Botao2.config(command=partial(self.cinzento3, 7), text=self.tipos.tipo_cinzento_str[7])
         self.Botao3.config(command=partial(self.cinzento3, 1), text=self.tipos.tipo_cinzento_str[1])
 
     def cinzento3(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[1] = resp_num
         self.Botao1.config(command=partial(self.cinzento4, 3), text=self.tipos.tipo_cinzento_str[3])
         self.Botao2.config(command=partial(self.cinzento4, 4), text=self.tipos.tipo_cinzento_str[4])
         self.Botao3.config(command=partial(self.cinzento4, 9), text=self.tipos.tipo_cinzento_str[9])
 
     def cinzento4(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[2] = resp_num
         self.Botao1.config(command=partial(self.cinzento5, 7), text=self.tipos.tipo_cinzento_str[7])
         self.Botao2.config(command=partial(self.cinzento5, 3), text=self.tipos.tipo_cinzento_str[3])
         self.Botao3.config(command=partial(self.cinzento5, 9), text=self.tipos.tipo_cinzento_str[9])
 
     def cinzento5(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[3] = resp_num
         self.Botao1.config(command=partial(self.cinzento6, 4), text=self.tipos.tipo_cinzento_str[4])
         self.Botao2.config(command=partial(self.cinzento6, 1), text=self.tipos.tipo_cinzento_str[1])
         self.Botao3.config(command=partial(self.cinzento6, 8), text=self.tipos.tipo_cinzento_str[8])
 
     def cinzento6(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[4] = resp_num
         self.Botao1.config(command=partial(self.cinzento7, 5), text=self.tipos.tipo_cinzento_str[5])
         self.Botao2.config(command=partial(self.cinzento7, 2), text=self.tipos.tipo_cinzento_str[2])
         self.Botao3.config(command=partial(self.cinzento7, 6), text=self.tipos.tipo_cinzento_str[6])
 
     def cinzento7(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[5] = resp_num
         self.Botao1.config(command=partial(self.cinzento8, 7), text=self.tipos.tipo_cinzento_str[7])
         self.Botao2.config(command=partial(self.cinzento8, 9), text=self.tipos.tipo_cinzento_str[9])
         self.Botao3.config(command=partial(self.cinzento8, 2), text=self.tipos.tipo_cinzento_str[2])
     
     def cinzento8(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[6] = resp_num
         self.Botao1.config(command=partial(self.cinzento9, 6), text=self.tipos.tipo_cinzento_str[6])
         self.Botao2.config(command=partial(self.cinzento9, 8), text=self.tipos.tipo_cinzento_str[8])
         self.Botao3.config(command=partial(self.cinzento9, 4), text=self.tipos.tipo_cinzento_str[4])
     
     def cinzento9(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[7] = resp_num
         self.Botao1.config(command=partial(self.cinzento10, 5), text=self.tipos.tipo_cinzento_str[5])
         self.Botao2.config(command=partial(self.cinzento10, 1), text=self.tipos.tipo_cinzento_str[1])
         self.Botao3.config(command=partial(self.cinzento10, 3), text=self.tipos.tipo_cinzento_str[3])
     
     def cinzento10(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[8] = resp_num
         self.Botao1.config(command=partial(self.cinzento11, 9), text=self.tipos.tipo_cinzento_str[9])
         self.Botao2.config(command=partial(self.cinzento11, 8), text=self.tipos.tipo_cinzento_str[8])
         self.Botao3.config(command=partial(self.cinzento11, 3), text=self.tipos.tipo_cinzento_str[3])
     
     def cinzento11(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[9] = resp_num
         self.Botao1.config(command=partial(self.cinzento12, 4), text=self.tipos.tipo_cinzento_str[4])
         self.Botao2.config(command=partial(self.cinzento12, 7), text=self.tipos.tipo_cinzento_str[7])
         self.Botao3.config(command=partial(self.cinzento12, 1), text=self.tipos.tipo_cinzento_str[1])
     
     def cinzento12(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[10] = resp_num
         self.Botao1.config(command=partial(self.init_fase_rosa, 2), text=self.tipos.tipo_cinzento_str[2])
         self.Botao2.config(command=partial(self.init_fase_rosa, 6), text=self.tipos.tipo_cinzento_str[6])
         self.Botao3.config(command=partial(self.init_fase_rosa, 5), text=self.tipos.tipo_cinzento_str[5])
     
     def init_fase_rosa(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.imagem.close()
-        self.imagem = Image.open("D:\\prog\\img\\rosa.jpg")
+        self.imagem = Image.open(diretorio_g + "rosa.jpg")
         self.imagem.thumbnail((1920, 1080))
         self.imagem_tk = ImageTk.PhotoImage(self.imagem)
         self.label1.configure(image=self.imagem_tk)
@@ -869,14 +896,14 @@ class App:
         self.mensagem_principal["bg"] = "pink"
         self.tipos.resp[11] = resp_num
         self.imagem_botao_pergunta.close()
-        self.imagem_botao_pergunta = Image.open("D:\\prog\\img\\botao_r.png")
+        self.imagem_botao_pergunta = Image.open(diretorio_g + "botao_r.png")
         self.imagem_botao_pergunta_tk = ImageTk.PhotoImage(self.imagem_botao_pergunta)
         self.Botao1.config(command=partial(self.rosa_2, self.tipos.resp[0], 0, 3), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_rosa_str[self.tipos.resp[0]], width=580)
         self.Botao2.config(command=partial(self.rosa_2, self.tipos.resp[1], 0, 3), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_rosa_str[self.tipos.resp[1]], width=580)
         self.Botao3.config(command=partial(self.rosa_2, self.tipos.resp[2], 0, 3), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_rosa_str[self.tipos.resp[2]], width=580)
 
     def rosa_2(self, resp_num, index_resp, index_text):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.fase_2_resp[index_resp] = resp_num
         if index_text == 12:
             self.verifica_repeticao() # parametro apenas de trensporte
@@ -886,7 +913,7 @@ class App:
             self.Botao3.config(command=partial(self.rosa_2, self.tipos.resp[index_text+2], index_resp+1, index_text+3), text=self.tipos.tipo_rosa_str[self.tipos.resp[index_text+2]])
 
     def verifica_repeticao(self):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         i = 0
         while i < 3:
             j = i + 1
@@ -900,25 +927,25 @@ class App:
         self.fase_rosa2_1()
 
     def fase_rosa2_1(self):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.Botao1.config(command=partial(self.fase_rosa2_2, self.tipos.fase_2_resp[0]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[0]])
         self.Botao2.config(command=partial(self.fase_rosa2_2, self.tipos.fase_2_resp[1]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[1]])
         self.Botao3.config(command=partial(self.fase_rosa2_2, self.tipos.fase_2_resp[2]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[2]])
         
     def fase_rosa2_2(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
-        self.tipos.fase_2_resp[0] = resp_num
+        winsound.PlaySound(diretorio_audio_b, fich_async)
+        self.tipos.fase_2_1_resp[0] = resp_num
         self.Botao1.config(command=partial(self.leve_verificação, self.tipos.fase_2_resp[1]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[1]])
         self.Botao2.config(command=partial(self.leve_verificação, self.tipos.fase_2_resp[2]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[2]])
         self.Botao3.config(command=partial(self.leve_verificação, self.tipos.fase_2_resp[3]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[3]])
 
     def leve_verificação(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
-        self.tipos.fase_2_resp[1] = resp_num
+        winsound.PlaySound(diretorio_audio_b, fich_async)
+        self.tipos.fase_2_1_resp[1] = resp_num
         contador = 2
         while 1:
-            if self.tipos.fase_2_resp[0] == self.tipos.fase_2_resp[1]:
-                self.tipos.fase_2_resp[1] = self.tipos.fase_2_resp[contador] # solução para um pequeno bug
+            if self.tipos.fase_2_1_resp[0] == self.tipos.fase_2_1_resp[1]:
+                self.tipos.fase_2_1_resp[1] = self.tipos.fase_2_1_resp[contador] # solução para um pequeno bug
                 contador += 1
             else:
                 break
@@ -926,26 +953,26 @@ class App:
 
     def init_azul(self):
         self.imagem.close()
-        self.imagem = Image.open("D:\\prog\\img\\azul.jpg")
+        self.imagem = Image.open(diretorio_g + "azul.jpg")
         self.imagem.thumbnail((1920, 1080))
         self.imagem_tk = ImageTk.PhotoImage(self.imagem)
         self.label1.configure(image=self.imagem_tk)
         self.label1.image = self.imagem_tk
         self.mensagem_principal["bg"] = "blue"
         self.imagem_botao_pergunta.close()
-        self.imagem_botao_pergunta = Image.open("D:\\prog\\img\\botao_a.png")
+        self.imagem_botao_pergunta = Image.open(diretorio_g + "botao_a.png")
         self.imagem_botao_pergunta_tk = ImageTk.PhotoImage(self.imagem_botao_pergunta)
         self.Botao2.destroy()
-        self.Botao1.config(command=partial(self.resultado_final, self.tipos.fase_2_resp[0]), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_azul_str[self.tipos.fase_2_resp[0]])
-        self.Botao3.config(command=partial(self.resultado_final, self.tipos.fase_2_resp[1]), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_azul_str[self.tipos.fase_2_resp[1]])
+        self.Botao1.config(command=partial(self.resultado_final, self.tipos.fase_2_1_resp[0]), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_azul_str[self.tipos.fase_2_resp[0]])
+        self.Botao3.config(command=partial(self.resultado_final, self.tipos.fase_2_1_resp[1]), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_azul_str[self.tipos.fase_2_resp[1]])
 
     def resultado_final(self, resp_num):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
         self.imagem.close()
         self.imagem_botao_pergunta.close()
         self.mensagem_principal.destroy()
-        self.imagem = Image.open("D:\\prog\\img\\resultado.png")
+        self.imagem = Image.open(diretorio_g + "resultado.png")
         imagem_tk = ImageTk.PhotoImage(self.imagem)
         self.img_menu = Image.open(self.tipos.caminho_img_botoes_str[3])
         img_menu_tk = ImageTk.PhotoImage(self.img_menu)
@@ -963,7 +990,7 @@ class App:
         else:
             self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="Your type is " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num])
         self.botao_menu = tk.Button(width=200, height=40, image=img_menu_tk, command=self.fim)
-        self.botao_info = tk.Button(width=200, height=60, image=img_inf_tk, command=partial(self.mostrar_info, self.tipos.inf_personalidade_str[resp_num], self.resultado_do_user, self.tipos.caminho_img_fundo_str[resp_num]))
+        self.botao_info = tk.Button(width=200, height=60, image=img_inf_tk, command=partial(self.mostrar_info, self.tipos.inf_personalidade_str[resp_num], self.resultado_do_user, diretorio_g + self.tipos.caminho_img_fundo_str[resp_num]))
         self.botao_menu.image = img_menu_tk
         self.botao_info.image = img_inf_tk
         self.botao_menu.place(x=540, y=350)
@@ -984,14 +1011,14 @@ class App:
                     break
                 except:
                     if idioma == "PT":
-                        resposta = tk.messagebox.askquestion("Erro de conexão", "Não foi possivel conectar ao banco de dados, deseja tentar outra vez?")
+                        resposta = tk.messagebox.askquestion("Erro de conexão", "Não foi possivel conectar ao banco de dados, deseja tentar outra vez?", icon='error')
                     else:
-                        resposta = tk.messagebox.askquestion("Connection error", "Unable to connect database, try again?")
+                        resposta = tk.messagebox.askquestion("Connection error", "Unable to connect database, try again?", icon='error')
                     if resposta == "no":
                         break
 
     def fim(self):
-        winsound.PlaySound("D:\\prog\\img\\zapsplat_multimedia_button_click_bright_003_92100.wav", fich_async)
+        winsound.PlaySound(diretorio_audio_b, fich_async)
         self.botao_menu.destroy()
         self.botao_info.destroy()
         self.imagem.close()
@@ -1002,10 +1029,25 @@ class App:
         self.__init__(self.janela_init, self.tipos)
 
 # Inicio do programa
+# inicia o diretorio dos assets
+dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+diretorio_g = dir + "\\assets" + "\\img\\"
+diretorio_audio = dir + "\\assets" + "\\sound\\"
+diretorio_audio_b = diretorio_audio + "zapsplat_multimedia_button_click_bright_003_92100.wav"
 inicializa_diretorio()
+# detecta o idioma
 personalidades = tipos_personalidade()
 detectar_idioma_padrao()
 personalidades.mudar_idioma(idioma)
+#inicia a janela
 janela = Tk()
+if not os.path.exists(dir + "\\assets"):
+    janela.withdraw()
+    quest = tk.messagebox.askquestion("Resources not found", "Intall resouces", icon='error')
+    if quest == "yes":
+        install_resource("https://github.com/manteiga25/assets_teste_de_personalidade.git", dir)
+        janela.deiconify()
+    else:
+        sys.exit(1)
 app = App(janela, personalidades)
 janela.mainloop()
