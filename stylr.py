@@ -17,11 +17,6 @@ def conectar_banco_de_dados():
     host = parsed_url.hostname
     port = parsed_url.port
     database = parsed_url.path.lstrip('/')
-    print(user)
-    print(password)
-    print(host)
-    print(port)
-    print(database)
     # Conecte-se ao banco de dados remoto
     conexao = psycopg2.connect(
         host="surus.db.elephantsql.com",
@@ -38,22 +33,18 @@ def inserir_usuario():
     cursor = conexao.cursor()
 
     nome = ""
-    email = ""
     for i in range(100):
         for j in range(20):
             nome += chr(random.randrange(65, 88))
-            email += chr(random.randrange(65, 88))
-        email += "@gmail.com"
         resultado = random.randrange(1, 10)
         data = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
         comando_sql = '''
-            INSERT INTO testes (nome, email, resultado, data) 
-            VALUES (%s, %s, %s, %s)
+            INSERT INTO testes (nome, resultado, data) 
+            VALUES (%s, %s, %s)
         '''
     # Executa o comando SQL para inserir um novo usuário
-        cursor.execute(comando_sql, (nome, email, resultado, data))
+        cursor.execute(comando_sql, (nome, resultado, data))
         nome = ""
-        email = ""
 
     # Confirma a transação e fecha a conexão
     conexao.commit()
