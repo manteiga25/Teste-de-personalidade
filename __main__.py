@@ -9,7 +9,6 @@ import os
 import sys
 from PIL import Image, ImageTk
 import requests
-import threading
 import xml.etree.ElementTree as ET
 import time
 from time import gmtime, strftime
@@ -18,27 +17,6 @@ import psycopg2
 diretorio_g = ""
 diretorio_audio = ""
 diretorio_audio_b = ""
-
-def install_resource(url, diretorio):
-  #  import git
-
-    while 1:
-        try:
-          #  git.Repo.clone_from(url, diretorio + "\\assets")
-            r = requests.get('https://github.com/manteiga25/assets_teste_de_personalidade.git')
-            r.json()
-            if idioma == "PT":
-                tk.messagebox.showinfo("Sucesso", "Ficheiros instalados com sucesso")
-            else:
-                tk.messagebox.showinfo("Sucess", "Files are instaled with sucess")
-            break
-        except:
-            if idioma == "PT":
-                voltar = tk.messagebox.askquestion("Erro de conexão", "Ocorreu um erro no download, quer voltar a tentar?", detail="verifique a sua ligação", icon='error')
-            else:
-                voltar = tk.messagebox.askquestion("Error to connect", "Download error, try again?", detail="verify your network", icon='error')
-            if voltar == "no":
-                sys.exit(1)
 
 def inicializa_diretorio():
     diretorio_de_dados = os.path.join(os.getenv('APPDATA'), 'Teste_de_personalidade')
@@ -589,21 +567,15 @@ class App:
 
     # atributos globais
     resultado_do_user = 0
-    interrupted_rede = False
 
     def verifica_rede(self):
-        global interrupted_rede
-        while not interrupted_rede:
-            self.mutex.acquire()
-            try:
-                _ = requests.get("http://www.google.com", timeout=10)
-                self.rede = True
-            except:
-                self.rede = False
-            finally:
-                if self.mutex.locked():
-                    self.mutex.release()
-            time.sleep(0.1)
+        try:
+            _ = requests.get("http://www.google.com", timeout=10)
+            self.rede = True
+        except:
+            self.rede = False
+        finally:
+            return 0
 
     def __init__ (self, janela_init, tipos):
         self.janela_init = janela_init
@@ -646,7 +618,7 @@ class App:
         self.botao_registo.image = self.imagem_reg_f
         self.botao_idioma.image = self.imagem_botao_idioma_f
         self.botao_idioma.place(x=570, y=470)
-        nome.place(x=540, y=300)
+        nome.place(x=540, y=320)
         self.botao_init.place(x=540, y=360)
         self.botao_registo.place(x=570, y=430)
         self.botao_rank.place(x=570, y=510)
@@ -655,14 +627,9 @@ class App:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         global idioma
         self.idioma = idioma
-        global interrupted_rede
-        interrupted_rede = False
         self.nome_id = id.get()
         self.rede = True
         self.pergunta = ""
-        self.mutex = threading.Lock()
-        tarefa_rede = threading.Thread(target=self.verifica_rede)
-        tarefa_rede.start()
         if self.nome_id == "":
             if self.idioma == "PT":
                 tk.messagebox.showerror("Preencha o campo nome", "É obrigatorio introduzor o nome")
@@ -671,16 +638,14 @@ class App:
             id.config(bg="#FFC0CB")
             return 1
 
-        self.mutex.acquire()
+        self.verifica_rede()
+
         if self.rede == False:
             if self.idioma == "PT":
                 self.pergunta = tk.messagebox.askquestion("Erro de rede", "Não foi possível estabelecer conexão á rede, deseja continuar com o teste?")
             else:
                 self.pergunta = tk.messagebox.askquestion("Network error", "Unable to connect to the network, do you want to continue with the test?")
 
-        if self.mutex.locked():
-            self.mutex.release()
-        interrupted_rede = True
         if self.pergunta == "no":
             return 1
 
@@ -957,13 +922,9 @@ janela = Tk()
 if not os.path.exists(dir + "\\assets"):
     janela.withdraw()
     if idioma == "PT":
-        quest = tk.messagebox.askquestion("Arquivo não encontrado", "Não foi possivel encontrar o arquivo assets do programa, deseja instalar?", detail = "Não, fecha o programa", icon='error')
+        tk.messagebox.showerror("Arquivo não encontrado", "Não foi possivel encontrar o arquivo assets do programa.")
     else:
-        quest = tk.messagebox.askquestion("Resources not found", "Intall resouces?", detail = "No, program close", icon='error')
-    if quest == "yes":
-        install_resource("https://github.com/manteiga25/assets_teste_de_personalidade.git", dir)
-        janela.deiconify()
-    else:
-        sys.exit(1)
+        tk.messagebox.showerror("Resources not found", "Unable to find the program assets file.")
+    sys.exit(1)
 app = App(janela, personalidades)
 janela.mainloop()
