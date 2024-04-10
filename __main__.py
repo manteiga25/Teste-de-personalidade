@@ -97,6 +97,8 @@ class tipos_personalidade:
     fase_2_resp = list(range(4))
     fase_2_1_resp = list(range(2))
 
+    nome_text = ""
+
     # variaveis fase cinzento
     tipo_cinzento_str = ['' for _ in range(10)]
     
@@ -152,6 +154,8 @@ class tipos_personalidade:
         idioma = idioma_str
         # Não faz nada se for o mesmo idioma, vai ser util para o futuro
         if idioma_str == "PT":
+
+            self.nome_text = "Nome:"
     
             self.caminho_img_fundo_init_str = diretorio_g + "fundo_init.png"
 
@@ -216,6 +220,9 @@ class tipos_personalidade:
             self.inf_personalidade_str[8] = "As personalidades do tipo OITO são caracterizadas por um forte controle sobre seu ambiente e pelo desejo de esconder suas fraquezas a todo custo.\nSão pessoas combativas, agressivas e orientadas para o poder.\nBuscam proteger aqueles indivíduos que eles consideram ""merecedores de proteção"" e tentam impor suas ideias a todo custo.\nPara que um OITO possa crescer emocionalmente é recomendável um trabalho orientado a recuperar a inocência e bondade própria da criança interior, aceitar suas fraquezas e aprender a viver no amor."
             self.inf_personalidade_str[9] = "As pessoas desse eneatipo são indivíduos tranquilos, mediadores e com tendência a evitar o conflito.\nNecessitam que em seu ambiente reine a paz e a harmonia.\nEles geralmente não enfrentam os outros porque não querem romper essa tranquilidade interna, é por isso que se sentem desconfortáveis com as mudanças e os desafios inesperados.\nOs objetivos recomendados para o tipo de personalidade NOVE estarão relacionados com mostrar suas emoções, aprender a tomar decisões e amar-se, respeitando seus reais desejos."
         else:
+
+            self.nome_text = "Name:"
+
             self.caminho_img_fundo_init_str = diretorio_g + "fundo_init_ing.png"
 
             self.caminho_img_botoes_str[0] = diretorio_g + "botao_init_ing.png"
@@ -454,7 +461,7 @@ class App:
             self.imagem_botao_idioma_f = ImageTk.PhotoImage(self.imagem_botao_idioma)
             self.botao_idioma.configure(image=self.imagem_botao_idioma_f)
             self.botao_idioma.image = self.imagem_botao_idioma_f
-            
+            self.rotulo_nome["text"] = self.tipos.nome_text
             self.repoe_botoes_init_idioma()
 
     def idioma_janela(self):
@@ -610,7 +617,7 @@ class App:
         self.janela_init.iconphoto(True, logo)
         self.mensagem_principal = tk.Label()
         nome = tk.Entry(width=40, exportselection=True)
-        self.rotulo_nome = tk.Label(text="Nome:", font=("Arial", 15, "bold"), bg="pink")
+        self.rotulo_nome = tk.Label(text=self.tipos.nome_text, font=("Arial", 15, "bold"), bg="pink")
         self.botao_registo = tk.Button(janela_init, image=self.imagem_reg_f, width=180, height=30, command=self.ver_registro)
         self.botao_init = tk.Button(janela_init, image=self.imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome))
         self.botao_idioma = tk.Button(janela_init, image=self.imagem_botao_idioma_f, width=180, height=30, text="Idioma", command=self.idioma_janela)
