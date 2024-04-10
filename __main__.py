@@ -610,6 +610,7 @@ class App:
         self.janela_init.iconphoto(True, logo)
         self.mensagem_principal = tk.Label()
         nome = tk.Entry(width=40, exportselection=True)
+        self.rotulo_nome = tk.Label(text="Nome:", font=("Arial", 15, "bold"), bg="pink")
         self.botao_registo = tk.Button(janela_init, image=self.imagem_reg_f, width=180, height=30, command=self.ver_registro)
         self.botao_init = tk.Button(janela_init, image=self.imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome))
         self.botao_idioma = tk.Button(janela_init, image=self.imagem_botao_idioma_f, width=180, height=30, text="Idioma", command=self.idioma_janela)
@@ -617,6 +618,7 @@ class App:
         self.botao_init.image = self.imagem_botao_f
         self.botao_registo.image = self.imagem_reg_f
         self.botao_idioma.image = self.imagem_botao_idioma_f
+        self.rotulo_nome.place(x=540, y=290)
         self.botao_idioma.place(x=570, y=470)
         nome.place(x=540, y=320)
         self.botao_init.place(x=540, y=360)
@@ -651,6 +653,7 @@ class App:
 
         self.botao_init.destroy()
         id.destroy()
+        self.rotulo_nome.destroy()
         self.botao_registo.destroy()
         self.imagem.close()
         self.imagem_botao_idioma.close()
