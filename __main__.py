@@ -7,16 +7,40 @@ import winsound
 import random
 import os
 import sys
+from validate_email import validate_email
+import threading
 from PIL import Image, ImageTk
 import requests
 import xml.etree.ElementTree as ET
 import time
 from time import gmtime, strftime
 import psycopg2
+import smtplib
+from email.mime.text import MIMEText
 
 diretorio_g = ""
 diretorio_audio = ""
 diretorio_audio_b = ""
+
+def enviar_email(nome, email, resultado, data):
+    servidor = smtplib.SMTP('smtp.gmail.com', 587)
+    servidor.starttls()
+    servidor.login('mentescriativas117@gmail.com', 'xrdbviegrlsqldtb')
+    global idioma
+    if idioma == "PT":
+        assunto = 'Resultado do teste de personalidade'
+        corpo = "Olá " + nome + ", o resultado do seu teste de personalidade realizado no dia " + str(data) + " foi " + resultado + "."
+    else:
+        assunto = 'Result of personality test'
+        corpo = "Hi " + nome + ", the result of your personality test realized on " + str(data) + " is " + resultado + "."
+
+    msg = MIMEText(corpo)
+    msg['From'] = 'mentescriativas117@gmail.com'
+    msg['To'] = email
+    msg['Subject'] = assunto
+
+    servidor.sendmail('mentescriativas117@gmail.com', email, msg.as_string())
+    servidor.quit()
 
 def inicializa_diretorio():
     diretorio_de_dados = os.path.join(os.getenv('APPDATA'), 'Teste_de_personalidade')
@@ -39,17 +63,17 @@ def conectar_banco_de_dados():
     return conexao
 
 
-def inserir_usuario(nome, resultado, data):
+def inserir_usuario(nome, email, resultado, data):
     conexao = conectar_banco_de_dados()
     cursor = conexao.cursor()
 
     comando_sql = '''
-        INSERT INTO testes (nome, resultado, data) 
-        VALUES (%s, %s, %s)
+        INSERT INTO testes (nome, email, resultado, data) 
+        VALUES (%s, %s, %s, %s)
     '''
     
     # Executa o comando SQL para inserir um novo usuário
-    cursor.execute(comando_sql, (nome, resultado, data))
+    cursor.execute(comando_sql, (nome, email, resultado, data))
 
     # Confirma a transação e fecha a conexão
     conexao.commit()
@@ -319,9 +343,9 @@ class App:
         fich_le_xml = ET.parse('resultado.xml')
         const_dados = fich_le_xml.getroot()
         numero_de_dados = len(list(const_dados))
-        const_dados_formatados = [['' for _ in range(3)] for _ in range(numero_de_dados)]
+        const_dados_formatados = [['' for _ in range(4)] for _ in range(numero_de_dados)]
         for linha in range(len(list(const_dados))):
-            for coluna in range(3):
+            for coluna in range(4):
                 const_dados_formatados[linha][coluna] = const_dados[linha][coluna].text
         return const_dados_formatados
 
@@ -361,6 +385,27 @@ class App:
         y = int((janela_principal.winfo_height() - janela.winfo_height()) / 2.5)
         janela.geometry(f"+{x}+{y}")
 
+        # cria e verifica se o ficheiro já existe
+    # retona False se o ficheiro já existir
+    # rtorna True se o ficheiro foi criado
+    def cria_ficheiro(self):
+        if os.path.exists("email-cache.txt"):
+            return False
+        else:
+            ficheiro = open("email-cache.txt", "w") # apenas cria ficheiro
+            ficheiro.close()
+            return True
+
+    def le_cache(self, email_str):
+        encontrou = False
+        email_cache_leitura = open("email-cache.txt", "rt")
+        for string in email_cache_leitura:
+            if email_str == string:
+                encontrou = True # encontrou email na cache local do computador
+                break
+        email_cache_leitura.close()
+        return encontrou
+
     def ver_registro(self):
         winsound.PlaySound(diretorio_audio_b, fich_async)
         global idioma
@@ -385,7 +430,7 @@ class App:
 
         self.janela_reg.protocol("WM_DELETE_WINDOW", self.repoe_botoes_init_reg)
 
-        colunas = ('Nome', 'Resultado', 'Data')
+        colunas = ('Nome', 'Email', 'Resultado', 'Data')
 
         grelha = ttk.Treeview(self.janela_reg, columns=colunas, show='headings')
 
@@ -394,20 +439,20 @@ class App:
 
         grelha.config(yscrollcommand=rolagem.set)
 
+        grelha.heading('Email', text='Email')
+        grelha.heading('Data', text='Data')
         if idioma == "PT":
             grelha.heading('Nome', text='Nome')
             grelha.heading('Resultado', text='Resultado')
-            grelha.heading('Data', text='Data')
         else:
             grelha.heading('Nome', text='Name')
             grelha.heading('Resultado', text='Result')
-            grelha.heading('Data', text='Data')
 
         dados_formatados = self.le_registro_xml()
 
         for linha in range(len(list(dados_formatados))):
-            grelha.insert("", tk.END, values=(dados_formatados[linha][0], self.tipos.resultado_str[int(dados_formatados[linha][1])], dados_formatados[linha][2]))
-        
+            grelha.insert("", tk.END, values=(dados_formatados[linha][0], dados_formatados[linha][1], self.tipos.resultado_str[int(dados_formatados[linha][2])], dados_formatados[linha][3]))
+
         grelha.pack(expand=True, fill=tk.BOTH)
         
     def repoe_botoes_init_reg(self):
@@ -574,15 +619,22 @@ class App:
 
     # atributos globais
     resultado_do_user = 0
+    interrupted_rede = False
 
     def verifica_rede(self):
-        try:
-            _ = requests.get("http://www.google.com", timeout=10)
-            self.rede = True
-        except:
-            self.rede = False
-        finally:
-            return 0
+        global interrupted_rede
+        while not interrupted_rede:
+            self.mutex.acquire()
+            try:
+                _ = requests.get("http://www.google.com", timeout=10)
+                self.rede = True
+            except:
+                self.rede = False
+            finally:
+                if self.mutex.locked():
+                    self.mutex.release()
+            time.sleep(0.1)
+        return 0
 
     def __init__ (self, janela_init, tipos):
         self.janela_init = janela_init
@@ -616,29 +668,38 @@ class App:
         # Defina a imagem como ícone
         self.janela_init.iconphoto(True, logo)
         self.mensagem_principal = tk.Label()
+        email_entry = tk.Entry(width=40, exportselection=True)
         nome = tk.Entry(width=40, exportselection=True)
         self.rotulo_nome = tk.Label(text=self.tipos.nome_text, font=("Arial", 15, "bold"), bg="pink")
+        self.rotulo_email = tk.Label(text="Email:", font=("Arial", 15, "bold"), bg="pink")
         self.botao_registo = tk.Button(janela_init, image=self.imagem_reg_f, width=180, height=30, command=self.ver_registro)
-        self.botao_init = tk.Button(janela_init, image=self.imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome))
+        self.botao_init = tk.Button(janela_init, image=self.imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome, email_entry))
         self.botao_idioma = tk.Button(janela_init, image=self.imagem_botao_idioma_f, width=180, height=30, text="Idioma", command=self.idioma_janela)
         self.botao_rank = tk.Button(janela_init, image=self.imagem_botao_rank_f, width=180, height=30, command=self.rank)
         self.botao_init.image = self.imagem_botao_f
         self.botao_registo.image = self.imagem_reg_f
         self.botao_idioma.image = self.imagem_botao_idioma_f
-        self.rotulo_nome.place(x=540, y=290)
+        self.rotulo_nome.place(x=540, y=240)
+        self.rotulo_email.place(x=540, y=290)
         self.botao_idioma.place(x=570, y=470)
-        nome.place(x=540, y=320)
+        nome.place(x=540, y=270)
+        email_entry.place(x=540, y=320)
         self.botao_init.place(x=540, y=360)
         self.botao_registo.place(x=570, y=430)
         self.botao_rank.place(x=570, y=510)
 
-    def verifica(self, id):
+    def verifica(self, id, email):
         winsound.PlaySound(diretorio_audio_b, fich_async)
         global idioma
         self.idioma = idioma
+        global interrupted_rede
+        interrupted_rede = False
         self.nome_id = id.get()
         self.rede = True
+        self.email_check = email.get()
         self.pergunta = ""
+        econtrou = False
+        self.mutex = threading.Lock()
         if self.nome_id == "":
             if self.idioma == "PT":
                 tk.messagebox.showerror("Preencha o campo nome", "É obrigatorio introduzor o nome")
@@ -646,14 +707,60 @@ class App:
                 tk.messagebox.showerror("Fill in the name field", "It is mandatory to enter the name")
             id.config(bg="#FFC0CB")
             return 1
+        elif self.email_check == "":
+            if self.idioma == "PT":
+                tk.messagebox.showerror("Preencha o campo email", "É obrigatorio introduzor o email")
+            else:
+                tk.messagebox.showerror("Fill in the email field", "It is mandatory to enter the email")
+            email.config(bg="#FFC0CB")
+            return 1
+        elif self.email_check == "":
+            if self.idioma == "PT":
+                tk.messagebox.showerror("Preencha o campo email", "É obrigatorio introduzor o email")
+            else:
+                tk.messagebox.showerror("Fill in the email field", "It is mandatory to enter the email")
+            email.config(bg="#FFC0CB")
+            return 1
+        elif self.cria_ficheiro() == False:
+            econtrou = self.le_cache(self.email_check + "\n")
 
-        self.verifica_rede()
+        tarefa_rede = threading.Thread(target=self.verifica_rede)
+        tarefa_rede.start()
 
-        if self.rede == False:
+        self.mutex.acquire()
+        # sem o acesso á rede não podemos validar o email
+        if econtrou == False and self.rede == True:
+            self.mutex.release()
+            if not validate_email(email_address=self.email_check):
+                self.mutex.acquire()
+                if self.rede == True:
+                    if self.idioma == "PT":
+                        tk.messagebox.showerror("Email invalido", "O email introduzido é invlido ou não existe, reescreva")
+                    else:
+                        tk.messagebox.showerror("Invalid Email", "The email you entered does not exist, please rewrite")
+                    email.config(bg="#FFC0CB")
+                    interrupted_rede = True
+                    self.mutex.release()
+                    return 1
+                else:
+                    if self.idioma == "PT":
+                        self.pergunta = tk.messagebox.askquestion("Erro de rede", "Não foi possível estabelecer conexão á rede, deseja continuar com o teste?")
+                    else:
+                        self.pergunta = tk.messagebox.askquestion("Network error", "Unable to connect to the network, do you want to continue with the test?")
+                    self.mutex.release()
+            else: # se o email estiver correto mas o utilizador não tiver o acessso a rede o email não sera guardado no ficheiro de cache
+                ficheiro_cache_escrita = open("email-cache.txt", "a")
+                ficheiro_cache_escrita.write(self.email_check + "\n")
+                ficheiro_cache_escrita.close()
+        elif self.rede == False:
             if self.idioma == "PT":
                 self.pergunta = tk.messagebox.askquestion("Erro de rede", "Não foi possível estabelecer conexão á rede, deseja continuar com o teste?")
             else:
                 self.pergunta = tk.messagebox.askquestion("Network error", "Unable to connect to the network, do you want to continue with the test?")
+
+        if self.mutex.locked():
+            self.mutex.release()
+        interrupted_rede = True
 
         if self.pergunta == "no":
             return 1
@@ -661,7 +768,9 @@ class App:
         self.botao_init.destroy()
         id.destroy()
         self.rotulo_nome.destroy()
+        self.rotulo_email.destroy()
         self.botao_registo.destroy()
+        email.destroy()
         self.imagem.close()
         self.imagem_botao_idioma.close()
         self.imagem_reg.close()
@@ -889,13 +998,14 @@ class App:
             self.Resultado.place(x=380, y=150)
         fich_xml = self.cria_xml()
         num_resultados = len(list(self.dados))
-        resultado_lista = {"nome": self.nome_id, "resultado": resp_num, "tempo": tempo}
+        resultado_lista = {"nome": self.nome_id, "email": self.email_check, "resultado": resp_num, "tempo": tempo}
         self.escreve_resultado_xml(self.dados, "teste" + str(num_resultados), resultado_lista)
         fich_xml.write("resultado.xml")
         if self.pergunta == "": # não ocorreu erro de rede na primeira fase
             while 1:
                 try:
-                    inserir_usuario(self.nome_id, resp_num, tempo)
+                    enviar_email(self.nome_id, self.email_check, self.tipos.resultado_str[resp_num], tempo)
+                    inserir_usuario(self.nome_id, self.email_check, resp_num, tempo)
                     break
                 except:
                     if idioma == "PT":
