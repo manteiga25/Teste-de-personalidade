@@ -725,6 +725,7 @@ class App:
             econtrou = self.le_cache(self.email_check + "\n")
 
         tarefa_rede = threading.Thread(target=self.verifica_rede)
+        tarefa_rede.daemon = True
         tarefa_rede.start()
 
         self.mutex.acquire()
