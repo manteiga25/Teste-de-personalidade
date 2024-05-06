@@ -359,7 +359,7 @@ class App:
         else:
             janela_info.title("Information about personalities")
         janela_info.resizable(False, False)
-        self.centralizar_janela(janela_info)
+        self.janela_init.eval(f'tk::PlaceWindow {str(janela_info)} center')
         
         fr1 = tk.Frame(janela_info)
         fr2 = tk.Frame(janela_info)
@@ -377,13 +377,6 @@ class App:
         fr1.pack()
         fr2.pack()
         fr3.pack()
-
-    # codigo copiado que vai ser eliminado no futuro
-    def centralizar_janela(self, janela):
-        janela_principal = janela.master
-        x = int((janela_principal.winfo_width() - janela.winfo_width()) / 3.5)
-        y = int((janela_principal.winfo_height() - janela.winfo_height()) / 2.5)
-        janela.geometry(f"+{x}+{y}")
 
         # cria e verifica se o ficheiro já existe
     # retona False se o ficheiro já existir
@@ -421,7 +414,7 @@ class App:
             self.janela_reg.title("Registro")
         else:
             self.janela_reg.title("Register")
-        self.centralizar_janela(self.janela_reg)
+        self.janela_init.eval(f'tk::PlaceWindow {str(self.janela_reg)} center')
 
         self.botao_init["state"] = "disabled"
         self.botao_registo["state"] = "disabled"
@@ -518,7 +511,7 @@ class App:
             self.janela_def.title("Idioma")
         else:
             self.janela_def.title("Language")
-        self.centralizar_janela(self.janela_def)
+        self.janela_init.eval(f'tk::PlaceWindow {str(self.janela_def)} center')
         self.botao_init["state"] = "disabled"
         self.botao_registo["state"] = "disabled"
         self.botao_idioma["state"] = "disabled"
@@ -556,7 +549,7 @@ class App:
 
         self.janela_rank = Toplevel(self.janela_init)
         self.janela_rank.title("Ranking")
-        self.centralizar_janela(self.janela_rank)
+        self.janela_init.eval(f'tk::PlaceWindow {str(self.janela_rank)} center')
         self.janela_rank.resizable(False, False)
 
         self.botao_init["state"] = "disabled"
@@ -626,7 +619,7 @@ class App:
     resultado_do_user = 0
     interrupted_rede = False
 
-    def verifica_rede(self, mutex_rede):
+    def verifica_rede(self, mutex_rede) -> bool:
         global interrupted_rede
         while not interrupted_rede:
             mutex_rede.acquire()
@@ -643,15 +636,28 @@ class App:
 
     def janela_verificar_email(self):
         self.janela_email = Toplevel(self.janela_init)
+        global idioma
+        text = ""
+        if idioma == "PT":
+            text = "Verificando email."
+        else:
+            text = "Verifying email."
         self.janela_email.title("Email")
         self.janela_init.eval(f'tk::PlaceWindow {str(self.janela_email)} center')
-        Label(self.janela_email, text="Verificando email.", font=(25)).pack(padx=50, pady=50)
+        Label(self.janela_email, text=text, font=(25)).pack(padx=50, pady=50)
 
     def janela_gerar_res(self):
         self.janela_gerar = Toplevel(self.janela_init)
-        self.janela_gerar.title("Resultado")
+        global idioma
+        text = ""
+        if idioma == "PT":
+            self.janela_gerar.title("Resultado")
+            text = "Gerando resultado."
+        else:
+            self.janela_gerar.title("Result")
+            text = "Generating result."
         self.janela_init.eval(f'tk::PlaceWindow {str(self.janela_gerar)} center')
-        Label(self.janela_gerar, text="Gerando resultado.", font=(25)).pack(padx=50, pady=50)
+        Label(self.janela_gerar, text=text, font=(25)).pack(padx=50, pady=50)
 
     def __init__ (self, janela_init, tipos):
         self.janela_init = janela_init
