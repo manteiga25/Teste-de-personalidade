@@ -77,6 +77,7 @@ def inserir_usuario(nome, email, resultado, data):
 
     # Confirma a transação e fecha a conexão
     conexao.commit()
+    cursor.close()
     conexao.close()
 
 def receber_dados():
@@ -91,6 +92,7 @@ def receber_dados():
         resultado_s = str(dados_res[i]).strip('(),')
         dados_formatados[i] = int(resultado_s)
 
+    cursor.close()
     conexao.close()
     return dados_formatados
 
@@ -393,7 +395,7 @@ class App:
         encontrou = False
         email_cache_leitura = open("email-cache.bin", "rb")
         for string in email_cache_leitura:
-            if email_str == string:
+            if email_str == string.decode("utf-8"):
                 encontrou = True # encontrou email na cache local do computador
                 break
         email_cache_leitura.close()
