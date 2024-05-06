@@ -389,16 +389,16 @@ class App:
     # retona False se o ficheiro já existir
     # rtorna True se o ficheiro foi criado
     def cria_ficheiro(self):
-        if os.path.exists("email-cache.txt"):
+        if os.path.exists("email-cache.bin"):
             return False
         else:
-            ficheiro = open("email-cache.txt", "w") # apenas cria ficheiro
+            ficheiro = open("email-cache.bin", "wb") # apenas cria ficheiro
             ficheiro.close()
             return True
 
     def le_cache(self, email_str):
         encontrou = False
-        email_cache_leitura = open("email-cache.txt", "rt")
+        email_cache_leitura = open("email-cache.bin", "rb")
         for string in email_cache_leitura:
             if email_str == string:
                 encontrou = True # encontrou email na cache local do computador
@@ -450,7 +450,9 @@ class App:
 
         dados_formatados = self.le_registro_xml()
 
-        for linha in range(len(list(dados_formatados))):
+        num_dados = len(dados_formatados) - 1
+
+        for linha in range(num_dados,0,-1):
             grelha.insert("", tk.END, values=(dados_formatados[linha][0], dados_formatados[linha][1], self.tipos.resultado_str[int(dados_formatados[linha][2])], dados_formatados[linha][3]))
 
         grelha.pack(expand=True, fill=tk.BOTH)
@@ -516,7 +518,6 @@ class App:
             self.janela_def.title("Idioma")
         else:
             self.janela_def.title("Language")
-        self.janela_def.geometry("200x100")
         self.centralizar_janela(self.janela_def)
         self.botao_init["state"] = "disabled"
         self.botao_registo["state"] = "disabled"
@@ -524,18 +525,22 @@ class App:
         self.botao_rank["state"] = "disabled"
 
         self.janela_def.protocol("WM_DELETE_WINDOW", self.repoe_botoes_init_idioma)
+
         idioma_b = tk.StringVar(value=idioma)
         if idioma == "PT":
-            botao_r_in = ttk.Radiobutton(self.janela_def, text='Inglês', value='IN', variable=idioma_b)
-            botao_r_pt = ttk.Radiobutton(self.janela_def, text='Português', value='PT', variable=idioma_b)
-            botao_aplicar_idioma = tk.Button(self.janela_def, text="Aplicar idioma", command=partial(self.verificar_mudou_idioma, idioma_b))
+            self.idiomas = tk.LabelFrame(self.janela_def, text="idiomas")
+            botao_r_in = ttk.Radiobutton(self.idiomas, text='Inglês', value='IN', variable=idioma_b)
+            botao_r_pt = ttk.Radiobutton(self.idiomas, text='Português', value='PT', variable=idioma_b)
+            botao_aplicar_idioma = tk.Button(self.idiomas, text="Aplicar idioma", command=partial(self.verificar_mudou_idioma, idioma_b))
         else:
-            botao_r_in = ttk.Radiobutton(self.janela_def, text='English', value='IN', variable=idioma_b)
-            botao_r_pt = ttk.Radiobutton(self.janela_def, text='Portuguese', value='PT', variable=idioma_b)
-            botao_aplicar_idioma = tk.Button(self.janela_def, text="Aply Language", command=partial(self.verificar_mudou_idioma, idioma_b))
-        botao_r_in.place(x=30, y=10)
-        botao_r_pt.place(x=100, y=10)
-        botao_aplicar_idioma.place(x=60, y=40)
+            self.idiomas = tk.LabelFrame(self.janela_def, text="languages")
+            botao_r_in = ttk.Radiobutton(self.idiomas, text='English', value='IN', variable=idioma_b)
+            botao_r_pt = ttk.Radiobutton(self.idiomas, text='Portuguese', value='PT', variable=idioma_b)
+            botao_aplicar_idioma = tk.Button(self.idiomas, text="Aply Language", command=partial(self.verificar_mudou_idioma, idioma_b))
+        botao_r_in.grid(row=0, column=0, padx=5, pady=5)  # Primeiro botão
+        botao_r_pt.grid(row=0, column=1, padx=5, pady=5)  # Segundo botão ao lado do primeiro
+        botao_aplicar_idioma.grid(row=1, columnspan=2, pady=5)  # Terceiro botão abaixo dos dois primeiros
+        self.idiomas.pack(fill="both", expand=True)
 
     def rank(self):
         winsound.PlaySound(diretorio_audio_b, fich_async)
@@ -621,20 +626,32 @@ class App:
     resultado_do_user = 0
     interrupted_rede = False
 
-    def verifica_rede(self):
+    def verifica_rede(self, mutex_rede):
         global interrupted_rede
         while not interrupted_rede:
-            self.mutex.acquire()
+            mutex_rede.acquire()
             try:
                 _ = requests.get("http://www.google.com", timeout=10)
                 self.rede = True
             except:
                 self.rede = False
             finally:
-                if self.mutex.locked():
-                    self.mutex.release()
+           #     if self.mutex.locked():
+                mutex_rede.release()
             time.sleep(0.1)
         return 0
+
+    def janela_verificar_email(self):
+        self.janela_email = Toplevel(self.janela_init)
+        self.janela_email.title("Email")
+        self.janela_init.eval(f'tk::PlaceWindow {str(self.janela_email)} center')
+        Label(self.janela_email, text="Verificando email.", font=(25)).pack(padx=50, pady=50)
+
+    def janela_gerar_res(self):
+        self.janela_gerar = Toplevel(self.janela_init)
+        self.janela_gerar.title("Resultado")
+        self.janela_init.eval(f'tk::PlaceWindow {str(self.janela_gerar)} center')
+        Label(self.janela_gerar, text="Gerando resultado.", font=(25)).pack(padx=50, pady=50)
 
     def __init__ (self, janela_init, tipos):
         self.janela_init = janela_init
@@ -690,6 +707,7 @@ class App:
 
     def verifica(self, id, email):
         winsound.PlaySound(diretorio_audio_b, fich_async)
+        self.janela_verificar_email()
         global idioma
         self.idioma = idioma
         global interrupted_rede
@@ -699,7 +717,7 @@ class App:
         self.email_check = email.get()
         self.pergunta = ""
         econtrou = False
-        self.mutex = threading.Lock()
+        mutex = threading.Lock()
         if self.nome_id == "":
             if self.idioma == "PT":
                 tk.messagebox.showerror("Preencha o campo nome", "É obrigatorio introduzor o nome")
@@ -724,16 +742,15 @@ class App:
         elif self.cria_ficheiro() == False:
             econtrou = self.le_cache(self.email_check + "\n")
 
-        tarefa_rede = threading.Thread(target=self.verifica_rede)
-        tarefa_rede.daemon = True
+        tarefa_rede = threading.Thread(target=self.verifica_rede, args=(mutex, ), daemon=True)
         tarefa_rede.start()
 
-        self.mutex.acquire()
+        mutex.acquire()
         # sem o acesso á rede não podemos validar o email
         if econtrou == False and self.rede == True:
-            self.mutex.release()
+            mutex.release()
             if not validate_email(email_address=self.email_check):
-                self.mutex.acquire()
+                mutex.acquire()
                 if self.rede == True:
                     if self.idioma == "PT":
                         tk.messagebox.showerror("Email invalido", "O email introduzido é invlido ou não existe, reescreva")
@@ -741,17 +758,17 @@ class App:
                         tk.messagebox.showerror("Invalid Email", "The email you entered does not exist, please rewrite")
                     email.config(bg="#FFC0CB")
                     interrupted_rede = True
-                    self.mutex.release()
+                    mutex.release()
                     return 1
                 else:
                     if self.idioma == "PT":
                         self.pergunta = tk.messagebox.askquestion("Erro de rede", "Não foi possível estabelecer conexão á rede, deseja continuar com o teste?")
                     else:
                         self.pergunta = tk.messagebox.askquestion("Network error", "Unable to connect to the network, do you want to continue with the test?")
-                    self.mutex.release()
+                    mutex.release()
             else: # se o email estiver correto mas o utilizador não tiver o acessso a rede o email não sera guardado no ficheiro de cache
-                ficheiro_cache_escrita = open("email-cache.txt", "a")
-                ficheiro_cache_escrita.write(self.email_check + "\n")
+                ficheiro_cache_escrita = open("email-cache.bin", "ab")
+                ficheiro_cache_escrita.write((self.email_check + "\n").encode('utf-8'))
                 ficheiro_cache_escrita.close()
         elif self.rede == False:
             if self.idioma == "PT":
@@ -759,8 +776,8 @@ class App:
             else:
                 self.pergunta = tk.messagebox.askquestion("Network error", "Unable to connect to the network, do you want to continue with the test?")
 
-        if self.mutex.locked():
-            self.mutex.release()
+        if mutex.locked():
+            mutex.release()
         interrupted_rede = True
 
         if self.pergunta == "no":
@@ -778,6 +795,7 @@ class App:
         self.imagem_botao_rank.close()
         self.botao_idioma.destroy()
         self.botao_rank.destroy()
+        self.janela_email.destroy()
         self.init_cinzento()
     
     def init_cinzento(self):
@@ -966,6 +984,7 @@ class App:
 
     def resultado_final(self, resp_num):
         winsound.PlaySound(diretorio_audio_b, fich_async)
+        self.janela_gerar_res()
         tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
         self.imagem.close()
         self.imagem_botao_pergunta.close()
@@ -1002,13 +1021,19 @@ class App:
         resultado_lista = {"nome": self.nome_id, "email": self.email_check, "resultado": resp_num, "tempo": tempo}
         self.escreve_resultado_xml(self.dados, "teste" + str(num_resultados), resultado_lista)
         fich_xml.write("resultado.xml")
+        vivo = True
         if self.pergunta == "": # não ocorreu erro de rede na primeira fase
             while 1:
                 try:
                     enviar_email(self.nome_id, self.email_check, self.tipos.resultado_str[resp_num], tempo)
                     inserir_usuario(self.nome_id, self.email_check, resp_num, tempo)
+                    if vivo:
+                        self.janela_gerar.destroy()
                     break
                 except:
+                    if vivo:
+                        self.janela_gerar.destroy()
+                        vivo = False
                     if idioma == "PT":
                         resposta = tk.messagebox.askquestion("Erro de conexão", "Não foi possivel conectar ao banco de dados, deseja tentar outra vez?", icon='error')
                     else:
