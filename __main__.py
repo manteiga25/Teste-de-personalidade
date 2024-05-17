@@ -2,7 +2,6 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from functools import partial
 import winsound
 import random
 import os
@@ -22,17 +21,17 @@ diretorio_g = ""
 diretorio_audio = ""
 diretorio_audio_b = ""
 
-def enviar_email(nome, email, resultado, data):
+def enviar_email(nome, email, resultado, data, texto) -> None:
     servidor = smtplib.SMTP('smtp.gmail.com', 587)
     servidor.starttls()
     servidor.login('mentescriativas117@gmail.com', 'xrdbviegrlsqldtb')
     global idioma
     if idioma == "PT":
         assunto = 'Resultado do teste de personalidade'
-        corpo = "Olá " + nome + ", o resultado do seu teste de personalidade realizado no dia " + str(data) + " foi " + resultado + "."
+        corpo = "Olá " + nome + ", o resultado do seu teste de personalidade realizado no dia " + str(data) + " foi " + resultado + ".\n" + texto
     else:
         assunto = 'Result of personality test'
-        corpo = "Hi " + nome + ", the result of your personality test realized on " + str(data) + " is " + resultado + "."
+        corpo = "Hi " + nome + ", the result of your personality test realized on " + str(data) + " is " + resultado + ".\n" + texto
 
     msg = MIMEText(corpo)
     msg['From'] = 'mentescriativas117@gmail.com'
@@ -42,7 +41,7 @@ def enviar_email(nome, email, resultado, data):
     servidor.sendmail('mentescriativas117@gmail.com', email, msg.as_string())
     servidor.quit()
 
-def inicializa_diretorio():
+def inicializa_diretorio() -> None:
     diretorio_de_dados = os.path.join(os.getenv('APPDATA'), 'Teste_de_personalidade')
 
     # Cria o diretório se não existir
@@ -51,7 +50,7 @@ def inicializa_diretorio():
 
     os.chdir(diretorio_de_dados)
 
-def conectar_banco_de_dados():
+def conectar_banco_de_dados() -> psycopg2.extensions.connection:
     # Conecte-se ao banco de dados remoto
     conexao = psycopg2.connect(
         host="surus.db.elephantsql.com",
@@ -63,7 +62,7 @@ def conectar_banco_de_dados():
     return conexao
 
 
-def inserir_usuario(nome, email, resultado, data):
+def inserir_usuario(nome, email, resultado, data) -> None:
     conexao = conectar_banco_de_dados()
     cursor = conexao.cursor()
 
@@ -80,21 +79,16 @@ def inserir_usuario(nome, email, resultado, data):
     cursor.close()
     conexao.close()
 
-def receber_dados():
+def receber_dados() -> list:
     conexao = conectar_banco_de_dados()
     cursor = conexao.cursor()
     
     # Executa o comando SQL para inserir um novo usuário
     cursor.execute("SELECT resultado FROM testes")
     dados_res = cursor.fetchall()
-    dados_formatados = list(range(len(dados_res)))
-    for i in range(len(dados_res)):
-        resultado_s = str(dados_res[i]).strip('(),')
-        dados_formatados[i] = int(resultado_s)
-
     cursor.close()
     conexao.close()
-    return dados_formatados
+    return dados_res
 
 #Variavel Global do programa todo
 idioma = 'PT'
@@ -102,7 +96,7 @@ fich_async = winsound.SND_FILENAME | winsound.SND_ASYNC
 mudou = False
 
 # se o ficheiro não existir cria um ficheiro e coloca o idioma português por padrão
-def detectar_idioma_padrao():
+def detectar_idioma_padrao() -> None:
     global idioma
     if not os.path.exists("Idioma.txt"):
         idioma_fd = open("Idioma.txt", "w")
@@ -111,10 +105,12 @@ def detectar_idioma_padrao():
         idioma_fd = open("Idioma.txt", "r")
         if idioma_fd.read() == "IN":
             idioma = 'IN'
+    idioma_fd.close()
 
-def escrever_idioma(idioma_str):
+def escrever_idioma(idioma_str) -> None:
     esc_idi = open("Idioma.txt", "w") # não á problema em recriar o ficheiro
     esc_idi.write(idioma_str)
+    esc_idi.close()
 
 class tipos_personalidade:
 
@@ -157,7 +153,7 @@ class tipos_personalidade:
     caminho_img_fundo_str[9] = diretorio_g + "Pacifista.png"
 
     # return 0 se idioma for o mesmo
-    def verificar_idioma(self, idioma_str):
+    def verificar_idioma(self, idioma_str) -> bool:
         idioma_sel = idioma_str.get()
         global mudou
         global idioma
@@ -175,7 +171,7 @@ class tipos_personalidade:
             escrever_idioma(idioma_sel)
             mudou = True
 
-    def mudar_idioma(self, idioma_str):
+    def mudar_idioma(self, idioma_str) -> None:
         global idioma
         idioma = idioma_str
         # Não faz nada se for o mesmo idioma, vai ser util para o futuro
@@ -236,15 +232,15 @@ class tipos_personalidade:
             self.resultado_str[9] = "Pacificador"
 
             self.inf_personalidade_str[0] = ""
-            self.inf_personalidade_str[1] = "O primeiro dos eneatipos é caracterizado por um ego muito focado na disciplina, busca destacar sempre os erros de tudo o que vê e é incapaz de deixar um detalhe sem concertar.\nSão ordenados e têm uma concepção muito forte do que é certo e do que é errado.\nApesar de suas boas intenções, em sua busca pela perfeição, podem ferir os sentimentos alheios ao destacar sempre os detalhes negativos.\nO trabalho psicológico do UM será baseado em encontrar a paz, ser menos auto exigente, cultivar a bondade, aceitar a si mesmo e aos outros."
-            self.inf_personalidade_str[2] = "As pessoas desse eneatipo concentram toda sua atenção nos outros, buscam o amor através de atos ou gestos de ajuda para os outros e geralmente sentem um tipo de ""orgulho"" ao sentir que alguém precisa deles.\nQuerem ser amados e se sentir queridos ao preço que faça falta.\nNão se concentram em suas necessidades e isso pode afetar seu bem-estar pessoal.\nO objetivo de crescimento de um DOIS será aprender a dar amor e deixar de precisar de carinho externo, reconhecer sua humildade e deixar para trás o sentimento de orgulho."
-            self.inf_personalidade_str[3] = "O tipo TRÊS é caracterizado por uma tendência a agir como ele ou ela acredita que os outros querem que ele aja.\nEles se preocupam muitíssimo com a imagem que projetam para os outros e vivem por e para ela.\nO caminho para o bem-estar do tipo TRÊS será orientado a deixar para trás a vaidade e agir de acordo com seus sentimentos e emoções próprias, deixando de focar no que os outros pensam."
-            self.inf_personalidade_str[4] = "Essas pessoas se conectam profundamente com as emoções, têm uma forte necessidade inconsciente de se sentirem amados, de serem únicos e especiais.\nFrequentemente desenvolvem transtornos relacionados com a depressão e tem um profundo sentimento de inferioridade.\nSão o tipo de personalidade mais criativo, mas ao mesmo tempo mais melancólico e pessimista.\nO conselho psicológico para um indivíduo com personalidade QUATRO estará focado em cultivar um sentimento de igualdade em relação aos outros, a autoestima e deixar-se amar."
-            self.inf_personalidade_str[5] = "Aquelas pessoas analíticas, observadoras e perceptivas são geralmente descritas no tipo de personalidade CINCO.\nSeu mundo está em sua cabeça e eles raramente o compartilham, têm uma profunda dificuldade para conectar com as emoções e ainda mais se eles são estrangeiros.\nO caminho para o crescimento de uma pessoa com um eneatipo CINCO será direcionado para fora do isolamento pessoal e compartilhar seus pensamentos e emoções com outras pessoas."
-            self.inf_personalidade_str[6] = "Os indivíduos que são definidos como eneatipo SEIS são aqueles cujo valor principal é a sinceridade e a fidelidade.\nGeralmente são extremamente ansiosos e desconfiados, têm medo do desconhecido de tudo que pode causar algum tipo de dano emocional.\nOs objetivos emocionais do SEIS serão encontrar o valor dentro deles e aprender a confiar em suas atitudes."
-            self.inf_personalidade_str[7] = "Ativos, vivazes, distraídos...os SETE são um eneatipo cheio de energia e desejo de liberdade.\nSão pessoas que fogem da rotina fazendo mil planos para se distrair, buscam constantemente experiências novas e satisfatórias e geralmente vivem sob uma máscara de alegria para evitar conectar com a dor e a realidade quando essa é pouco agradável.\nA dica psicológica que o tipo SETE pode melhorar se baseará na tomada de responsabilidades, a maturidade emocional e a conexão com a realidade."
-            self.inf_personalidade_str[8] = "As personalidades do tipo OITO são caracterizadas por um forte controle sobre seu ambiente e pelo desejo de esconder suas fraquezas a todo custo.\nSão pessoas combativas, agressivas e orientadas para o poder.\nBuscam proteger aqueles indivíduos que eles consideram ""merecedores de proteção"" e tentam impor suas ideias a todo custo.\nPara que um OITO possa crescer emocionalmente é recomendável um trabalho orientado a recuperar a inocência e bondade própria da criança interior, aceitar suas fraquezas e aprender a viver no amor."
-            self.inf_personalidade_str[9] = "As pessoas desse eneatipo são indivíduos tranquilos, mediadores e com tendência a evitar o conflito.\nNecessitam que em seu ambiente reine a paz e a harmonia.\nEles geralmente não enfrentam os outros porque não querem romper essa tranquilidade interna, é por isso que se sentem desconfortáveis com as mudanças e os desafios inesperados.\nOs objetivos recomendados para o tipo de personalidade NOVE estarão relacionados com mostrar suas emoções, aprender a tomar decisões e amar-se, respeitando seus reais desejos."
+            self.inf_personalidade_str[1] = "“Trabalho arduamente para restabelecer a perfeição. As regras são para cumprir e o dever vem em primeiro lugar.\nNum papel de liderança defino objetivos claros e inspiro os outros a atingir altos standards de qualidade. Sou extremamente exigente com as minhas equipas e em particular com aqueles em que mais confio.\n\nSou sem dúvida uma pessoa extremamente determinada, organizada, responsável e trabalhadora focada na criação de mecanismos para melhoria contínua, buscando a excelência.\nO exagero dos nossos talentos revela os nossos pontos fracos, por isso sou também uma pessoa inflexível, excessivamente exigente e excessivamente preocupada.”\n\nEntre em acção com algumas dicas de crescimento:\nAinda que lhe pareça estranho e naturalmente menos fácil, desafie-se a fazer algo imperfeito ou de uma forma um pouco mais relaxada.\nAprenda a aceitar os seus erros e a apreciar-se tal como é.\nE, já agora, uma vez por outra, permita-se perder “completamente” o controlo e volte mais aliviado."
+            self.inf_personalidade_str[2] = "“Sou uma pessoa prestativa, disponível e antecipo-me a ajudar os que considero que precisam de mim.\nTenho uma grande facilidade no relacionamento interpessoal e num papel de liderança tenho tendência a desenvolver equipas muito próximas, que se protegem e se apoiam contudo, sinto uma grande dificuldade em pedir ajuda e em dizer NÃO às pessoas que me são especiais passando assim as minhas necessidades/vontades para 2º plano.\nSou sem dúvida uma pessoa empática, voluntariosa, generosa, empenhada e atenta aos outros.\nO exagero dos nossos talentos revela os nossos pontos fracos, por isso sou também uma pessoa teimosa, indireta e tenho momentos em que me sinto carente de atenção.”\n\nEntre em acção com algumas dicas de crescimento:\nContrarie o querer fazer tudo.\nFaça uso da sua criatividade. Mesmo que aparentemente lhe falte tempo, contrarie-se.\nObserve-se mais.\nObrigue-se a fazer coisas a sós, a entrar mais em contacto com a natureza e em relaxar."
+            self.inf_personalidade_str[3] = "“Sou uma pessoa focada numa imagem de sucesso, dedicada e eficiente.\nNum papel de liderança tenho tendência a criar um ambiente que atinja resultados e que seja altamente focado nas metas.\n\nSou sem dúvida uma pessoa determinada e extremamente focada em objetivos e resultados.\nVivo a minha vida a um ritmo claramente mais acelerado que os outros.\nTenho uma habilidade única a negociar, como se estivesse equipado com um sonar especial.\nO exagero dos nossos talentos revela os nossos pontos fracos, por isso sou também uma pessoa impaciente, excessivamente competitiva e autocentrada.”\n\nEntre em acção com algumas dicas de crescimento:\nProcure diminuir o seu ritmo. Se não for muito fácil, defina isso como objetivo e comece com pequenas metas. Atingir objetivos continua, afinal, a ser algo natural e fácil para si.\nSinta os que mais gosta. Permita-se emocionar.\nDa próxima vez que for de férias, defina um horário para ter acesso ao seu mundo profissional. Defina isso como meta e não se deixe vencer.\nEste foi apenas o levantar da ponta do véu…\nAgora a DICA DE OURO que pode mudar a sua VIDA como mudou a MINHA.\n\nVocê acredita que relacionamentos mais equilibrados podem melhorar a sua vida?\n\nQuando nos conhecemos a nós mesmos e aos outros, somos mais tolerantes e as nossas relações melhoram. E isso tem impacto na nossa auto-estima, confiança e felicidade."
+            self.inf_personalidade_str[4] = "“Sou uma pessoa que se aperfeiçoa e procura fazer tudo de uma forma única, especial e talvez até romântica.\nNum papel de liderança dou às pessoas significado e propósito para que elas possam mostrar toda a sua inspiração e excelência.\n\nSou sem dúvida uma pessoa criativa, incentivadora, idealista, expressiva e empenhada em criar ambientes competitivos mas com alto nível de envolvimento das pessoas e das equipas.\n\nO exagero dos nossos talentos revela os nossos pontos fracos, por isso sou também uma pessoa instável, queixosa e receoso/a de perder relações.”\n\nEntre em acção com algumas dicas de crescimento:\nFique atento às comparações. Aperceba-se do quanto se compara com as outras pessoas. Compreenda que essa comparação alimenta a sua instabilidade.\nEntenda as emoções como uma ferramenta de aprendizagem. Procure tirar prazer de coisas simples e valorizar o que tem e não o que não tem.\nFaça por viver o presente."
+            self.inf_personalidade_str[5] = "“Sou uma pessoa que precisa de se resguardar para, em privado, poder pensar, informar-me e recarregar as minhas baterias.\nNum papel de liderança desenvolvo uma organização eficiente através do uso de planeamento, critério para que todos trabalhem com uma missão comum.\n\nSou sem dúvida uma pessoa, lógica, analítica, calma nas crises, que compreende o ambiente como invasivo e procuro preservar os meus recursos mais valiosos, como tempo, informação e energia, através da defesa exagerada da minha privacidade.\n\nA minha visão extremamente racional e objetiva proporcionam uma substancial capacidade de definir critérios, métodos e planeamento de longo prazo.\n\nO exagero dos nossos talentos revela os nossos pontos fracos, por isso sou também uma pessoa distante, reservada e contida nas relações.”\n\nEntre em acção com algumas dicas de crescimento:\nPonha o seu corpo a funcionar, praticando regularmente atividades físico-desportivas. Somos mais do que pensamentos.\nHabitue-se a circular um pouco mais pelo seu local de trabalho e a fazer alguma conversa de circunstância."
+            self.inf_personalidade_str[6] = "“Sou uma pessoa que considera que nem mesmo a autoridade é confiável, por isso, testo-a e questiono-a.\n\nNum papel de liderança tenho tendência a resolver problemas da organização e desenvolver um ambiente em que cada pessoa sinta que é parte da solução.\n\nSou sem dúvida uma pessoa estratega, criteriosa, cautelosa e que antecipa facilmente cenários negativos, extremamente eficaz no planeamento e comprometida.\nO exagero dos nossos talentos revela os nossos pontos fracos, por isso sou também uma pessoa insegura, ansiosa e desconfiada.”\n\nEntre em acção com algumas dicas de crescimento:\nIdentifique os seus receios. A identificação é o primeiro passo para a transformação.\nControle o seu ritmo e ansiedade. Ponha por escrito os seus pensamentos nos momentos em que sente maior ansiedade. Volte a lê-los mais tarde e compreenda o que lhe ensinam sobre si."
+            self.inf_personalidade_str[7] = "“Sou uma pessoa otimista, criativa e entusiasmada por novas ideias, experiências, projetos e pessoas.\n\nNum papel de liderança gosto de ter as pessoas entusiasmadas e motivá-las a criar inovações que deem vantagem competitiva na conquista de oportunidades.\n\nSou sem dúvida uma pessoa bem-humorada, espontânea, curiosa, produtiva e com enorme capacidade de síntese.\nO exagero dos nossos talentos revela os nossos pontos fracos, por isso sou também uma pessoa anti rotina, descomprometida e dispersa.”\n\nEntre em acção com algumas dicas de crescimento:\nAprenda a lidar com limitações. Quando surgir a ansia de seguir para um novo projeto ou ideia, respire fundo e procure acabar o que ainda tem em mãos.\nDiminua as suas opções. Em vez de aumentar a pressão com os outros, procure diminuir os seus focos de atenção.\nFundamentalmente, compreenda que, na vida, tudo tem um ritmo e um momento para acontecer."
+            self.inf_personalidade_str[8] = "“Sou uma pessoa que repõe a justiça e luto para defender os inocentes e desprotegidos porque são mais frágeis.\n\nNum papel de liderança gosto de mover a organização liderando assertivamente e tendo equipas determinadas em agir e conquistar.\n\nSou sem dúvida uma pessoa dinâmica, eficaz, decidida e que aceita tomar por sua conta e risco os desafios com que me cruzo.\n\nO exagero dos nossos talentos revela os nossos pontos fracos, por isso sou também uma pessoa impaciente, exagerada e autoritária.”\n\nEntre em acção com algumas dicas de crescimento:\nRespeite os seus limites. Fique atento ao seu ritmo e aprenda a escutar o seu corpo.\nNão despreze o seu lado mais sensível. Ele é compatível com assertividade e determinação. Por último, lembre-se de que é um ser humano. Quando as suas fragilidades ocorrerem, não as disfarce, aprenda com elas."
+            self.inf_personalidade_str[9] = "“Sou uma pessoa que está em paz quando todos á minha volta estão bem e unidos.\n\nNum papel de liderança gosto de Viver a missão da organização promovendo um ambiente harmonioso e estruturado.\n\nSou sem dúvida uma pessoa com afável, flexível e com uma notável capacidade diplomática e uma cordialidade carismática.\n\nO exagero dos nossos talentos revela os nossos pontos fracos, por isso sou também uma pessoa teimosa, indecisa e apática.”\n\nEntre em acção com algumas dicas de crescimento:\nSorria menos. Apareça mais e não tema ter destaque. Insista na colocação dos seus pontos de vista e interesses em cima da mesa.\nDe tempos a tempos, atreva-se a ter uma discussão mais acesa. Vai ver que o mundo não acaba. Pratique desporto ou uma atividade física regular.\nFaça listas de tarefas a executar em cada dia para compreender o quanto se esquece dos seus objetivos e procure contrariar a situação. Não se esqueça de verificar a lista."
         else:
 
             self.nome_text = "Name:"
@@ -335,13 +331,13 @@ class App:
             tree = ET.ElementTree(self.dados)
         return tree
 
-    def escreve_resultado_xml(self, fich_obj, resultado_index, resultado):
+    def escreve_resultado_xml(self, fich_obj, resultado_index, resultado) -> None:
         novo_elemento = ET.SubElement(fich_obj, resultado_index)
         for key, value in resultado.items():
             esc_resultado = ET.SubElement(novo_elemento, key)
             esc_resultado.text = str(value)
 
-    def le_registro_xml(self):
+    def le_registro_xml(self) -> list:
         fich_le_xml = ET.parse('resultado.xml')
         const_dados = fich_le_xml.getroot()
         numero_de_dados = len(list(const_dados))
@@ -351,7 +347,7 @@ class App:
                 const_dados_formatados[linha][coluna] = const_dados[linha][coluna].text
         return const_dados_formatados
 
-    def mostrar_info(self, inf_personalidade, tit_personalidade, img_path):
+    def mostrar_info(self, inf_personalidade, tit_personalidade, img_path) -> None:
         self.botao_info["state"] = "disabled"
         self.botao_menu["state"] = "disabled"
         janela_info = Toplevel(self.janela_init)
@@ -380,10 +376,10 @@ class App:
         fr2.pack()
         fr3.pack()
 
-        # cria e verifica se o ficheiro já existe
+    # cria e verifica se o ficheiro já existe
     # retona False se o ficheiro já existir
     # rtorna True se o ficheiro foi criado
-    def cria_ficheiro(self):
+    def cria_ficheiro(self) -> bool:
         if os.path.exists("email-cache.bin"):
             return False
         else:
@@ -391,7 +387,7 @@ class App:
             ficheiro.close()
             return True
 
-    def le_cache(self, email_str):
+    def le_cache(self, email_str) -> bool:
         encontrou = False
         email_cache_leitura = open("email-cache.bin", "rb")
         for string in email_cache_leitura:
@@ -410,7 +406,7 @@ class App:
             else:
                 tk.messagebox.showinfo("Data empty", "No data was detected in the log, perform a test")
             return 1
-        
+
         self.janela_reg = Toplevel(self.janela_init)
         if idioma == "PT":
             self.janela_reg.title("Registro")
@@ -452,33 +448,33 @@ class App:
 
         grelha.pack(expand=True, fill=tk.BOTH)
         
-    def repoe_botoes_init_reg(self):
+    def repoe_botoes_init_reg(self) -> None:
         self.botao_init["state"] = "normal"
         self.botao_registo["state"] = "normal"
         self.botao_idioma["state"] = "normal"
         self.botao_rank["state"] = "normal"
         self.janela_reg.destroy()
 
-    def repoe_botoes_final(self, janela_inf):
+    def repoe_botoes_final(self, janela_inf) -> None:
         self.botao_info["state"] = "normal"
         self.botao_menu["state"] = "normal"
         janela_inf.destroy()
 
-    def repoe_botoes_init_idioma(self):
+    def repoe_botoes_init_idioma(self) -> None:
         self.botao_init["state"] = "normal"
         self.botao_registo["state"] = "normal"
         self.botao_idioma["state"] = "normal"
         self.botao_rank["state"] = "normal"
         self.janela_def.destroy()
 
-    def repoe_botoes_init_rank(self):
+    def repoe_botoes_init_rank(self) -> None:
         self.botao_init["state"] = "normal"
         self.botao_registo["state"] = "normal"
         self.botao_idioma["state"] = "normal"
         self.botao_rank["state"] = "normal"
         self.janela_rank.destroy()
 
-    def verificar_mudou_idioma(self, idioma_e):
+    def verificar_mudou_idioma(self, idioma_e) -> None:
         self.tipos.verificar_idioma(idioma_e)
         global mudou
         if mudou == True:
@@ -506,7 +502,7 @@ class App:
             self.rotulo_nome["text"] = self.tipos.nome_text
             self.repoe_botoes_init_idioma()
 
-    def idioma_janela(self):
+    def idioma_janela(self) -> None:
         self.janela_def = Toplevel(self.janela_init)
         self.janela_def.resizable(False, False)
         if idioma == "PT":
@@ -526,20 +522,19 @@ class App:
             self.idiomas = tk.LabelFrame(self.janela_def, text="idiomas")
             botao_r_in = ttk.Radiobutton(self.idiomas, text='Inglês', value='IN', variable=idioma_b)
             botao_r_pt = ttk.Radiobutton(self.idiomas, text='Português', value='PT', variable=idioma_b)
-            botao_aplicar_idioma = tk.Button(self.idiomas, text="Aplicar idioma", command=partial(self.verificar_mudou_idioma, idioma_b))
+            botao_aplicar_idioma = tk.Button(self.idiomas, text="Aplicar idioma", command=lambda: self.verificar_mudou_idioma(idioma_b))
         else:
             self.idiomas = tk.LabelFrame(self.janela_def, text="languages")
             botao_r_in = ttk.Radiobutton(self.idiomas, text='English', value='IN', variable=idioma_b)
             botao_r_pt = ttk.Radiobutton(self.idiomas, text='Portuguese', value='PT', variable=idioma_b)
-            botao_aplicar_idioma = tk.Button(self.idiomas, text="Aply Language", command=partial(self.verificar_mudou_idioma, idioma_b))
+            botao_aplicar_idioma = tk.Button(self.idiomas, text="Aply Language", command=lambda: self.verificar_mudou_idioma(idioma_b))
         botao_r_in.grid(row=0, column=0, padx=5, pady=5)  # Primeiro botão
         botao_r_pt.grid(row=0, column=1, padx=5, pady=5)  # Segundo botão ao lado do primeiro
         botao_aplicar_idioma.grid(row=1, columnspan=2, pady=5)  # Terceiro botão abaixo dos dois primeiros
         self.idiomas.pack(fill="both", expand=True)
 
-    def rank(self):
+    def rank(self) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
-
         try:
             dados_resultados = receber_dados()
         except:
@@ -636,32 +631,21 @@ class App:
             time.sleep(0.1)
         return 0
 
-    def janela_verificar_email(self):
-        self.janela_email = Toplevel(self.janela_init)
+    def voltar(self) -> bool:
+        pergunta = ""
         global idioma
-        text = ""
         if idioma == "PT":
-            text = "Verificando email."
+            pergunta = tk.messagebox.askquestion("Sair do teste", "Tem a certeza que quer sair do teste?", detail="Os dados serão perdidos.")
         else:
-            text = "Verifying email."
-        self.janela_email.title("Email")
-        self.janela_init.eval(f'tk::PlaceWindow {str(self.janela_email)} center')
-        Label(self.janela_email, text=text, font=(25)).pack(padx=50, pady=50)
-
-    def janela_gerar_res(self):
-        self.janela_gerar = Toplevel(self.janela_init)
-        global idioma
-        text = ""
-        if idioma == "PT":
-            self.janela_gerar.title("Resultado")
-            text = "Gerando resultado."
+            pergunta = tk.messagebox.askquestion("Quit test", "Are you sure you want to get out of the test?", detail="The data will be lost.")
+        if pergunta == "no":
+            return 0
         else:
-            self.janela_gerar.title("Result")
-            text = "Generating result."
-        self.janela_init.eval(f'tk::PlaceWindow {str(self.janela_gerar)} center')
-        Label(self.janela_gerar, text=text, font=(25)).pack(padx=50, pady=50)
+            for widget in self.janela_init.winfo_children():
+                widget.destroy()
+            self.__init__(self.janela_init, self.tipos)
 
-    def __init__ (self, janela_init, tipos):
+    def __init__ (self, janela_init, tipos) -> None:
         self.janela_init = janela_init
         self.tipos = tipos
         self.janela_init.title("Teste de personalidade")
@@ -669,7 +653,7 @@ class App:
         self.imagem = Image.open(self.tipos.caminho_img_fundo_init_str)
         self.imagem.thumbnail((1920, 1080))
         self.imagem_tk = ImageTk.PhotoImage(self.imagem)
-        
+
         self.label1 = Label(self.janela_init, image=self.imagem_tk)
         self.label1.pack()
 
@@ -693,12 +677,12 @@ class App:
         # Defina a imagem como ícone
         self.janela_init.iconphoto(True, logo)
         self.mensagem_principal = tk.Label()
-        email_entry = tk.Entry(width=40, exportselection=True)
-        nome = tk.Entry(width=40, exportselection=True)
+        self.email_entry = tk.Entry(width=40, exportselection=True)
+        self.nome = tk.Entry(width=40, exportselection=True)
         self.rotulo_nome = tk.Label(text=self.tipos.nome_text, font=("Arial", 15, "bold"), bg="pink")
         self.rotulo_email = tk.Label(text="Email:", font=("Arial", 15, "bold"), bg="pink")
         self.botao_registo = tk.Button(janela_init, image=self.imagem_reg_f, width=180, height=30, command=self.ver_registro)
-        self.botao_init = tk.Button(janela_init, image=self.imagem_botao_f, width=250, height=50, command=partial(self.verifica, nome, email_entry))
+        self.botao_init = tk.Button(janela_init, image=self.imagem_botao_f, width=250, height=50, command=self.verifica)
         self.botao_idioma = tk.Button(janela_init, image=self.imagem_botao_idioma_f, width=180, height=30, text="Idioma", command=self.idioma_janela)
         self.botao_rank = tk.Button(janela_init, image=self.imagem_botao_rank_f, width=180, height=30, command=self.rank)
         self.botao_init.image = self.imagem_botao_f
@@ -707,22 +691,21 @@ class App:
         self.rotulo_nome.place(x=540, y=240)
         self.rotulo_email.place(x=540, y=290)
         self.botao_idioma.place(x=570, y=470)
-        nome.place(x=540, y=270)
-        email_entry.place(x=540, y=320)
+        self.nome.place(x=540, y=270)
+        self.email_entry.place(x=540, y=320)
         self.botao_init.place(x=540, y=360)
         self.botao_registo.place(x=570, y=430)
         self.botao_rank.place(x=570, y=510)
 
-    def verifica(self, id, email):
+    def verifica(self) -> bool:
         winsound.PlaySound(diretorio_audio_b, fich_async)
-        self.janela_verificar_email()
         global idioma
         self.idioma = idioma
         global interrupted_rede
         interrupted_rede = False
-        self.nome_id = id.get()
+        self.nome_id = self.nome.get()
         self.rede = True
-        self.email_check = email.get()
+        self.email_check = self.email_entry.get()
         self.pergunta = ""
         econtrou = False
         mutex = threading.Lock()
@@ -731,21 +714,21 @@ class App:
                 tk.messagebox.showerror("Preencha o campo nome", "É obrigatorio introduzor o nome")
             else:
                 tk.messagebox.showerror("Fill in the name field", "It is mandatory to enter the name")
-            id.config(bg="#FFC0CB")
+            self.nome.config(bg="#FFC0CB")
             return 1
         elif self.email_check == "":
             if self.idioma == "PT":
                 tk.messagebox.showerror("Preencha o campo email", "É obrigatorio introduzor o email")
             else:
                 tk.messagebox.showerror("Fill in the email field", "It is mandatory to enter the email")
-            email.config(bg="#FFC0CB")
+            self.email_entry.config(bg="#FFC0CB")
             return 1
         elif self.email_check == "":
             if self.idioma == "PT":
                 tk.messagebox.showerror("Preencha o campo email", "É obrigatorio introduzor o email")
             else:
                 tk.messagebox.showerror("Fill in the email field", "It is mandatory to enter the email")
-            email.config(bg="#FFC0CB")
+            self.email_entry.config(bg="#FFC0CB")
             return 1
         elif self.cria_ficheiro() == False:
             econtrou = self.le_cache(self.email_check + "\n")
@@ -764,7 +747,7 @@ class App:
                         tk.messagebox.showerror("Email invalido", "O email introduzido é invlido ou não existe, reescreva")
                     else:
                         tk.messagebox.showerror("Invalid Email", "The email you entered does not exist, please rewrite")
-                    email.config(bg="#FFC0CB")
+                    self.email_entry.config(bg="#FFC0CB")
                     interrupted_rede = True
                     mutex.release()
                     return 1
@@ -792,38 +775,39 @@ class App:
             return 1
 
         self.botao_init.destroy()
-        id.destroy()
+        self.nome.destroy()
         self.rotulo_nome.destroy()
         self.rotulo_email.destroy()
         self.botao_registo.destroy()
-        email.destroy()
+        self.email_entry.destroy()
         self.imagem.close()
         self.imagem_botao_idioma.close()
         self.imagem_reg.close()
         self.imagem_botao_rank.close()
         self.botao_idioma.destroy()
         self.botao_rank.destroy()
-        self.janela_email.destroy()
         self.init_cinzento()
-    
-    def init_cinzento(self):
+
+    def init_cinzento(self) -> None:
         self.imagem = Image.open(diretorio_g + "cinzento.jpg")
         self.imagem.thumbnail((1920, 1080))
         self.imagem_tk = ImageTk.PhotoImage(self.imagem)
         self.label1.configure(image=self.imagem_tk)
         self.label1.image = self.imagem_tk
+        if idioma == "PT":
+            self.botao_sair = Button(self.janela_init, text="Sair do teste", command=self.voltar, background="red")
+        else:
+            self.botao_sair = Button(self.janela_init, text="Quit test", command=self.voltar, background="red")
+        self.botao_sair.place(x=20, y=15)
         if self.idioma == "PT":
             self.mensagem_principal.config(text="Escolha uma das opções", bg="#808080", font=("Arial", 25, "bold"), justify="center")
         else:
             self.mensagem_principal.config(text="Choose one option", bg="#808080", font=("Arial", 25, "bold"), justify="center")
         self.imagem_botao_pergunta = Image.open(diretorio_g + "botao_c.png")
         self.imagem_botao_pergunta_tk = ImageTk.PhotoImage(self.imagem_botao_pergunta)
-        self.Botao1 = tk.Button(self.janela_init, image=self.imagem_botao_pergunta_tk, text=self.tipos.tipo_cinzento_str[8], compound="center", width=580, height=40, command=partial(self.cinzento2, 8))
-        self.Botao1.image = self.imagem_botao_pergunta_tk
-        self.Botao2 = tk.Button(self.janela_init, image=self.imagem_botao_pergunta_tk, text=self.tipos.tipo_cinzento_str[5], compound="center", width=580, height=40, command=partial(self.cinzento2, 5))
-        self.Botao2.image = self.imagem_botao_pergunta_tk
-        self.Botao3 = tk.Button(self.janela_init, image=self.imagem_botao_pergunta_tk, text=self.tipos.tipo_cinzento_str[2], compound="center", width=580, height=40, command=partial(self.cinzento2, 2))
-        self.Botao3.image = self.imagem_botao_pergunta_tk
+        self.Botao1 = tk.Button(self.janela_init, background="#ccc8c0", text=self.tipos.tipo_cinzento_str[8], width=80, height=2, command=lambda: self.cinzento2(8))
+        self.Botao2 = tk.Button(self.janela_init, background="#ccc8c0", text=self.tipos.tipo_cinzento_str[5], width=80, height=2, command=lambda: self.cinzento2(5))
+        self.Botao3 = tk.Button(self.janela_init, background="#ccc8c0", text=self.tipos.tipo_cinzento_str[2], width=80, height=2, command=lambda: self.cinzento2(2))
         self.Botao1.place(x=50, y=450)
         self.Botao2.place(x=350, y=300)
         self.Botao3.place(x=650, y=450)
@@ -832,84 +816,84 @@ class App:
         else:
             self.mensagem_principal.place(x=500, y=150)
 
-    def cinzento2(self, resp_num):
+    def cinzento2(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[0] = resp_num
-        self.Botao1.config(command=partial(self.cinzento3, 6), text=self.tipos.tipo_cinzento_str[6])
-        self.Botao2.config(command=partial(self.cinzento3, 7), text=self.tipos.tipo_cinzento_str[7])
-        self.Botao3.config(command=partial(self.cinzento3, 1), text=self.tipos.tipo_cinzento_str[1])
+        self.Botao1.config(command=lambda: self.cinzento3(6), text=self.tipos.tipo_cinzento_str[6])
+        self.Botao2.config(command=lambda: self.cinzento3(7), text=self.tipos.tipo_cinzento_str[7])
+        self.Botao3.config(command=lambda: self.cinzento3(1), text=self.tipos.tipo_cinzento_str[1])
 
-    def cinzento3(self, resp_num):
+    def cinzento3(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[1] = resp_num
-        self.Botao1.config(command=partial(self.cinzento4, 3), text=self.tipos.tipo_cinzento_str[3])
-        self.Botao2.config(command=partial(self.cinzento4, 4), text=self.tipos.tipo_cinzento_str[4])
-        self.Botao3.config(command=partial(self.cinzento4, 9), text=self.tipos.tipo_cinzento_str[9])
+        self.Botao1.config(command=lambda: self.cinzento4(3), text=self.tipos.tipo_cinzento_str[3])
+        self.Botao2.config(command=lambda: self.cinzento4(4), text=self.tipos.tipo_cinzento_str[4])
+        self.Botao3.config(command=lambda: self.cinzento4(9), text=self.tipos.tipo_cinzento_str[9])
 
-    def cinzento4(self, resp_num):
+    def cinzento4(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[2] = resp_num
-        self.Botao1.config(command=partial(self.cinzento5, 7), text=self.tipos.tipo_cinzento_str[7])
-        self.Botao2.config(command=partial(self.cinzento5, 3), text=self.tipos.tipo_cinzento_str[3])
-        self.Botao3.config(command=partial(self.cinzento5, 9), text=self.tipos.tipo_cinzento_str[9])
+        self.Botao1.config(command=lambda: self.cinzento5(7), text=self.tipos.tipo_cinzento_str[7])
+        self.Botao2.config(command=lambda: self.cinzento5(3), text=self.tipos.tipo_cinzento_str[3])
+        self.Botao3.config(command=lambda: self.cinzento5(9), text=self.tipos.tipo_cinzento_str[9])
 
-    def cinzento5(self, resp_num):
+    def cinzento5(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[3] = resp_num
-        self.Botao1.config(command=partial(self.cinzento6, 4), text=self.tipos.tipo_cinzento_str[4])
-        self.Botao2.config(command=partial(self.cinzento6, 1), text=self.tipos.tipo_cinzento_str[1])
-        self.Botao3.config(command=partial(self.cinzento6, 8), text=self.tipos.tipo_cinzento_str[8])
+        self.Botao1.config(command=lambda: self.cinzento6(4), text=self.tipos.tipo_cinzento_str[4])
+        self.Botao2.config(command=lambda: self.cinzento6(1), text=self.tipos.tipo_cinzento_str[1])
+        self.Botao3.config(command=lambda: self.cinzento6(8), text=self.tipos.tipo_cinzento_str[8])
 
-    def cinzento6(self, resp_num):
+    def cinzento6(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[4] = resp_num
-        self.Botao1.config(command=partial(self.cinzento7, 5), text=self.tipos.tipo_cinzento_str[5])
-        self.Botao2.config(command=partial(self.cinzento7, 2), text=self.tipos.tipo_cinzento_str[2])
-        self.Botao3.config(command=partial(self.cinzento7, 6), text=self.tipos.tipo_cinzento_str[6])
+        self.Botao1.config(command=lambda: self.cinzento7(5), text=self.tipos.tipo_cinzento_str[5])
+        self.Botao2.config(command=lambda: self.cinzento7(2), text=self.tipos.tipo_cinzento_str[2])
+        self.Botao3.config(command=lambda: self.cinzento7(6), text=self.tipos.tipo_cinzento_str[6])
 
-    def cinzento7(self, resp_num):
+    def cinzento7(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[5] = resp_num
-        self.Botao1.config(command=partial(self.cinzento8, 7), text=self.tipos.tipo_cinzento_str[7])
-        self.Botao2.config(command=partial(self.cinzento8, 9), text=self.tipos.tipo_cinzento_str[9])
-        self.Botao3.config(command=partial(self.cinzento8, 2), text=self.tipos.tipo_cinzento_str[2])
+        self.Botao1.config(command=lambda: self.cinzento8(7), text=self.tipos.tipo_cinzento_str[7])
+        self.Botao2.config(command=lambda: self.cinzento8(9), text=self.tipos.tipo_cinzento_str[9])
+        self.Botao3.config(command=lambda: self.cinzento8(2), text=self.tipos.tipo_cinzento_str[2])
     
-    def cinzento8(self, resp_num):
+    def cinzento8(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[6] = resp_num
-        self.Botao1.config(command=partial(self.cinzento9, 6), text=self.tipos.tipo_cinzento_str[6])
-        self.Botao2.config(command=partial(self.cinzento9, 8), text=self.tipos.tipo_cinzento_str[8])
-        self.Botao3.config(command=partial(self.cinzento9, 4), text=self.tipos.tipo_cinzento_str[4])
+        self.Botao1.config(command=lambda: self.cinzento9(6), text=self.tipos.tipo_cinzento_str[6])
+        self.Botao2.config(command=lambda: self.cinzento9(8), text=self.tipos.tipo_cinzento_str[8])
+        self.Botao3.config(command=lambda: self.cinzento9(4), text=self.tipos.tipo_cinzento_str[4])
     
-    def cinzento9(self, resp_num):
+    def cinzento9(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[7] = resp_num
-        self.Botao1.config(command=partial(self.cinzento10, 5), text=self.tipos.tipo_cinzento_str[5])
-        self.Botao2.config(command=partial(self.cinzento10, 1), text=self.tipos.tipo_cinzento_str[1])
-        self.Botao3.config(command=partial(self.cinzento10, 3), text=self.tipos.tipo_cinzento_str[3])
+        self.Botao1.config(command=lambda: self.cinzento10(5), text=self.tipos.tipo_cinzento_str[5])
+        self.Botao2.config(command=lambda: self.cinzento10(1), text=self.tipos.tipo_cinzento_str[1])
+        self.Botao3.config(command=lambda: self.cinzento10(3), text=self.tipos.tipo_cinzento_str[3])
     
-    def cinzento10(self, resp_num):
+    def cinzento10(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[8] = resp_num
-        self.Botao1.config(command=partial(self.cinzento11, 9), text=self.tipos.tipo_cinzento_str[9])
-        self.Botao2.config(command=partial(self.cinzento11, 8), text=self.tipos.tipo_cinzento_str[8])
-        self.Botao3.config(command=partial(self.cinzento11, 3), text=self.tipos.tipo_cinzento_str[3])
+        self.Botao1.config(command=lambda: self.cinzento11(9), text=self.tipos.tipo_cinzento_str[9])
+        self.Botao2.config(command=lambda: self.cinzento11(8), text=self.tipos.tipo_cinzento_str[8])
+        self.Botao3.config(command=lambda: self.cinzento11(3), text=self.tipos.tipo_cinzento_str[3])
     
-    def cinzento11(self, resp_num):
+    def cinzento11(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[9] = resp_num
-        self.Botao1.config(command=partial(self.cinzento12, 4), text=self.tipos.tipo_cinzento_str[4])
-        self.Botao2.config(command=partial(self.cinzento12, 7), text=self.tipos.tipo_cinzento_str[7])
-        self.Botao3.config(command=partial(self.cinzento12, 1), text=self.tipos.tipo_cinzento_str[1])
+        self.Botao1.config(command=lambda: self.cinzento12(4), text=self.tipos.tipo_cinzento_str[4])
+        self.Botao2.config(command=lambda: self.cinzento12(7), text=self.tipos.tipo_cinzento_str[7])
+        self.Botao3.config(command=lambda: self.cinzento12(1), text=self.tipos.tipo_cinzento_str[1])
     
-    def cinzento12(self, resp_num):
+    def cinzento12(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.resp[10] = resp_num
-        self.Botao1.config(command=partial(self.init_fase_rosa, 2), text=self.tipos.tipo_cinzento_str[2])
-        self.Botao2.config(command=partial(self.init_fase_rosa, 6), text=self.tipos.tipo_cinzento_str[6])
-        self.Botao3.config(command=partial(self.init_fase_rosa, 5), text=self.tipos.tipo_cinzento_str[5])
+        self.Botao1.config(command=lambda: self.init_fase_rosa(2), text=self.tipos.tipo_cinzento_str[2])
+        self.Botao2.config(command=lambda: self.init_fase_rosa(6), text=self.tipos.tipo_cinzento_str[6])
+        self.Botao3.config(command=lambda: self.init_fase_rosa(5), text=self.tipos.tipo_cinzento_str[5])
     
-    def init_fase_rosa(self, resp_num):
+    def init_fase_rosa(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.imagem.close()
         self.imagem = Image.open(diretorio_g + "rosa.jpg")
@@ -919,24 +903,21 @@ class App:
         self.label1.image = self.imagem_tk
         self.mensagem_principal["bg"] = "pink"
         self.tipos.resp[11] = resp_num
-        self.imagem_botao_pergunta.close()
-        self.imagem_botao_pergunta = Image.open(diretorio_g + "botao_r.png")
-        self.imagem_botao_pergunta_tk = ImageTk.PhotoImage(self.imagem_botao_pergunta)
-        self.Botao1.config(command=partial(self.rosa_2, self.tipos.resp[0], 0, 3), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_rosa_str[self.tipos.resp[0]], width=580)
-        self.Botao2.config(command=partial(self.rosa_2, self.tipos.resp[1], 0, 3), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_rosa_str[self.tipos.resp[1]], width=580)
-        self.Botao3.config(command=partial(self.rosa_2, self.tipos.resp[2], 0, 3), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_rosa_str[self.tipos.resp[2]], width=580)
+        self.Botao1.config(command=lambda: self.rosa_2(self.tipos.resp[0], 0, 3), background="#edcedf", text=self.tipos.tipo_rosa_str[self.tipos.resp[0]])
+        self.Botao2.config(command=lambda: self.rosa_2(self.tipos.resp[1], 0, 3), background="#edcedf", text=self.tipos.tipo_rosa_str[self.tipos.resp[1]])
+        self.Botao3.config(command=lambda: self.rosa_2(self.tipos.resp[2], 0, 3), background="#edcedf", text=self.tipos.tipo_rosa_str[self.tipos.resp[2]])
 
-    def rosa_2(self, resp_num, index_resp, index_text):
+    def rosa_2(self, resp_num, index_resp, index_text) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.fase_2_resp[index_resp] = resp_num
         if index_text == 12:
             self.verifica_repeticao() # parametro apenas de trensporte
         else:
-            self.Botao1.config(command=partial(self.rosa_2, self.tipos.resp[index_text], index_resp+1, index_text+3), text=self.tipos.tipo_rosa_str[self.tipos.resp[index_text]])
-            self.Botao2.config(command=partial(self.rosa_2, self.tipos.resp[index_text+1], index_resp+1, index_text+3), text=self.tipos.tipo_rosa_str[self.tipos.resp[index_text+1]])
-            self.Botao3.config(command=partial(self.rosa_2, self.tipos.resp[index_text+2], index_resp+1, index_text+3), text=self.tipos.tipo_rosa_str[self.tipos.resp[index_text+2]])
+            self.Botao1.config(command=lambda: self.rosa_2(self.tipos.resp[index_text], index_resp+1, index_text+3), text=self.tipos.tipo_rosa_str[self.tipos.resp[index_text]])
+            self.Botao2.config(command=lambda: self.rosa_2(self.tipos.resp[index_text+1], index_resp+1, index_text+3), text=self.tipos.tipo_rosa_str[self.tipos.resp[index_text+1]])
+            self.Botao3.config(command=lambda: self.rosa_2(self.tipos.resp[index_text+2], index_resp+1, index_text+3), text=self.tipos.tipo_rosa_str[self.tipos.resp[index_text+2]])
 
-    def verifica_repeticao(self):
+    def verifica_repeticao(self) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         i = 0
         while i < 3:
@@ -950,32 +931,32 @@ class App:
             i += 1  
         self.fase_rosa2_1()
 
-    def fase_rosa2_1(self):
+    def fase_rosa2_1(self) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
-        self.Botao1.config(command=partial(self.fase_rosa2_2, self.tipos.fase_2_resp[0]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[0]])
-        self.Botao2.config(command=partial(self.fase_rosa2_2, self.tipos.fase_2_resp[1]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[1]])
-        self.Botao3.config(command=partial(self.fase_rosa2_2, self.tipos.fase_2_resp[2]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[2]])
+        self.Botao1.config(command=lambda: self.fase_rosa2_2(self.tipos.fase_2_resp[0]), background="#cde2fc", text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[0]])
+        self.Botao2.config(command=lambda: self.fase_rosa2_2(self.tipos.fase_2_resp[1]), background="#cde2fc", text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[1]])
+        self.Botao3.config(command=lambda: self.fase_rosa2_2(self.tipos.fase_2_resp[2]), background="#cde2fc", text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[2]])
         
-    def fase_rosa2_2(self, resp_num):
+    def fase_rosa2_2(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.fase_2_1_resp[0] = resp_num
-        self.Botao1.config(command=partial(self.leve_verificação, self.tipos.fase_2_resp[1]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[1]])
-        self.Botao2.config(command=partial(self.leve_verificação, self.tipos.fase_2_resp[2]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[2]])
-        self.Botao3.config(command=partial(self.leve_verificação, self.tipos.fase_2_resp[3]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[3]])
+        self.Botao1.config(command=lambda: self.leve_verificação(self.tipos.fase_2_resp[1]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[1]])
+        self.Botao2.config(command=lambda: self.leve_verificação(self.tipos.fase_2_resp[2]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[2]])
+        self.Botao3.config(command=lambda: self.leve_verificação(self.tipos.fase_2_resp[3]), text=self.tipos.tipo_rosa_str[self.tipos.fase_2_resp[3]])
 
-    def leve_verificação(self, resp_num):
+    def leve_verificação(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.tipos.fase_2_1_resp[1] = resp_num
         contador = 2
         while 1:
             if self.tipos.fase_2_1_resp[0] == self.tipos.fase_2_1_resp[1]:
-                self.tipos.fase_2_1_resp[1] = self.tipos.fase_2_1_resp[contador] # solução para um pequeno bug
+                self.tipos.fase_2_1_resp[1] = self.tipos.fase_2_resp[contador] # solução para um pequeno bug
                 contador += 1
             else:
                 break
         self.init_azul()
 
-    def init_azul(self):
+    def init_azul(self) -> None:
         self.imagem.close()
         self.imagem = Image.open(diretorio_g + "azul.jpg")
         self.imagem.thumbnail((1920, 1080))
@@ -983,18 +964,13 @@ class App:
         self.label1.configure(image=self.imagem_tk)
         self.label1.image = self.imagem_tk
         self.mensagem_principal["bg"] = "blue"
-        self.imagem_botao_pergunta.close()
-        self.imagem_botao_pergunta = Image.open(diretorio_g + "botao_a.png")
-        self.imagem_botao_pergunta_tk = ImageTk.PhotoImage(self.imagem_botao_pergunta)
         self.Botao2.destroy()
-        self.Botao1.config(command=partial(self.resultado_final, self.tipos.fase_2_1_resp[0]), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_azul_str[self.tipos.fase_2_resp[0]])
-        self.Botao3.config(command=partial(self.resultado_final, self.tipos.fase_2_1_resp[1]), image=self.imagem_botao_pergunta_tk,text=self.tipos.tipo_azul_str[self.tipos.fase_2_resp[1]])
+        self.Botao1.config(command=lambda: self.resultado_final(self.tipos.fase_2_1_resp[0]), text=self.tipos.tipo_azul_str[self.tipos.fase_2_resp[0]])
+        self.Botao3.config(command=lambda: self.resultado_final(self.tipos.fase_2_1_resp[1]), text=self.tipos.tipo_azul_str[self.tipos.fase_2_resp[1]])
 
-    def resultado_final(self, resp_num):
+    def resultado_final(self, resp_num) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
-        self.janela_gerar_res()
         tempo = strftime("%d/%m/%Y %H:%M:%S", gmtime(time.time()))
-        self.imagem.close()
         self.imagem_botao_pergunta.close()
         self.mensagem_principal.destroy()
         self.imagem = Image.open(diretorio_g + "resultado.png")
@@ -1008,6 +984,7 @@ class App:
         self.label1.imagem = imagem_tk
         self.Botao3.destroy()
         self.Botao1.destroy()
+        self.botao_sair.destroy()
 
         self.resultado_do_user = self.tipos.resultado_str[resp_num]
         if self.idioma == "PT":
@@ -1015,7 +992,7 @@ class App:
         else:
             self.Resultado = tk.Label(bg="purple", font=("Arial", 30, "bold"), text="Your type is " + str(resp_num) + "-" + self.tipos.resultado_str[resp_num])
         self.botao_menu = tk.Button(width=200, height=40, image=img_menu_tk, command=self.fim)
-        self.botao_info = tk.Button(width=200, height=60, image=img_inf_tk, command=partial(self.mostrar_info, self.tipos.inf_personalidade_str[resp_num], self.resultado_do_user, diretorio_g + self.tipos.caminho_img_fundo_str[resp_num]))
+        self.botao_info = tk.Button(width=200, height=60, image=img_inf_tk, command=lambda: self.mostrar_info(self.tipos.inf_personalidade_str[resp_num], self.resultado_do_user, diretorio_g + self.tipos.caminho_img_fundo_str[resp_num]))
         self.botao_menu.image = img_menu_tk
         self.botao_info.image = img_inf_tk
         self.botao_menu.place(x=540, y=350)
@@ -1029,19 +1006,13 @@ class App:
         resultado_lista = {"nome": self.nome_id, "email": self.email_check, "resultado": resp_num, "tempo": tempo}
         self.escreve_resultado_xml(self.dados, "teste" + str(num_resultados), resultado_lista)
         fich_xml.write("resultado.xml")
-        vivo = True
         if self.pergunta == "": # não ocorreu erro de rede na primeira fase
             while 1:
                 try:
-                    enviar_email(self.nome_id, self.email_check, self.tipos.resultado_str[resp_num], tempo)
+                    enviar_email(self.nome_id, self.email_check, self.tipos.resultado_str[resp_num], tempo, self.tipos.inf_personalidade_str[resp_num])
                     inserir_usuario(self.nome_id, self.email_check, resp_num, tempo)
-                    if vivo:
-                        self.janela_gerar.destroy()
                     break
                 except:
-                    if vivo:
-                        self.janela_gerar.destroy()
-                        vivo = False
                     if idioma == "PT":
                         resposta = tk.messagebox.askquestion("Erro de conexão", "Não foi possivel conectar ao banco de dados, deseja tentar outra vez?", icon='error')
                     else:
@@ -1049,7 +1020,7 @@ class App:
                     if resposta == "no":
                         break
 
-    def fim(self):
+    def fim(self) -> None:
         winsound.PlaySound(diretorio_audio_b, fich_async)
         self.botao_menu.destroy()
         self.botao_info.destroy()
