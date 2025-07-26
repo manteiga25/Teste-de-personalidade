@@ -24,7 +24,7 @@ diretorio_audio_b = ""
 def enviar_email(nome, email, resultado, data, texto) -> None:
     servidor = smtplib.SMTP('smtp.gmail.com', 587)
     servidor.starttls()
-    servidor.login('mentescriativas117@gmail.com', 'xrdbviegrlsqldtb')
+    servidor.login('mentescriativas117@gmail.com', '')
     global idioma
     if idioma == "PT":
         assunto = 'Resultado do teste de personalidade'
